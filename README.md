@@ -50,4 +50,4 @@ Ces données nous semblent pertinentes dans le cadre d'une analyse car permettra
 - Etablir un ratio likes/dislikes selon les catégories/les caractéristiques d'une vidéo
 - Essayer de récupérer, si possible, le watchtime moyen des vidéos et regarder si un attribut "show_product_quickly" à true incite le spectateur à rester plus longtemps sur la vidéo
 - Voir s'il existe éventuellement une corrélation entre la présence de danger dans la pub (connotation negative pour le spectateur) et le nombre de dislikes sur la vidéo
-- 
+- Etudier la corrélation entre la présence de différentes caractéristiques dans une publicité (patriotisme, présence d'une célébrité...) et le nombre de réactions total (like, dislikes, commentaires) --> qu'est-ce qui fait réagir les gens le plus? Une publicité efficace est une publicité qui marque
