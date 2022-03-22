@@ -2,6 +2,14 @@
 
 Projet réalisé dans le cadre de la matière Visualisation de données enseignée à l'Université de Technologie de Troyes.
 
+## Idées :
+
+- World Happiness Report : https://www.kaggle.com/datasets/unsdsn/world-happiness?select=2017.csv
+- Healthy Lifestyle Cities Report 2021 : https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021 (à relier avec le dataset précédent)
+- Netflix daily top 10 : https://www.kaggle.com/datasets/prasertk/netflix-daily-top-10-in-us
+- Marvel Movie dataset : https://www.kaggle.com/datasets/minisam/marvel-movie-dataset?select=marvel.csv
+- 
+
 ## Introduction :
 
 ### Données:
