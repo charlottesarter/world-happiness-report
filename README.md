@@ -2,18 +2,22 @@
 
 Ce projet est réalisé dans le cadre de la matière <b>Visualisation de données</b> enseignée à l'Université de Technologie de Troyes.
 
-## Lien du dataset :
+## Lien des datasets
 
-- World Happiness Report : https://www.kaggle.com/datasets/unsdsn/world-happiness?select=2017.csv
-- Healthy Lifestyle Cities Report 2021 : https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021 (à relier avec le dataset précédent)
+- [World Happiness Report](https://www.kaggle.com/datasets/unsdsn/world-happiness?select=2017.csv)
+- [Healthy Lifestyle Cities Report 2021](https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021) 
 
-## Introduction :
+> Le second dataset apporte des indicateurs supplémentaires sur ce qui est susceptible de provoquer le bonheur des populations (prix de la vie, soleil, obésité...). Cependant, il ne comporte uniquement des données de 2021, alors que le dataset que nous utilisons regroupe des données de 2015 à 2019. Nous allons donc voir si nous pouvons nous procurer les données du World Happiness Report de 2020 et 2021, ou si nous pouvons quand même tirer des informations pertinentes du second dataset.
 
-### Données:
+## Introduction
 
-Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de référence sur l'état du bonheur dans le monde. Il comporte les données de 2015 à 2019, et classe 155 pays selon leur niveau de bonheur. Il permet d'établir une corrélation entre différents critères (liberté, corruption, cadre de vie...) et le niveau de bonheur qui en découle.
+![World Happiness Report](https://www.sogeti.com/globalassets/common/1980x660-large-background-image/sogeti/worldhappinessreport2019-1980x660.jpg)
 
-Le jeu de données comporte 13 variables: 
+### Données
+
+Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de référence sur l'état du bonheur dans le monde. Il comporte des données de 2015 à 2019, et classe 155 pays selon leur niveau de bonheur. Il permet d'établir une corrélation entre différents critères (liberté, corruption, cadre de vie...) et le niveau de bonheur qui en découle.
+
+Le jeu de données comporte 13 variables : 
   
 |variable                  |class     |description |
 |:-------------------------|:---------|:-----------|
@@ -31,14 +35,23 @@ Le jeu de données comporte 13 variables:
 |generosity                |double    | La mesure dans laquelle la générosité a contribué au calcul du score de bonheur |
 |dystopia residual         |double    | "Résidu" correspondant à l'écart entre le modèle théorique et la réalité, auquel on ajoute un score de dystopie (score d'un pays hypothétique moins bien classé que tous les autre) |
 
-Ces données nous semblent pertinentes dans le cadre d'une analyse car:
+
+> L'ensemble des données utilisées est disponible dans le dossier `/data/`
+
+Ces données nous semblent pertinentes dans le cadre d'une analyse car :
 - elles sont analysables dans le temps
 - elles sont analysables géographiquement
 - elles permettent d'établir différents facteurs de contribution au bonheur en fonction des régions du monde, des cultures...
 
 ### Plan d'analyse
 
-- Comment évolue le bonheur moyen au fil des années? (en regroupant par région peut-être, en utilisant des facet charts pour visualiser les différentes années en même temps)
-- Y'a-t-il des régions du monde moins heureuses que d'autres? Pourquoi? --> utiliser les facteurs de contribution du score pour mettre en évidence des causes de disparité
-- Le niveau de bonheur est-il directement corrélé à la liberté des individus? --> extensible à la richesse, l'espérance de vie...
-- Quelle est la combinaison de facteurs hauts entraîne une hausse du bonheur? Quelle combinaison de facteurs bas entraîne une diminution de celui-ci? (par exemple: avoir une espérance de vie élevée ET un PIB élevé ET un taux de liberté elevé implique-t-il nécessairement un haut niveau de bonheur, au-dessus d'un certain seuil?)
+- Comment évolue le bonheur moyen au fil des années ? (en regroupant par région peut-être, en utilisant des facet charts pour visualiser les différentes années en même temps)
+- Y'a-t-il des régions du monde moins heureuses que d'autres ? Pourquoi ? --> utiliser les facteurs de contribution du score pour mettre en évidence des causes de disparité
+- Le niveau de bonheur est-il directement corrélé à la liberté des individus ? --> extensible à la richesse, l'espérance de vie...
+- Quelle est la combinaison de facteurs hauts entraîne une hausse du bonheur ? Quelle combinaison de facteurs bas entraîne une diminution de celui-ci ? (par exemple: avoir une espérance de vie élevée ET un PIB élevé ET un taux de liberté elevé implique-t-il nécessairement un haut niveau de bonheur, au-dessus d'un certain seuil ?)
+
+## Auteurs
+
+- [Maud AGNES]
+- [Evann BONNAVENTURE]
+- [Charlotte SARTER]
