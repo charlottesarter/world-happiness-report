@@ -27,23 +27,9 @@ Le jeu de données comporte 13 variables:
 |family                    |double    | La mesure dans laquelle la famille contribue au calcul du score du bonheur |
 |health (life expectancy)  |double    | La mesure dans laquelle l'espérance de vie a contribué au calcul du score du bonheur |
 |freedom                   |double    | La mesure dans laquelle la liberté a contribué au calcul du score du bonheur |
-|use_sex                   |logical   | booléen indiquant si la pub contient des connotations sexuelles |
-|id                        |character | ID de la vidéo (chaine de caractère) |
-|kind                      |character | type de contenu (valeur: "youtube#video" pour tout le jeu de données) |
-|etag                      |character | Youtube etag |
-|view_count                |integer   | nombre de vues |
-|like_count                |integer   | nombre de likes |
-|dislike_count             |integer   | nombre de dislikes |
-|favorite_count            |integer   | nombre de favoris (vaut zéro pour chaque colonne, inutile) |
-|comment_count             |integer   | nombre de commentaires |
-|published_at              |character | date de publication de la vidéo |
-|title                     |character | titre |
-|description               |character | description de la vidéo |
-|thumbnail                 |character | url de la miniature |
-|channel_title             |character | titre de la chaîne |
-|category_id               |character | id de la catégorie Youtube correspondante |
-
-Et 247 enregistrements.
+|trust (governement corruption)|double| La mesure dans laquelle la perception de la corruption contribue au score de bonheur |
+|generosity                |double    | La mesure dans laquelle la générosité a contribué au calcul du score de bonheur |
+|dystopia residual         |double    | La mesure dans laquelle le résidu de dystopie a contribué au calcul du score de bonheur |
 
 Ces données nous semblent pertinentes dans le cadre d'une analyse car permettraient potentiellement de mettre en lumière différentes corrélations (qu'est-ce qui fonctionne le mieux dans les publicités) et des tendances car s'étalent sur plusieurs années. Elles sont en outre de nature à faciliter l'analyse (via des booléens, des entiers et des catégories par exemple).
 
