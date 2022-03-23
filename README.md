@@ -54,4 +54,4 @@ Ces données nous semblent pertinentes dans le cadre d'une analyse car :
 
 - [Maud AGNES]
 - [Evann BONNAVENTURE]
-- [Charlotte SARTER]
+- [Charlotte SARTER](https://github.com/charlottesarter)
