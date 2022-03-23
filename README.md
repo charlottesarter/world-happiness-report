@@ -53,5 +53,5 @@ Ces données nous semblent pertinentes dans le cadre d'une analyse car :
 ## Auteurs
 
 - [Maud AGNES]
-- [Evann BONNAVENTURE]
+- [Evann BONNAVENTURE](https://github.com/evann8042)
 - [Charlotte SARTER](https://github.com/charlottesarter)
