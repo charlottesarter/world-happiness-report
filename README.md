@@ -40,9 +40,9 @@ Le jeu de données comporte 13 variables :
 > L'ensemble des données utilisées est disponible dans le dossier `/data/`
 
 Ces données nous semblent pertinentes dans le cadre d'une analyse car :
-- elles sont analysables dans le temps
-- elles sont analysables géographiquement
-- elles permettent d'établir différents facteurs de contribution au bonheur en fonction des régions du monde, des cultures...
+- Elles sont analysables dans le temps
+- Elles sont analysables géographiquement
+- Elles permettent d'établir différents facteurs de contribution au bonheur en fonction des régions du monde, des cultures...
 
 ### Plan d'analyse
 
