@@ -2,7 +2,7 @@
 
 Ce projet est réalisé dans le cadre de la matière <b>Visualisation de données</b> enseignée à l'Université de Technologie de Troyes.
 
-## Idées :
+## Lien du dataset :
 
 - World Happiness Report : https://www.kaggle.com/datasets/unsdsn/world-happiness?select=2017.csv
 - Healthy Lifestyle Cities Report 2021 : https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021 (à relier avec le dataset précédent)
@@ -29,17 +29,13 @@ Le jeu de données comporte 13 variables:
 |freedom                   |double    | La mesure dans laquelle la liberté a contribué au calcul du score du bonheur |
 |trust (governement corruption)|double| La mesure dans laquelle la perception de la corruption contribue au score de bonheur |
 |generosity                |double    | La mesure dans laquelle la générosité a contribué au calcul du score de bonheur |
-|dystopia residual         |double    | La mesure dans laquelle le résidu de dystopie a contribué au calcul du score de bonheur |
+|dystopia residual         |double    | "Résidu" correspondant à l'écart entre le modèle théorique et la réalité, auquel on ajoute un score de dystopie (score d'un pays hypothétique moins bien classé que tous les autre) |
 
-Ces données nous semblent pertinentes dans le cadre d'une analyse car permettraient potentiellement de mettre en lumière différentes corrélations (qu'est-ce qui fonctionne le mieux dans les publicités) et des tendances car s'étalent sur plusieurs années. Elles sont en outre de nature à faciliter l'analyse (via des booléens, des entiers et des catégories par exemple).
+Ces données nous semblent pertinentes dans le cadre d'une analyse car:
+- elles sont analysables dans le temps
+- elles sont analysables géographiquement
+- elles permettent d'établir différents facteurs de contribution au bonheur en fonction des régions du monde, des cultures...
 
 ### Plan d'analyse
 
-- Quelles sont les caractéristiques (parmi les variables funny, show_product_quickly, patriotic...) qui plaisent le plus? (= celles qui ont le plus de vues et de like)
-- Les publicités les plus courtes sont-elles le plus efficaces? (récupérer la durée des vidéos via leur ID et l'api Google)
-- Quelles sont les catégories qui fonctionnent le mieux? (nom des catégories à récupérer via leur category_id)
- --> Etudier les statistiques des différentes catégories du jeu de données (nombre de vues moyen, durée moyenne, caractéristiques présentes...)
-- Etablir un ratio likes/dislikes selon les catégories/les caractéristiques d'une vidéo
-- Essayer de récupérer, si possible, le watchtime moyen des vidéos et regarder si un attribut "show_product_quickly" à true incite le spectateur à rester plus longtemps sur la vidéo
-- Voir s'il existe éventuellement une corrélation entre la présence de danger dans la pub (connotation negative pour le spectateur) et le nombre de dislikes sur la vidéo
-- Etudier la corrélation entre la présence de différentes caractéristiques dans une publicité (patriotisme, présence d'une célébrité...) et le nombre de réactions total (like, dislikes, commentaires) --> qu'est-ce qui fait réagir les gens le plus? Une publicité efficace est une publicité qui marque
+
