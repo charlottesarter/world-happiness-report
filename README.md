@@ -1,34 +1,32 @@
 # README
 
-Projet réalisé dans le cadre de la matière Visualisation de données enseignée à l'Université de Technologie de Troyes.
+Ce projet est réalisé dans le cadre de la matière <b>Visualisation de données</b> enseignée à l'Université de Technologie de Troyes.
 
 ## Idées :
 
 - World Happiness Report : https://www.kaggle.com/datasets/unsdsn/world-happiness?select=2017.csv
 - Healthy Lifestyle Cities Report 2021 : https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021 (à relier avec le dataset précédent)
-- Netflix daily top 10 : https://www.kaggle.com/datasets/prasertk/netflix-daily-top-10-in-us
-- Marvel Movie dataset : https://www.kaggle.com/datasets/minisam/marvel-movie-dataset?select=marvel.csv
-- 
 
 ## Introduction :
 
 ### Données:
 
-Ce jeu de données concerne des données sur les publicités diffusées lors du superbowl lors de différentes années entre 2000 et 2020. Il concerne des vidéos Youtube.
-Il comporte 25 variables: 
+Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de référence sur l'état du bonheur dans le monde. Il comporte les données de 2015 à 2019, et classe 155 pays selon leur niveau de bonheur. Il permet d'établir une corrélation entre différents critères (liberté, corruption, cadre de vie...) et le niveau de bonheur qui en découle.
+
+Le jeu de données comporte 13 variables: 
   
-  |variable                  |class     |description |
+|variable                  |class     |description |
 |:-------------------------|:---------|:-----------|
-|year                      |double    | année de la vidéo |
-|brand                     |character | la marque faisant sa publicité |
-|superbowl_ads_dot_com_url |character | url renvoyant vers le site du superbowl et la publicité en question |
-|youtube_url               |character | l'url de la vidéo |
-|funny                     |logical   | booléen indiquant si la publicité est drôle |
-|show_product_quickly      |logical   | booléen indiquant si le spectateur peut cerner l'objet de la publicité rapidement ou non |
-|patriotic                 |logical   | booléen indiquant si la pub est patriote |
-|celebrity                 |logical   | booléen indiquant si la pub contient une célébrité |
-|danger                    |logical   | booléen indiquant si la pub contient du "danger" (= une situation dangereuse) |
-|animals                   |logical   | booléen indiquant si la pub contient des animaux |
+|country                   |character | Nom du pays |
+|region                    |character | Région à laquelle le pays appartient |
+|hapiness rank             |integer   | Classement du pays sur la base du score du bonheur |
+|hapiness score            |double    | Un indicateur mesuré chaque année en posant aux personnes de l'échantillon la question suivante : "Comment évaluez-vous votre bonheur sur une échelle de 0 à 10 où 10 est le plus heureux" |
+|lower confidence interval |double    | Intervalle de confiance inférieur du score de bonheur |
+|upper confidence interval |double    | Intervalle de confiance supérieur du score de bonheur |
+|economy (GPD per capita)  |double    | La mesure dans laquelle le PIB contribue au calcul du score du bonheur |
+|family                    |double    | La mesure dans laquelle la famille contribue au calcul du score du bonheur |
+|health (life expectancy)  |double    | La mesure dans laquelle l'espérance de vie a contribué au calcul du score du bonheur |
+|freedom                   |double    | La mesure dans laquelle la liberté a contribué au calcul du score du bonheur |
 |use_sex                   |logical   | booléen indiquant si la pub contient des connotations sexuelles |
 |id                        |character | ID de la vidéo (chaine de caractère) |
 |kind                      |character | type de contenu (valeur: "youtube#video" pour tout le jeu de données) |
