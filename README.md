@@ -4,10 +4,11 @@ Ce projet est réalisé dans le cadre de la matière <b>Visualisation de donnée
 
 ## Lien des datasets
 
-- [World Happiness Report](https://www.kaggle.com/datasets/unsdsn/world-happiness?select=2017.csv)
+- [World Happiness Report](https://www.kaggle.com/datasets/unsdsn/world-happiness?select=2017.csv) (de 2015 à 2019)
+- [World Happiness Report](https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2021?select=world-happiness-report-2021.csv) (2021)
 - [Healthy Lifestyle Cities Report 2021](https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021) 
 
-> Le second dataset apporte des indicateurs supplémentaires sur ce qui est susceptible de provoquer le bonheur des populations (prix de la vie, soleil, obésité...). Cependant, il ne comporte uniquement des données de 2021, alors que le dataset que nous utilisons regroupe des données de 2015 à 2019. Nous allons donc voir si nous pouvons nous procurer les données du World Happiness Report de 2020 et 2021, ou si nous pouvons quand même tirer des informations pertinentes du second dataset.
+> Le troisième dataset apporte des indicateurs supplémentaires sur ce qui est susceptible de provoquer le bonheur des populations (prix de la vie, soleil, obésité...). Cependant, il ne comporte uniquement des données de 2021, ainsi nous pourrons seulement le comparer avec le second dataset, qui comporte les données du World Happiness Report de 2021. Nous pourrions ainsi apporter une nouvelle dimension à notre analyse.
 
 ## Introduction
 
@@ -15,7 +16,7 @@ Ce projet est réalisé dans le cadre de la matière <b>Visualisation de donnée
 
 ### Données
 
-Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de référence sur l'état du bonheur dans le monde. Il comporte des données de 2015 à 2019, et classe 155 pays selon leur niveau de bonheur. Il permet d'établir une corrélation entre différents critères (liberté, corruption, cadre de vie...) et le niveau de bonheur qui en découle.
+Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de référence sur l'état du bonheur dans le monde. Il comporte des données de 2015 à 2019, que nous avons compléter avec un second dataset identique qui comporte les données de 2021. Il classe 155 pays selon leur niveau de bonheur, et permet d'établir une corrélation entre différents critères (liberté, corruption, cadre de vie...) et le niveau de bonheur qui en découle.
 
 Le jeu de données comporte 13 variables : 
   
