@@ -9,7 +9,7 @@ Ce projet est réalisé dans le cadre de la matière <b>Visualisation de donnée
 - [World Happiness Report](https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2021?select=world-happiness-report-2021.csv) (2021)
 - [Healthy Lifestyle Cities Report 2021](https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021) 
 
-> Le troisième dataset apporte des indicateurs supplémentaires sur ce qui est susceptible de provoquer le bonheur des populations (prix de la vie, soleil, obésité...). Cependant, il ne comporte uniquement des données de 2021, ainsi nous pourrons seulement le comparer avec le second dataset, qui comporte les données du World Happiness Report de 2021. Nous pourrions ainsi apporter une nouvelle dimension à notre analyse.
+> Le dernier dataset apporte des indicateurs supplémentaires sur ce qui est susceptible de provoquer le bonheur des populations (prix de la vie, soleil, obésité...). Cependant, il ne comporte uniquement des données de 2021, ainsi nous pourrons seulement le comparer avec le second dataset, qui comporte les données du World Happiness Report de 2021. Nous pourrions ainsi apporter une nouvelle dimension à notre analyse.
 
 ## Introduction
 
