@@ -47,10 +47,10 @@ Ces données nous semblent pertinentes dans le cadre d'une analyse car :
 
 ### Plan d'analyse
 
-[] Comment évolue le bonheur moyen au fil des années ? (en regroupant par région peut-être, en utilisant des facet charts pour visualiser les différentes années en même temps)
-[] Y'a-t-il des régions du monde moins heureuses que d'autres ? Pourquoi ? :arrow_right: utiliser les facteurs de contribution du score pour mettre en évidence des causes de disparité
-[] Le niveau de bonheur est-il directement corrélé à la liberté des individus ? :arrow_right: extensible à la richesse, l'espérance de vie...
-[] Quelle est la combinaison de facteurs hauts entraîne une hausse du bonheur ? Quelle combinaison de facteurs bas entraîne une diminution de celui-ci ? (par exemple: avoir une espérance de vie élevée ET un PIB élevé ET un taux de liberté elevé implique-t-il nécessairement un haut niveau de bonheur, au-dessus d'un certain seuil ?)
+- [ ] Comment évolue le bonheur moyen au fil des années ? (en regroupant par région peut-être, en utilisant des facet charts pour visualiser les différentes années en même temps)
+- [ ] Y'a-t-il des régions du monde moins heureuses que d'autres ? Pourquoi ? :arrow_right: utiliser les facteurs de contribution du score pour mettre en évidence des causes de disparité
+- [ ] Le niveau de bonheur est-il directement corrélé à la liberté des individus ? :arrow_right: extensible à la richesse, l'espérance de vie...
+- [ ] Quelle est la combinaison de facteurs hauts entraîne une hausse du bonheur ? Quelle combinaison de facteurs bas entraîne une diminution de celui-ci ? (par exemple: avoir une espérance de vie élevée ET un PIB élevé ET un taux de liberté elevé implique-t-il nécessairement un haut niveau de bonheur, au-dessus d'un certain seuil ?)
 
 ## Auteurs
 
