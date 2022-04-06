@@ -1,1 +1,7 @@
+```{r}
+library(readr)
+
+read.csv("../data/2015.csv")
+
+```
 
