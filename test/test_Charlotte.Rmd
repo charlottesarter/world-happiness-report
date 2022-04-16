@@ -1,1 +1,43 @@
-test
+---
+title: "Test pour le projet d'IF36 par Charlotte"
+author: "Charlotte Sarter"
+date: '2022-03-22'
+output:
+  rmarkdown::html_document:
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Est-ce que certaines régions du monde sont moins heureuses que d'autres ?
+
+C'est ce que nous allons nous demander dans cette partie. Notre but est de déterminer si le bonheur a des préférence géographique, et quels sont les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
+
+Dans un premier temps, il faut organiser et nettoyer les jeux de données avec lesquels nous allons travailler.
+
+```{r clean}
+library(ggplot2)
+library(dplyr)
+
+# mettre toutes les données dans le même dataset ?
+```
+
+## Moyenne du score de bonheur en fonction de la région
+
+```{r rank}
+
+# Nombre de pays par région dans le jeu de données
+bar <- ggplot(X2015, aes(x = Region)) + geom_bar()
+bar + theme(axis.text.x = element_text(angle = 90))
+
+# Les régions et leur score de bonheur (box plot)
+regions <- X2015 %>% select("Region", "Happiness Score")
+
+regions <- rename(regions, "Happiness_score"="Hapiness Score")
+
+reg_point <- ggplot(regions, aes(x = Region, y = Happiness_score)) + geom_boxplot()
+reg_point + theme(axis.text.x = element_text(angle = 90))
+
+```
