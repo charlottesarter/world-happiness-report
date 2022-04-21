@@ -19,7 +19,7 @@ data2015_corrected <- data2015 %>%
          Happiness_score = `Happiness Score`,
          Standard_error = `Standard Error`,
          Exp_by_economy_gdp_per_capita = `Economy (GDP per Capita)`,
-         Explained_by_family = Family,
+         Explained_by_social_support = Family,
          Explained_by_life_expectancy = `Health (Life Expectancy)`,
          Explained_by_freedom = Freedom,
          Explained_by_trust_government = `Trust (Government Corruption)`,
@@ -32,7 +32,7 @@ data2016_corrected <- data2016 %>%
          Happiness_score = `Happiness Score`,
          Standard_error = Standard.Error,
          Exp_by_economy_gdp_per_capita = `Economy (GDP per Capita)`,
-         Explained_by_family = Family,
+         Explained_by_social_support = Family,
          Explained_by_life_expectancy = `Health (Life Expectancy)`,
          Explained_by_freedom = Freedom,
          Explained_by_trust_government = `Trust (Government Corruption)`,
@@ -46,7 +46,7 @@ data2017_corrected <- data2017 %>%
   rename(Happiness_rank = Happiness.Rank, 
          Happiness_score = Happiness.Score,
          Exp_by_economy_gdp_per_capita = Economy..GDP.per.Capita.,
-         Explained_by_family = Family,
+         Explained_by_social_support = Family,
          Explained_by_life_expectancy = Health..Life.Expectancy.,
          Explained_by_freedom = Freedom,
          Explained_by_trust_government = Trust..Government.Corruption.,
@@ -160,9 +160,6 @@ data %>%
 
 data %>%
   ggplot(aes(x=Explained_by_life_expectancy, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
-
-data %>%
-  ggplot(aes(x=Explained_by_family, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
 
 data %>%
   ggplot(aes(x=Explained_by_social_support, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
