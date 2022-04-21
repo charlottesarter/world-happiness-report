@@ -1,6 +1,7 @@
 ```{r}
 library(readr)
 library(dplyr)
+library(ggplot2)
 
 data2015 <- read.csv('../data/2015.csv')
 data2016 <- read.csv('../data/2016.csv')
@@ -141,8 +142,32 @@ data <- data2015_corrected %>%
   bind_rows(data2020_corrected) %>%
   bind_rows(data2021_corrected)
 
-data
+```
+```{r}
+
+data %>% 
+  group_by(Year) %>%
+  summarise(Happiness_score = mean(Happiness_score)) %>%
+  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity")
+
 
 ```
+```{r}
+data %>%
+  ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+
+data %>%
+  ggplot(aes(x=Explained_by_life_expectancy, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+
+data %>%
+  ggplot(aes(x=Explained_by_family, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+
+data %>%
+  ggplot(aes(x=Explained_by_social_support, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+
+data %>%
+  ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+```
+
 
 
