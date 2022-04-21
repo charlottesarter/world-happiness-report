@@ -25,6 +25,10 @@ Convention de nommage des colonnes : tout en minuscule, les espaces sont remplac
 
 1. Un barchart qui indique le nombre de pays dont on a les données par région
 2. Un boxplot qui indique le score de bonheur de chaque région
+3. Une carte du monde colorée par région en fonction du score de bonheur (avec ggmap ou leaflet)
+4. Faire des scatterplots pour les différents critères en fonction du niveau de bonheur par région (moyenne sur toutes les années ou évolution dans le temps ?)
+5. 
+
 
 
 ```{r clean}
@@ -33,7 +37,17 @@ library(dplyr)
 
 # Mettre toutes les données dans le même dataset
 
-# 1 - Nettoyage des datasets
+# 1 - Importer les données 
+
+X2015 <- read_csv('../data/2015.csv')
+X2016 <- read_csv('../data/2016.csv')
+X2017 <- read_csv('../data/2017.csv')
+X2018 <- read_csv('../data/2018.csv')
+X2019 <- read_csv('../data/2019.csv')
+X2020 <- read_csv('../data/2020.csv')
+X2021 <- read_csv('../data/2021.csv')
+
+# 2 - Nettoyage des datasets
 
 # Nettoyage du set 2015
 
@@ -78,9 +92,6 @@ X2017 <- cbind(X2017, "year"=2017)
 colnames(X2018)
 
 View(X2018)
-
-options(digits=4)
-as.double(X2018[, "trust"])
 
 colnames(X2018) <- c("happiness_rank", "country", "happiness_score", "economy", "family", "health", "freedom", "generosity", "trust")
 
@@ -130,7 +141,7 @@ colnames(X2021) <- c("country", "region", "happiness_score", "standard_error", "
 
 X2021 <- cbind(X2021, "year"=2021)
 
-# 2 - Assemblage des datasets
+# 3 - Assemblage des datasets
 
 bind_rows(X2015, X2016, X2017, X2018, X2019, X2020, X2021)
 
