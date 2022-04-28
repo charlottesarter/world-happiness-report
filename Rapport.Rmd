@@ -1,17 +1,43 @@
-```{r}
+---
+title: "Test pour le projet d'IF36 par Charlotte"
+author: "Charlotte Sarter"
+date: '2022-03-22'
+output:
+  rmarkdown::html_document:
+    theme: cosmo
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Nettoyage des données
+
+La première étape du projet est certainement une des plus importantes. 
+
+Nous avons commencé par analyser tous les datasets pour voir si les données nommées de la même manière correspondent à la même chose (ce qui n'était pas toujours le cas). Nous avons ensuite renommé toutes les colonnes de tous les datasets de la même manière selon la convention définie ci-dessous. Enfin, nous avons fusionné l'ensemble des datasets de manière à travailler sur un seul tableau propre à l'aide de filtres par la suite.
+
+## Convention de nommage des colonnes
+
+- Le nom des colonnes commence par une majuscule
+- Les espaces sont remplacés par un underscore "_"
+
+```{r cleaning}
 library(readr)
 library(dplyr)
 library(ggplot2)
 
-data2015 <- tibble(read_csv('../data/2015.csv'))
-data2016 <- tibble(read_csv('../data/2016.csv'))
-data2017 <- tibble(read_csv('../data/2017.csv'))
-data2018 <- tibble(read_csv('../data/2018.csv'))
-data2019 <- tibble(read_csv('../data/2019.csv'))
-data2020 <- tibble(read_csv('../data/2020.csv'))
-data2021 <- tibble(read_csv('../data/2021.csv'))
+# Importation des datasets
 
-colnames(data2015)
+data2015 <- tibble(read_csv('data/2015.csv'))
+data2016 <- tibble(read_csv('data/2016.csv'))
+data2017 <- tibble(read_csv('data/2017.csv'))
+data2018 <- tibble(read_csv('data/2018.csv'))
+data2019 <- tibble(read_csv('data/2019.csv'))
+data2020 <- tibble(read_csv('data/2020.csv'))
+data2021 <- tibble(read_csv('data/2021.csv'))
+
+# Renommage des colonnes (selon la convention définie précedemment) & ajout de la colonne "year"
 
 data2015_corrected <- data2015 %>% 
   mutate(lower_confidence_interval = `Happiness Score` - `Standard Error`, upper_confidence_interval = `Happiness Score` + `Standard Error`, Year = 2015) %>%
@@ -132,9 +158,8 @@ colnames(data2018_corrected)
 colnames(data2019_corrected)
 colnames(data2020_corrected)
 colnames(data2021_corrected)
-  
-```
-```{r}
+
+# Fusion de tous les datasets
 
 data <- data2015_corrected %>% 
   bind_rows(data2016_corrected) %>% 
@@ -144,17 +169,51 @@ data <- data2015_corrected %>%
   bind_rows(data2020_corrected) %>%
   bind_rows(data2021_corrected)
 
+# Complétion de la colonne "Region"
+
+regions <- data2015_corrected %>% select("Country", "Region")
+
+data <- merge(data, regions, by="Country")
+View(data)
+
+data <- data %>% select(-"Region.x")
+data <- data %>% rename("Region"="Region.y")
+
 ```
+
+## Est-ce que certaines régions du monde sont moins heureuses que d'autres ?
+
+C'est ce que nous allons nous demander dans cette partie. Notre but est de déterminer si le bonheur a des préférences géographiques, et quels sont les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
+
+## Idées de graphes à faire 
+
+1. Un barchart qui indique le nombre de pays dont on a les données par région
+2. Un boxplot qui indique le score de bonheur de chaque région
+3. Une carte du monde colorée par région en fonction du score de bonheur (avec ggmap ou leaflet)
+4. Faire des scatterplots pour les différents critères en fonction du niveau de bonheur par région (moyenne sur toutes les années ou évolution dans le temps ?)
+
+```{r graphe 1 & 2}
+
+# Nombre de pays par région dans le jeu de données
+data %>%
+  ggplot(aes(x = Region)) + geom_bar() + theme(axis.text.x = element_text(angle = 90))
+
+# Les régions et leur score de bonheur (box plot)
+regions <- data2015_corrected %>% select("Region", "Happiness_score")
+
+reg_point <- ggplot(regions, aes(x = Region, y = Happiness_score)) + geom_boxplot()
+reg_point + theme(axis.text.x = element_text(angle = 90))
+
+```
+
 ```{r}
+# Graphes Evann
 
 data %>% 
   group_by(Year) %>%
   summarise(Happiness_score = mean(Happiness_score)) %>%
   ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity")
 
-
-```
-```{r}
 data %>%
   ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
 
@@ -167,13 +226,4 @@ data %>%
 data %>%
   ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
 ```
-```{r}
-sort(intersect(data2015_corrected$Country, data2016_corrected$Country))
-sort(data2015_corrected$Country) %in% sort(data2016_corrected$Country)
-sort(data2016_corrected$Country) %in% sort(data2015_corrected$Country)
-sort(data2015_corrected$Country)
-sort(data2016_corrected$Country)
-```
-
-
 
