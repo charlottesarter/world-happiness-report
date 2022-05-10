@@ -26,6 +26,9 @@ Nous avons commencé par analyser tous les datasets pour voir si les données no
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(leaflet)
+library(sf)
+library(rmapshaper)
 
 # Importation des datasets
 
@@ -36,8 +39,24 @@ data2018 <- tibble(read_csv('../data/2018.csv'))
 data2019 <- tibble(read_csv('../data/2019.csv'))
 data2020 <- tibble(read_csv('../data/2020.csv'))
 data2021 <- tibble(read_csv('../data/2021.csv'))
+countries <- tibble(read_csv('../data/countries.csv'))
+world_map <- read_sf('../data/world_map')
 
-# Renommage des colonnes (selon la convention définie précedemment) & ajout de la colonne "year"
+# Nettoyage du dataset "countries" pour pouvoir ajouter les coordonnées géographiques des pays
+
+countries_corrected <- countries %>%
+  rename(Country_code =`country`, 
+         Latitude = `latitude`,
+         Longitude = `longitude`,
+         Country = `name`)
+
+# Nettoyage du dataset "world_map" pour pouvoir manipuler les régions du monde sur une carte
+
+world_map_corrected <- world_map %>%
+  rename(Country =`NAME`, 
+         Geometry = `geometry`)
+
+# Renommage des colonnes (selon la convention définie précedemment) & ajout de la colonne "year" 
 
 data2015_corrected <- data2015 %>% 
   mutate(lower_confidence_interval = `Happiness Score` - `Standard Error`, upper_confidence_interval = `Happiness Score` + `Standard Error`, Year = 2015) %>%
@@ -151,14 +170,6 @@ data2021_corrected <- data2021 %>%
          Explained_by_trust_government = `Explained by: Perceptions of corruption`,
          Dystopia_residual = `Dystopia + residual`)
 
-colnames(data2015_corrected)
-colnames(data2016_corrected)
-colnames(data2017_corrected)
-colnames(data2018_corrected)
-colnames(data2019_corrected)
-colnames(data2020_corrected)
-colnames(data2021_corrected)
-
 # Fusion de tous les datasets
 
 data <- data2015_corrected %>% 
@@ -174,10 +185,17 @@ data <- data2015_corrected %>%
 regions <- data2015_corrected %>% select("Country", "Region")
 
 data <- merge(data, regions, by="Country")
-View(data)
 
 data <- data %>% select(-"Region.x")
 data <- data %>% rename("Region"="Region.y")
+
+# Ajout des coordonnées géographiques
+
+data <- merge(data, countries_corrected, by="Country")
+
+# Ajout des données géographiques (shapefile)
+
+data <- merge(data, world_map_corrected, by="Country")
 
 ```
 
@@ -188,20 +206,45 @@ C'est ce que nous allons nous demander dans cette partie. Notre but est de déte
 ## Idées de graphes à faire 
 
 1. Un barchart qui indique le nombre de pays dont on a les données par région
+
 2. Un boxplot qui indique le score de bonheur de chaque région
+
 3. Une carte du monde colorée par région en fonction du score de bonheur (avec ggmap ou leaflet)
+
 4. Faire des scatterplots pour les différents critères en fonction du niveau de bonheur par région (moyenne sur toutes les années ou évolution dans le temps ?)
 
 ```{r graphe 1 & 2}
 
 # Nombre de pays par région dans le jeu de données
 data %>%
-  ggplot(aes(x = Region)) + geom_bar() + theme(axis.text.x = element_text(angle = 90))
+  ggplot(aes(x = Region)) + geom_bar() + theme(axis.text.x = element_text(angle = 90))+ labs(x = "Region", y = "Number of countries")
 
 # Les régions et leur score de bonheur (box plot)
-regions <- X2015 %>% select("Region", "Happiness Score")
 
-reg_point <- ggplot(regions, aes(x = Region, y = Happiness_score)) + geom_boxplot()
-reg_point + theme(axis.text.x = element_text(angle = 90))
+data %>%
+  ggplot(aes(x = Region, y = Happiness_score)) + geom_boxplot() + theme(axis.text.x = element_text(angle = 90)) + labs(x = "Region", y = "Happiness Score")
 
+```
+
+```{r graphe 3}
+
+# Carte du monde colorée en fonction du niveau de bonheur de chaque région
+
+# Création de la fonction de palette numérique sur les scores de bonheur
+bins <- c(0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+pal <- colorBin(
+  "YlOrRd",
+  domain = data$Happiness_score,
+  bins = bins
+)
+map_regions <- leaflet() %>%
+  addTiles() %>%
+  # polygone des regions
+  addPolygons(data = data$Geometry,
+              label = data$Country
+              #fillColor = ~pal(data$Happiness_score)
+              )
+map_regions
+
+data$Country[is.na(data$Geometry)]
 ```
