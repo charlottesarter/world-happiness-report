@@ -1,10 +1,10 @@
 ---
-title: "Test pour le projet d'IF36 par Charlotte"
-author: "Charlotte Sarter"
-date: '2022-03-22'
+title: "Analyse des scores de bonheur des pays du monde"
+author: "Charlotte Sarter, Maud Agnès, Evann Bonnaventure"
+date: '2022-06-18'
 output:
-  rmarkdown::html_document:
-    theme: cosmo
+  prettydoc::html_pretty: 
+    theme: cayman
 ---
 
 ```{r setup, include=FALSE}
@@ -26,6 +26,7 @@ Nous avons commencé par analyser tous les datasets pour voir si les données no
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(prettydoc)
 
 # Importation des datasets
 
