@@ -1,31 +1,106 @@
 ---
-title: "Test pour le projet d'IF36 par Charlotte"
-author: "Charlotte Sarter"
-date: '2022-03-22'
-output:
-  rmarkdown::html_document:
-    theme: cosmo
+title: "Le bonheur dans le monde"
+author: "Maud AGNES, Evann BONNAVENTURE & Charlotte SARTER"
+date: '2022-05-18'
+output: 
+  prettydoc::html_pretty:
+    theme: cayman
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
 ```
 
-## Nettoyage des données
+# Introduction
 
-La première étape du projet est certainement une des plus importantes. 
+Ce projet est réalisé dans le cadre de la matière **Visualisation de données** enseignée à l'Université de Technologie de Troyes. 
 
-Nous avons commencé par analyser tous les datasets pour voir si les données nommées de la même manière correspondent à la même chose (ce qui n'était pas toujours le cas). Nous avons ensuite renommé toutes les colonnes de tous les datasets de la même manière selon la convention définie ci-dessous. Enfin, nous avons fusionné l'ensemble des datasets de manière à travailler sur un seul tableau propre à l'aide de filtres par la suite.
+Notre analyse porte sur le **World Happiness Report**, une enquête annuelle qui récolte des données du monde entier pour indiquer **comment les gens évaluent leur propre vie** dans plus de 150 pays du globe. Le but de notre projet est de concevoir les meilleures visualisations possibles pour analyser les données du World Happiness Report et pour mettre en valeur les informations qui en découlent.
 
-## Convention de nommage des colonnes
+![](https://www.sogeti.com/globalassets/common/1980x660-large-background-image/sogeti/worldhappinessreport2019-1980x660.jpg)
 
-- Le nom des colonnes commence par une majuscule
-- Les espaces sont remplacés par un underscore "_"
+
+### Lien des datasets
+
+- [World Happiness Report](https://www.kaggle.com/datasets/unsdsn/world-happiness?select=2017.csv) (de 2015 à 2019)
+- [World Happiness Report](https://www.kaggle.com/datasets/londeen/world-happiness-report-2020) (2020)
+- [World Happiness Report](https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2021?select=world-happiness-report-2021.csv) (2021)
+- [Healthy Lifestyle Cities Report 2021](https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021) 
+
+> Le dernier dataset apporte des **indicateurs supplémentaires** sur ce qui est susceptible de provoquer le bonheur des populations (prix de la vie, soleil, obésité...). Cependant, il ne comporte uniquement les données de 2021, ainsi nous pourrons seulement le comparer avec le dataset qui comporte les données du World Happiness Report de 2021. Cela nous permettra d'apporter une nouvelle dimension à notre analyse.
+
+
+### Données
+
+Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de référence sur l'état du bonheur dans le monde. Il comporte des données de 2015 à 2021, et classe 155 pays selon leur niveau de bonheur. Il permet d'établir une corrélation entre différents critères (liberté, corruption, cadre de vie...) et le niveau de bonheur qui en découle.
+
+Les jeux de données initiaux comportent 13 variables : 
+  
+|Variable                  |Class     |Description |
+|:---------|:------|:---------------------------|
+|country                   |character | Nom du pays |
+|region                    |character | Région à laquelle le pays appartient |
+|hapiness rank             |integer   | Classement du pays sur la base du score du bonheur |
+|hapiness score            |double    | Un indicateur mesuré chaque année en posant aux personnes de l'échantillon la question suivante : "Comment évaluez-vous votre bonheur sur une échelle de 0 à 10 où 10 est le plus heureux" |
+|lower confidence interval |double    | Intervalle de confiance inférieur du score de bonheur |
+|upper confidence interval |double    | Intervalle de confiance supérieur du score de bonheur |
+|economy (GPD per capita)  |double    | La mesure dans laquelle le PIB contribue au calcul du score du bonheur |
+|family                    |double    | La mesure dans laquelle la famille contribue au calcul du score du bonheur |
+|health (life expectancy)  |double    | La mesure dans laquelle l'espérance de vie a contribué au calcul du score du bonheur |
+|freedom                   |double    | La mesure dans laquelle la liberté a contribué au calcul du score du bonheur |
+|trust (governement corruption)|double| La mesure dans laquelle la perception de la corruption contribue au score de bonheur |
+|generosity                |double    | La mesure dans laquelle la générosité a contribué au calcul du score de bonheur |
+|dystopia residual         |double    | "Résidu" correspondant à l'écart entre le modèle théorique et la réalité, auquel on ajoute un score de dystopie (score d'un pays hypothétique moins bien classé que tous les autre) |
+
+
+Par la suite, nous avons ajouté plusieurs données nécessaires à la création de cartes : les **coordonnées géographiques des pays**, ainsi que leur **géométrie**, afin de pouvoir colorier les surfaces des pays sur les cartes.
+
+> L'ensemble des données utilisées est disponible dans le dossier `/data/`
+
+Ces données nous semblent pertinentes dans le cadre d'une analyse car :
+
+- Elles sont analysables dans le **temps**
+- Elles sont analysables **géographiquement**
+- Elles permettent d'établir différents facteurs de contribution au bonheur en fonction des régions du monde, des cultures...
+
+### Plan d'analyse
+
+1. **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ? (en regroupant par région, en utilisant des facet charts pour visualiser les différentes années en même temps)
+
+2. **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ? Pourquoi ? ➡️ Utiliser les facteurs de contribution du score pour mettre en évidence des causes de disparité
+
+3. Le niveau de bonheur est-il directement corrélé à la liberté des individus ? ➡️ Question extensible à la richesse, à l'espérance de vie...
+
+4. Quelle combinaison de facteurs hauts entraîne une hausse du bonheur ? Quelle combinaison de facteurs bas entraîne une diminution de celui-ci ? (par exemple: avoir une espérance de vie élevée ET un PIB élevé ET un taux de liberté elevé implique-t-il nécessairement un haut niveau de bonheur, au-dessus d'un certain seuil ?)
+
+# Nettoyage des données
+
+Le **nettoyage des jeux de données** est la première étape du projet, et certainement l'une des plus importantes. Nous nous en sommes rendus compte après avoir essayé de concevoir des graphiques avec les jeux de données bruts : nous avons été très vite restreints, d'un côté car il était impossible d'analyser les données temporellement car les données étaient séparées dans des datasets différents, et de l'autre parce que les noms des variables comportaient des espaces et différaient d'un dataset à l'autre.
+
+Afin de pouvoir travailler efficacement, nous avons opéré le nettoyage suivant :
+
+1. Nous avons commencé par **analyser tous les datasets** pour voir si les données nommées de la même manière correspondent à la même chose (ce qui n'était pas toujours le cas). Parfois, la variable "freedom" d'un dataset correspondait à la variable "explained_by_freedom" d'un autre dataset.
+
+2. Nous avons ensuite **renommé toutes les colonnes de tous les datasets** de la même manière selon la **convention** définie ci-dessous.
+
+3. Nous avons **fusionné l'ensemble des datasets** de manière à travailler sur un seul tableau propre à l'aide de filtres par la suite. Nous avions au préalable **ajouté une variable *Year*** car cette donnée n'était pas fournie à l'intérieur des datasets et nous aurions mélangé toutes les données lors de la fusion des datasets.
+
+4. Afin de pouvoir travailler avec des cartes, nous avons été contraints d'ajouter pour chaque pays des **données géométriques et GPS**.
+
+#### Convention de nommage des colonnes
+
+-   Le nom des colonnes commence par une **M**ajuscule
+-   Les espaces sont remplacés par un underscore "\_"
 
 ```{r cleaning}
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(leaflet)
+library(sf)
+library(rmapshaper)
+library(prettydoc)
+library(plotly)
 
 # Importation des datasets
 
@@ -36,8 +111,24 @@ data2018 <- tibble(read_csv('data/2018.csv'))
 data2019 <- tibble(read_csv('data/2019.csv'))
 data2020 <- tibble(read_csv('data/2020.csv'))
 data2021 <- tibble(read_csv('data/2021.csv'))
+countries <- tibble(read_csv('data/countries.csv'))
+world_map <- read_sf('data/world_map')
 
-# Renommage des colonnes (selon la convention définie précedemment) & ajout de la colonne "year"
+# Nettoyage du dataset "countries" pour pouvoir ajouter les coordonnées géographiques des pays
+
+countries_corrected <- countries %>%
+  rename(Country_code =`country`, 
+         Latitude = `latitude`,
+         Longitude = `longitude`,
+         Country = `name`)
+
+# Nettoyage du dataset "world_map" pour pouvoir manipuler les régions du monde sur une carte
+
+world_map_corrected <- world_map %>%
+  rename(Country =`NAME`, 
+         Geometry = `geometry`)
+
+# Renommage des colonnes (selon la convention définie précedemment) & ajout de la colonne "year" 
 
 data2015_corrected <- data2015 %>% 
   mutate(lower_confidence_interval = `Happiness Score` - `Standard Error`, upper_confidence_interval = `Happiness Score` + `Standard Error`, Year = 2015) %>%
@@ -151,14 +242,6 @@ data2021_corrected <- data2021 %>%
          Explained_by_trust_government = `Explained by: Perceptions of corruption`,
          Dystopia_residual = `Dystopia + residual`)
 
-colnames(data2015_corrected)
-colnames(data2016_corrected)
-colnames(data2017_corrected)
-colnames(data2018_corrected)
-colnames(data2019_corrected)
-colnames(data2020_corrected)
-colnames(data2021_corrected)
-
 # Fusion de tous les datasets
 
 data <- data2015_corrected %>% 
@@ -174,37 +257,30 @@ data <- data2015_corrected %>%
 regions <- data2015_corrected %>% select("Country", "Region")
 
 data <- merge(data, regions, by="Country")
-View(data)
 
 data <- data %>% select(-"Region.x")
 data <- data %>% rename("Region"="Region.y")
 
-```
+# Ajout des coordonnées géographiques
 
-## Est-ce que certaines régions du monde sont moins heureuses que d'autres ?
+data <- merge(data, countries_corrected, by="Country")
 
-C'est ce que nous allons nous demander dans cette partie. Notre but est de déterminer si le bonheur a des préférences géographiques, et quels sont les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
+# Ajout des données géographiques (shapefile)
 
-## Idées de graphes à faire 
-
-1. Un barchart qui indique le nombre de pays dont on a les données par région
-2. Un boxplot qui indique le score de bonheur de chaque région
-3. Une carte du monde colorée par région en fonction du score de bonheur (avec ggmap ou leaflet)
-4. Faire des scatterplots pour les différents critères en fonction du niveau de bonheur par région (moyenne sur toutes les années ou évolution dans le temps ?)
-
-```{r graphe 1 & 2}
-
-# Nombre de pays par région dans le jeu de données
-data %>%
-  ggplot(aes(x = Region)) + geom_bar() + theme(axis.text.x = element_text(angle = 90))
-
-# Les régions et leur score de bonheur (box plot)
-regions <- data2015_corrected %>% select("Region", "Happiness_score")
-
-reg_point <- ggplot(regions, aes(x = Region, y = Happiness_score)) + geom_boxplot()
-reg_point + theme(axis.text.x = element_text(angle = 90))
+data <- merge(data, world_map_corrected, by="Country")
 
 ```
+# I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
+
+Intro de la partie...
+
+## Les visualisations réalisées
+
+1. ...
+
+2. ...
+
+Mettre les visualisations à la suite avec un texte explicatif à chaque fois
 
 ```{r}
 # Graphes Evann
@@ -227,3 +303,25 @@ data %>%
   ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
 ```
 
+# II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
+
+Dans cette partie, le but est de **déterminer si le bonheur a des préférences géographiques**, et d'identifier les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
+
+## Les visualisations réalisées
+
+1.  Un boxplot qui indique la distribution des scores de bonheur de chaque région
+
+2.  Une carte du monde colorée par région en fonction du score de bonheur (avec ggmap ou leaflet)
+
+3.  Faire des scatterplots pour les différents critères en fonction du niveau de bonheur par région (moyenne sur toutes les années ou évolution dans le temps ?)
+
+```{r graphe 1}
+
+# Les régions et la distribution de leurs scores de bonheur (boxplot)
+
+boxplot_happiness_score <- data %>% ggplot(aes(x = Region, y = Happiness_score, color = Region)) + labs(x = "Région", y = "Score de bonheur", title = "Distribution des scores de bonheur dans les régions du monde", subtitle = "Données de 2015 à 2021") + geom_boxplot() + theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 1500, transition = 500)
+
+
+```
