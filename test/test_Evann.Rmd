@@ -132,9 +132,6 @@ colnames(data2018_corrected)
 colnames(data2019_corrected)
 colnames(data2020_corrected)
 colnames(data2021_corrected)
-  
-```
-```{r}
 
 data <- data2015_corrected %>% 
   bind_rows(data2016_corrected) %>% 
@@ -144,7 +141,19 @@ data <- data2015_corrected %>%
   bind_rows(data2020_corrected) %>%
   bind_rows(data2021_corrected)
 
+# Complétion de la colonne "Region"
+
+regions <- data2015_corrected %>% select("Country", "Region")
+
+data <- merge(data, regions, by="Country")
+
+data <- data %>% select(-"Region.x")
+data <- data %>% rename("Region"="Region.y")
+
+write.csv(data, "../data/data.csv", row.names(TRUE))
+  
 ```
+
 ```{r}
 
 data %>% 
@@ -173,6 +182,9 @@ sort(data2015_corrected$Country) %in% sort(data2016_corrected$Country)
 sort(data2016_corrected$Country) %in% sort(data2015_corrected$Country)
 sort(data2015_corrected$Country)
 sort(data2016_corrected$Country)
+```
+```{r}
+## Dataset country avec coordonnées géographiques
 ```
 
 

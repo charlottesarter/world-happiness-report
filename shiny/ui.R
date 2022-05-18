@@ -18,16 +18,14 @@ shinyUI(fluidPage(
     # Sidebar with a slider input for number of bins
     sidebarLayout(
         sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
+            selectInput("year",
+                        "Année",
+                        list(2015, 2016, 2017, 2018, 2019, 2020, 2021))
         ),
 
         # Show a plot of the generated distribution
         mainPanel(
-            plotOutput("distPlot")
+            plotOutput("happinessPerCountry")
         )
     )
 ))

@@ -199,9 +199,12 @@ data %>%
   ggplot(aes(x = Region)) + geom_bar() + theme(axis.text.x = element_text(angle = 90))
 
 # Les régions et leur score de bonheur (box plot)
-regions <- X2015 %>% select("Region", "Happiness Score")
+regions <- data2015_corrected %>% select("Region", "Happiness_score")
 
 reg_point <- ggplot(regions, aes(x = Region, y = Happiness_score)) + geom_boxplot()
 reg_point + theme(axis.text.x = element_text(angle = 90))
 
 ```
+
+
+
