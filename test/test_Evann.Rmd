@@ -149,8 +149,6 @@ data <- merge(data, regions, by="Country")
 
 data <- data %>% select(-"Region.x")
 data <- data %>% rename("Region"="Region.y")
-
-write.csv(data, "../data/data.csv", row.names(TRUE))
   
 ```
 
@@ -159,7 +157,7 @@ write.csv(data, "../data/data.csv", row.names(TRUE))
 data %>% 
   group_by(Year) %>%
   summarise(Happiness_score = mean(Happiness_score)) %>%
-  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity")
+  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity") + ylim(4, 7.5)
 
 
 ```
@@ -186,6 +184,32 @@ sort(data2016_corrected$Country)
 ```{r}
 ## Dataset country avec coordonnées géographiques
 ```
+
+```{r}
+# Evolution du bonheur de chaque région au cours du temps
+
+df <- data %>%
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year) %>%
+  summarise(Happiness_score = mean(Happiness_score)) %>%
+  mutate(Region = "World")
+
+df
+  
+
+df2 <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year, Region) %>%
+  summarise(Happiness_score = mean(Happiness_score))
+
+
+df2 %>%
+  ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5)
+
+rbind(df, df2) %>%
+  ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5)
+```
+
 
 
 
