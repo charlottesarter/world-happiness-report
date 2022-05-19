@@ -286,22 +286,49 @@ Nous commencerons cette analyse par la visualisation du bonheur moyen au niveau 
 ```{r}
 # Graphes Evann
 
-data %>% 
+mean_hs_score_world <- data %>% 
   group_by(Year) %>%
   summarise(Happiness_score = mean(Happiness_score)) %>%
   ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity")
 
-data %>%
-  ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+ggplotly(mean_hs_score_world)
 
-data %>%
-  ggplot(aes(x=Explained_by_life_expectancy, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# data %>%
+#   ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# 
+# data %>%
+#   ggplot(aes(x=Explained_by_life_expectancy, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# 
+# data %>%
+#   ggplot(aes(x=Explained_by_social_support, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# 
+# data %>%
+#   ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+```
 
-data %>%
-  ggplot(aes(x=Explained_by_social_support, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+Ce graphique nous indique donc que le niveau moyen de bonheur dans le monde observe une tendance à la hausse, hormis une légère baisse en 2017. On peut cependant s'interroger sur la représentativité de ce résultat au vu de la moyenne globale effectuée. Qu'en est-il lorsque nous nous plaçons à l'échelle des différentes régions du monde?
 
-data %>%
-  ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+### 2. L'analyse temporelle par régions du monde
+
+Cette seconde visualisation s'attache à représenter l'évolution du bonheur moyen **par région**, chaque ligne représentant les données d'une région. On transforme pour cela nos données de sorte à les regrouper par année ET par région, puis on calcule la moyenne du score de bonheur par région. On obtient donc le score de bonheur moyen par an et par région, dont on peut observer l'évolution sur la visualisation suivante:
+
+```{r}
+df <- data %>%
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year) %>%
+  summarise(Happiness_score = mean(Happiness_score)) %>%
+  mutate(Region = "World")
+  
+
+df2 <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year, Region) %>%
+  summarise(Happiness_score = mean(Happiness_score))
+
+plot_hs_mean_per_region <- rbind(df, df2) %>%
+  ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5)
+
+ggplotly(plot_hs_mean_per_region)
 ```
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
