@@ -1,17 +1,10 @@
 ---
-<<<<<<< HEAD
-title: "Analyse des scores de bonheur des pays du monde"
-author: "Charlotte Sarter, Maud Agnès, Evann Bonnaventure"
-date: '2022-06-18'
-output:
-  prettydoc::html_pretty: 
-=======
+
 title: "Le bonheur dans le monde"
 author: "Maud AGNES, Evann BONNAVENTURE & Charlotte SARTER"
 date: '2022-05-18'
 output: 
   prettydoc::html_pretty:
->>>>>>> ae17bfb48c1b9376b50e4ba9bf5c0496bcde1030
     theme: cayman
 ---
 
@@ -104,15 +97,11 @@ Afin de pouvoir travailler efficacement, nous avons opéré le nettoyage suivant
 library(readr)
 library(dplyr)
 library(ggplot2)
-<<<<<<< HEAD
-library(prettydoc)
-=======
 library(leaflet)
 library(sf)
 library(rmapshaper)
 library(prettydoc)
 library(plotly)
->>>>>>> ae17bfb48c1b9376b50e4ba9bf5c0496bcde1030
 
 # Importation des datasets
 
