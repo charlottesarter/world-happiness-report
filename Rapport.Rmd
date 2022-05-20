@@ -366,6 +366,20 @@ plot_positive_progress <- df_diff %>%
 
 ggplotly(plot_positive_progress)
 ```
+Voyons maintenant le résultat pour les pays dont le score a le plus chuté entre 2015 et 2021:
+
+```{r}
+df_diff <- df_2015 %>%
+  mutate(Score_2021 = df_2021$Score_2021) %>%
+  mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
+  arrange(Score_progression) %>%
+  head(10)
+
+plot_positive_progress <- df_diff %>%
+  ggplot(aes(x = reorder(Country, Score_progression), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue")
+
+ggplotly(plot_positive_progress)
+```
 
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
