@@ -338,6 +338,34 @@ On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne 
 
 ### 2. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
 
+La visualisation suivante s'attache aux pays ayant connu une hausse de leur score de bonheur entre 2015 et 2021. Elle représente les 10 taux d'accroissement de ce score les plus importants, en prenant le score de 2015 comme référence (un taux d'accroissement de 20% signifie donc qu'en 2021, le score de bonheur du pays est 20% plus élevé qu'en 2015)
+
+```{r}
+df_2015 <- data %>%
+  filter((Year == 2015) & (Country != "Angola" & Country != "Bhutan" & Country != "Central African Republic" & Country != "Congo (Kinshasa)" & Country != "Djibouti" & Country != "Hong Kong" & Country != "Macedonia" & Country != "Oman" & Country != "Qatar" & Country != "Somaliland region" & Country != "Sudan" & Country != "Suriname" & Country != "Syria" & Country != "Taiwan" & Country != "Trinidad and Tobago"))  %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2015 = Happiness_score) %>%
+  tibble()
+
+df_2021 <- data %>%
+  filter(Year == 2021) %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2021 = Happiness_score) %>%
+  tibble()
+
+df_diff <- df_2015 %>%
+  mutate(Score_2021 = df_2021$Score_2021) %>%
+  mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
+  arrange(desc(Score_progression)) %>%
+  head(10)
+
+plot_positive_progress <- df_diff %>%
+  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue")
+
+ggplotly(plot_positive_progress)
+```
 
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?

@@ -227,9 +227,15 @@ df_2015
 df_2021
 
 df_diff <- df_2015 %>%
-  mutate(Score_2021 = df_2021$Score_2021)
+  mutate(Score_2021 = df_2021$Score_2021) %>%
+  mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
+  arrange(desc(Score_progression)) %>%
+  head(10)
 
 df_diff
+
+df_diff %>%
+  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue")
 
 
 # Pays non présent dans [année]:
