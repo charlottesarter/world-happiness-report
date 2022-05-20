@@ -206,6 +206,27 @@ rbind(df, df2) %>%
   ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5)
 ```
 
+```{r}
 
+df_dif <- data %>%
+  filter(Year == 2015 | Year == 2021) %>%
+  select(Year, Country, Happiness_rank, Happiness_score)
 
+df_dif
 
+# pays non présents dans les deux années:
+# Angola
+# Bhutan
+# Central African Republic
+# Congo (Kinshasa)
+# Djibouti
+# Hong Kong
+# Macedonia
+# Oman
+# Qatar
+# Somaliland region
+# Sudan
+# Suriname
+# Syria 2015
+# Taiwan 2015
+```
