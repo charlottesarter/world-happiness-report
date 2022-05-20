@@ -2,6 +2,7 @@
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(tibble)
 
 data2015 <- tibble(read_csv('../data/2015.csv'))
 data2016 <- tibble(read_csv('../data/2016.csv'))
@@ -208,25 +209,43 @@ rbind(df, df2) %>%
 
 ```{r}
 
-df_dif <- data %>%
-  filter(Year == 2015 | Year == 2021) %>%
-  select(Year, Country, Happiness_rank, Happiness_score)
+df_2015 <- data %>%
+  filter((Year == 2015) & (Country != "Angola" & Country != "Bhutan" & Country != "Central African Republic" & Country != "Congo (Kinshasa)" & Country != "Djibouti" & Country != "Hong Kong" & Country != "Macedonia" & Country != "Oman" & Country != "Qatar" & Country != "Somaliland region" & Country != "Sudan" & Country != "Suriname" & Country != "Syria" & Country != "Taiwan" & Country != "Trinidad and Tobago"))  %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2015 = Happiness_score) %>%
+  tibble()
 
-df_dif
+df_2021 <- data %>%
+  filter(Year == 2021) %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2021 = Happiness_score) %>%
+  tibble()
 
-# pays non présents dans les deux années:
-# Angola
-# Bhutan
-# Central African Republic
-# Congo (Kinshasa)
-# Djibouti
-# Hong Kong
-# Macedonia
-# Oman
-# Qatar
-# Somaliland region
-# Sudan
-# Suriname
-# Syria 2015
-# Taiwan 2015
+df_2015
+df_2021
+
+df_diff <- df_2015 %>%
+  mutate(Score_2021 = df_2021$Score_2021)
+
+df_diff
+
+
+# Pays non présent dans [année]:
+# Angola 2021
+# Bhutan 2021
+# Central African Republic 2021
+# Congo (Kinshasa) 2021
+# Djibouti 2021
+# Hong Kong 2021
+# Macedonia 2021
+# Oman 2021
+# Qatar 2021
+# Somaliland region 2021
+# Sudan 2021
+# Suriname 2021
+# Syria 2021
+# Taiwan 2021
+# Trinidad and Tobago 2021
 ```
