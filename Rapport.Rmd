@@ -101,6 +101,7 @@ library(sf)
 library(rmapshaper)
 library(prettydoc)
 library(plotly)
+library(scales)
 
 # Importation des datasets
 
@@ -289,7 +290,7 @@ Nous commencerons cette analyse par la visualisation du bonheur moyen au niveau 
 mean_hs_score_world <- data %>% 
   group_by(Year) %>%
   summarise(Happiness_score = mean(Happiness_score)) %>%
-  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity")
+  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity") + labs(title = "Evolution du score de bonheur moyen dans le monde", x = "Année", y = "Score de bonheur (moyenne monde)")
 
 ggplotly(mean_hs_score_world)
 
@@ -326,7 +327,7 @@ df2 <- data %>%
   summarise(Happiness_score = mean(Happiness_score))
 
 plot_hs_mean_per_region <- rbind(df, df2) %>%
-  ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5)
+  ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5) + labs(title = "Evolution du score de bonheur par région", x = "Année", y = "Score de bonheur")
 
 ggplotly(plot_hs_mean_per_region)
 
@@ -362,7 +363,7 @@ df_diff <- df_2015 %>%
   head(10)
 
 plot_positive_progress <- df_diff %>%
-  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue")
+  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue") + labs(title = "Les 10 pays dont le score a le plus progressé de 2015 à 2021", x = "Pays", y = "Pourcentage de progression")  + scale_y_continuous(labels = scales::percent)
 
 ggplotly(plot_positive_progress)
 ```
@@ -376,7 +377,8 @@ df_diff <- df_2015 %>%
   head(10)
 
 plot_positive_progress <- df_diff %>%
-  ggplot(aes(x = reorder(Country, Score_progression), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue")
+  ggplot(aes(x = reorder(Country, Score_progression), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue") + labs(title = "Les 10 pays dont le score a le plus régressé de 2015 à 2021", x = "Pays", y = "Pourcentage de régression") + scale_y_continuous(labels = scales::percent)
+
 
 ggplotly(plot_positive_progress)
 ```
