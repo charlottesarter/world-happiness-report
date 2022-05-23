@@ -13,7 +13,17 @@ library(shinydashboard)
 # Define UI for application that draws a histogram
 
 dashboardPage(
-  dashboardHeader(),
+  dashboardHeader(title = "Dashboard"),
   dashboardSidebar(),
-  dashboardBody()
+  dashboardBody(
+    fluidRow(
+      box(
+        selectInput("country", label = "Sélectionner un pays", choices = list("Afghanistan" = "Afghanistan", "Albania" = "Albania", "Argentina" = "Argentina"), 
+      selected = "Afghanistan")
+      ),
+      box(
+        plotOutput("happiness_score_country_evolution")
+      )
+    )
+  )
 )
