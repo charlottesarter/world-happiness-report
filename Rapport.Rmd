@@ -102,6 +102,7 @@ library(rmapshaper)
 library(prettydoc)
 library(plotly)
 library(scales)
+library(data.table)
 
 # Importation des datasets
 
@@ -269,9 +270,6 @@ data <- merge(data, countries_corrected, by="Country")
 # Ajout des données géographiques (shapefile)
 
 data <- merge(data, world_map_corrected, by="Country")
-
-# data %>%
-#   write.table(file = "cleaned_data.csv", sep = ",", row.names = TRUE)
 
 ```
 # I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
