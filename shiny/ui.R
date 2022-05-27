@@ -18,15 +18,36 @@ countries_names = read_lines("../data/countries_names.csv")
 
 dashboardPage(
   dashboardHeader(title = "Dashboard"),
-  dashboardSidebar(),
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("dashboard")),
+      menuItem("Les facteurs du bonheur", tabName = "happ_score_factors", icon = icon("dashboard"))
+    )
+  ),
   dashboardBody(
-    fluidRow(
-      box(
-        selectInput("country", label = "Sélectionner un pays", choices = countries_names, 
-      selected = "Afghanistan")
+    tabItems(
+      tabItem(tabName = "happ_score_by_country",
+        fluidRow(
+          box(
+            selectInput("country", label = "Sélectionner un pays", choices = countries_names, 
+          selected = "Afghanistan")
+          ),
+          box(
+            plotOutput("happiness_score_country_evolution")
+          )
+        )
       ),
-      box(
-        plotOutput("happiness_score_country_evolution")
+      tabItem(tabName = "happ_score_factors", icon = icon("dashboard"),
+        fluidRow(
+          box(
+            selectInput("country_factors", label = "Sélectionner un pays", choices = countries_names, 
+                        selected = "Afghanistan")
+          ),
+          box(
+            selectInput("year_factors", label = "Sélectionner une année", 
+                        choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2015)
+          )
+        )
       )
     )
   )

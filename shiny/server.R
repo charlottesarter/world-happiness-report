@@ -196,5 +196,21 @@ shinyServer(function(input, output) {
       filter(Country == input$country) %>%
       ggplot(aes(x = Year, y = Happiness_score)) + geom_line(stat = "identity")
   )
+  
+  # on filtre les données pour ne garder que les facteurs pour l'année et le pays donnés
+  filtered_data_factors <- data %>%
+    filter(Country == input$country_factors) %>%
+    filter(Year == input$year_factors) %>%
+    select(Explained_by_generosity, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_social_support, Explained_by_trust_government)
+  # on transpose les données pour pouvoir les utiliser dans un graphique
+  Factor_values <- t(filtered_data_factors)
+  # on construit le dataframe pour avoir le nom des facteurs dans une colonne nommée factor_names, et leurs valeurs dans une colonne nommée factor_values
+  factors_and_values_data <- data.frame(Factor_names = row.names(Factor_values), Factor_values, row.names = NULL)
+  
+  output$factors_contribution_graph <- renderPlot(
+    factors_and_values_data %>%
+      ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), y = Factor_values)) + 
+      geom_bar(stat = "identity", fill = "steelblue")
+  )
 
 })
