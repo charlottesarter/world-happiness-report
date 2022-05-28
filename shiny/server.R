@@ -210,7 +210,7 @@ shinyServer(function(input, output) {
       rename(Factor_values = ".") %>%
       
       # construction du graphique
-      ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), y = Factor_values)) + geom_bar(stat = "identity") + labs(title = "Classement des facteurs de bonheur d'un pays", x = "Facteurs de bonheur", y = "Valeur")
+      ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), y = Factor_values)) + geom_bar(stat = "identity", fill = "steelblue") + labs(title = "Classement des facteurs de bonheur d'un pays", x = "Facteurs de bonheur", y = "Valeur")
   )
 
 })
