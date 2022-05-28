@@ -46,6 +46,9 @@ dashboardPage(
           box(
             selectInput("year_factors", label = "Sélectionner une année", 
                         choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2015)
+          ),
+          box(
+            plotOutput("factors_contribution_graph")
           )
         )
       )
