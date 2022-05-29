@@ -8,26 +8,50 @@
 #
 
 library(shiny)
+library(shinydashboard)
+library(readr)
+
+# on récupère la liste des pays à mettre dans notre select input depuis un csv
+countries_names = read_lines("../data/countries_names.csv")
 
 # Define UI for application that draws a histogram
-shinyUI(fluidPage(
 
-    # Application title
-    titlePanel("Old Faithful Geyser Data"),
-
-    # Sidebar with a slider input for number of bins
-    sidebarLayout(
-        sidebarPanel(
-            sliderInput("bins",
-                        "Number of bins:",
-                        min = 1,
-                        max = 50,
-                        value = 30)
-        ),
-
-        # Show a plot of the generated distribution
-        mainPanel(
-            plotOutput("distPlot")
-        )
+dashboardPage(
+  dashboardHeader(title = "Dashboard"),
+  dashboardSidebar(
+    sidebarMenu(
+      menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("dashboard")),
+      menuItem("Les facteurs du bonheur", tabName = "happ_score_factors", icon = icon("dashboard"))
     )
-))
+  ),
+  dashboardBody(
+    tabItems(
+      tabItem(tabName = "happ_score_by_country",
+        fluidRow(
+          box(
+            selectInput("country", label = "Sélectionner un pays", choices = countries_names, 
+          selected = "Afghanistan")
+          ),
+          box(
+            plotOutput("happiness_score_country_evolution")
+          )
+        )
+      ),
+      tabItem(tabName = "happ_score_factors", icon = icon("dashboard"),
+        fluidRow(
+          box(
+            selectInput("country_factors", label = "Sélectionner un pays", choices = countries_names, 
+                        selected = "Afghanistan")
+          ),
+          box(
+            selectInput("year_factors", label = "Sélectionner une année", 
+                        choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2015)
+          ),
+          box(
+            plotOutput("factors_contribution_graph")
+          )
+        )
+      )
+    )
+  )
+)

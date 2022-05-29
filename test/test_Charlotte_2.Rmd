@@ -240,11 +240,13 @@ data %>%
   ggplot(aes(x = Region)) + geom_bar() + theme(axis.text.x = element_text(angle = 90))+ labs(x = "Region", y = "Number of countries")
 
 # Les régions et leur score de bonheur (box plot)
+regions <- data2015_corrected %>% select("Region", "Happiness_score")
 
 data %>%
   ggplot(aes(x = Region, y = Happiness_score)) + geom_boxplot() + theme(axis.text.x = element_text(angle = 90)) + labs(x = "Region", y = "Happiness Score")
 
 ```
+
 
 ```{r graphe 3}
 
@@ -270,4 +272,3 @@ map_regions
 
 # data$Country[is.na(data$Geometry)]
 data2016_corrected$Country[is.na(data$Happiness_score)]
-```

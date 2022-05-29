@@ -2,6 +2,7 @@
 library(readr)
 library(dplyr)
 library(ggplot2)
+library(tibble)
 
 data2015 <- tibble(read_csv('../data/2015.csv'))
 data2016 <- tibble(read_csv('../data/2016.csv'))
@@ -132,9 +133,6 @@ colnames(data2018_corrected)
 colnames(data2019_corrected)
 colnames(data2020_corrected)
 colnames(data2021_corrected)
-  
-```
-```{r}
 
 data <- data2015_corrected %>% 
   bind_rows(data2016_corrected) %>% 
@@ -144,13 +142,23 @@ data <- data2015_corrected %>%
   bind_rows(data2020_corrected) %>%
   bind_rows(data2021_corrected)
 
+# Complétion de la colonne "Region"
+
+regions <- data2015_corrected %>% select("Country", "Region")
+
+data <- merge(data, regions, by="Country")
+
+data <- data %>% select(-"Region.x")
+data <- data %>% rename("Region"="Region.y")
+  
 ```
+
 ```{r}
 
 data %>% 
   group_by(Year) %>%
   summarise(Happiness_score = mean(Happiness_score)) %>%
-  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity")
+  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity") + ylim(4, 7.5)
 
 
 ```
@@ -174,6 +182,76 @@ sort(data2016_corrected$Country) %in% sort(data2015_corrected$Country)
 sort(data2015_corrected$Country)
 sort(data2016_corrected$Country)
 ```
+```{r}
+## Dataset country avec coordonnées géographiques
+```
+
+```{r}
+# Evolution du bonheur de chaque région au cours du temps
+
+df <- data %>%
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year) %>%
+  summarise(Happiness_score = mean(Happiness_score)) %>%
+  mutate(Region = "World")
+
+df
+  
+
+df2 <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year, Region) %>%
+  summarise(Happiness_score = mean(Happiness_score))
+
+rbind(df, df2) %>%
+  ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5)
+```
+
+```{r}
+
+df_2015 <- data %>%
+  filter((Year == 2015) & (Country != "Angola" & Country != "Bhutan" & Country != "Central African Republic" & Country != "Congo (Kinshasa)" & Country != "Djibouti" & Country != "Hong Kong" & Country != "Macedonia" & Country != "Oman" & Country != "Qatar" & Country != "Somaliland region" & Country != "Sudan" & Country != "Suriname" & Country != "Syria" & Country != "Taiwan" & Country != "Trinidad and Tobago"))  %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2015 = Happiness_score) %>%
+  tibble()
+
+df_2021 <- data %>%
+  filter(Year == 2021) %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2021 = Happiness_score) %>%
+  tibble()
+
+df_2015
+df_2021
+
+df_diff <- df_2015 %>%
+  mutate(Score_2021 = df_2021$Score_2021) %>%
+  mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
+  arrange(desc(Score_progression)) %>%
+  head(10)
+
+df_diff
+
+df_diff %>%
+  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue")
 
 
-
+# Pays non présent dans [année]:
+# Angola 2021
+# Bhutan 2021
+# Central African Republic 2021
+# Congo (Kinshasa) 2021
+# Djibouti 2021
+# Hong Kong 2021
+# Macedonia 2021
+# Oman 2021
+# Qatar 2021
+# Somaliland region 2021
+# Sudan 2021
+# Suriname 2021
+# Syria 2021
+# Taiwan 2021
+# Trinidad and Tobago 2021
+```

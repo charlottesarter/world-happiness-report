@@ -101,6 +101,8 @@ library(sf)
 library(rmapshaper)
 library(prettydoc)
 library(plotly)
+library(scales)
+library(data.table)
 
 # Importation des datasets
 
@@ -290,32 +292,112 @@ Intro de la partie...
 
 ## Les visualisations réalisées
 
-1. ...
+### 1. L'évolution du bonheur moyen dans le monde
 
-2. ...
+Nous commencerons cette analyse par la visualisation du bonheur moyen au niveau mondial. La visualisation suivante est donc construite à partir de la moyenne globale des scores de bonheur de tous les pays chaque année.
 
-Mettre les visualisations à la suite avec un texte explicatif à chaque fois
+*Attention: on peut penser à première vue que les variations du bonheur moyen au fil des ans est importante. Il est important de prendre en compte l'échelle de l'axe: ces variations sont en réalité relativement faibles, cette échelle ayant précisément été choisie pour qu'elles soivent plus visuelles.*
+
 
 ```{r}
 # Graphes Evann
 
-data %>% 
+mean_hs_score_world <- data %>% 
   group_by(Year) %>%
   summarise(Happiness_score = mean(Happiness_score)) %>%
-  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity")
+  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity") + labs(title = "Evolution du score de bonheur moyen dans le monde", x = "Année", y = "Score de bonheur (moyenne monde)")
 
-data %>%
-  ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+ggplotly(mean_hs_score_world)
 
-data %>%
-  ggplot(aes(x=Explained_by_life_expectancy, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
-
-data %>%
-  ggplot(aes(x=Explained_by_social_support, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
-
-data %>%
-  ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# data %>%
+#   ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# 
+# data %>%
+#   ggplot(aes(x=Explained_by_life_expectancy, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# 
+# data %>%
+#   ggplot(aes(x=Explained_by_social_support, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# 
+# data %>%
+#   ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
 ```
+
+Ce graphique nous indique donc que le niveau moyen de bonheur dans le monde observe une tendance à la hausse, hormis une légère baisse en 2017. On peut cependant s'interroger sur la représentativité de ce résultat au vu de la moyenne globale effectuée. Qu'en est-il lorsque nous nous plaçons à l'échelle des différentes régions du monde?
+
+### 2. L'analyse temporelle par régions du monde
+
+Cette seconde visualisation s'attache à représenter l'évolution du bonheur moyen **par région**, chaque ligne représentant les données d'une région. On transforme pour cela nos données de sorte à les regrouper par année ET par région, puis on calcule la moyenne du score de bonheur par région. On obtient donc le score de bonheur moyen par an et par région, dont on peut observer l'évolution sur la visualisation suivante:
+
+```{r}
+df <- data %>%
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year) %>%
+  summarise(Happiness_score = mean(Happiness_score)) %>%
+  mutate(Region = "World")
+  
+
+df2 <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year, Region) %>%
+  summarise(Happiness_score = mean(Happiness_score))
+
+plot_hs_mean_per_region <- rbind(df, df2) %>%
+  ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5) + labs(title = "Evolution du score de bonheur par région", x = "Année", y = "Score de bonheur")
+
+ggplotly(plot_hs_mean_per_region)
+
+```
+
+On a ajouté à ces données par région la moyenne pour le monde. On peut donc effectuer simplement des comparaisons (en cliquant sur l'étiquette d'une région pour la faire apparaître/disparaître notamment) entre les différentes régions. 
+
+On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne globale, et qu'une moyenne par région nous montre des disparités bien plus importantes quant à l'évolution du niveau de bonheur dans le monde au cours des dernières années. 
+
+### 2. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
+
+La visualisation suivante s'attache aux pays ayant connu une hausse de leur score de bonheur entre 2015 et 2021. Elle représente les 10 taux d'accroissement de ce score les plus importants, en prenant le score de 2015 comme référence (un taux d'accroissement de 20% signifie donc qu'en 2021, le score de bonheur du pays est 20% plus élevé qu'en 2015)
+
+```{r}
+df_2015 <- data %>%
+  filter((Year == 2015) & (Country != "Angola" & Country != "Bhutan" & Country != "Central African Republic" & Country != "Congo (Kinshasa)" & Country != "Djibouti" & Country != "Hong Kong" & Country != "Macedonia" & Country != "Oman" & Country != "Qatar" & Country != "Somaliland region" & Country != "Sudan" & Country != "Suriname" & Country != "Syria" & Country != "Taiwan" & Country != "Trinidad and Tobago"))  %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2015 = Happiness_score) %>%
+  tibble()
+
+df_2021 <- data %>%
+  filter(Year == 2021) %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2021 = Happiness_score) %>%
+  tibble()
+
+df_diff <- df_2015 %>%
+  mutate(Score_2021 = df_2021$Score_2021) %>%
+  mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
+  arrange(desc(Score_progression)) %>%
+  head(10)
+
+plot_positive_progress <- df_diff %>%
+  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue") + labs(title = "Les 10 pays dont le score a le plus progressé de 2015 à 2021", x = "Pays", y = "Pourcentage de progression")  + scale_y_continuous(labels = scales::percent)
+
+ggplotly(plot_positive_progress)
+```
+Voyons maintenant le résultat pour les pays dont le score a le plus chuté entre 2015 et 2021:
+
+```{r}
+df_diff <- df_2015 %>%
+  mutate(Score_2021 = df_2021$Score_2021) %>%
+  mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
+  arrange(Score_progression) %>%
+  head(10)
+
+plot_positive_progress <- df_diff %>%
+  ggplot(aes(x = reorder(Country, Score_progression), y = Score_progression)) + geom_bar(stat = "identity", fill = "steelblue") + labs(title = "Les 10 pays dont le score a le plus régressé de 2015 à 2021", x = "Pays", y = "Pourcentage de régression") + scale_y_continuous(labels = scales::percent)
+
+
+ggplotly(plot_positive_progress)
+```
+
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
