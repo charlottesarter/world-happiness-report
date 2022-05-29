@@ -270,6 +270,20 @@ data <- merge(data, countries_corrected, by="Country")
 data <- merge(data, world_map_corrected, by="Country")
 
 ```
+# À savoir
+
+Avant de commencer l'analyse détaillée du jeu de donnée, il y a quelques informations à connaître.
+
+1. Comme nous allons analyser le score de bonheur des régions, nous avons jugé utile de présenter la **liste des pays de chaque région** :
+
+```{r répartition pays}
+
+repartition <- data2015_corrected %>% select("Country", "Region")
+
+View(repartition)
+
+```
+
 # I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
 Intro de la partie...
@@ -314,6 +328,10 @@ Dans cette partie, le but est de **déterminer si le bonheur a des préférences
 2.  Une carte du monde colorée par région en fonction du score de bonheur (avec ggmap ou leaflet)
 
 3.  Faire des scatterplots pour les différents critères en fonction du niveau de bonheur par région (moyenne sur toutes les années ou évolution dans le temps ?)
+
+#### La distribution des scores de bonheur de chaque région chaque année
+
+La visualisation du boxplot nous permet de situer rapidement les scores de bonheurs des pays d'une même région. On constate en un coup d'oeil que les 3 régions du monde les plus heureuses sont la Nouvelle Zélande, l'Amérique du Nord et l'Europe de l'Ouest. 
 
 ```{r graphe 1}
 
