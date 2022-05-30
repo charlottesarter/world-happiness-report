@@ -369,7 +369,7 @@ On a ajouté à ces données par région la moyenne pour le monde. On peut donc 
 
 On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne globale, et qu'une moyenne par région nous montre des disparités bien plus importantes quant à l'évolution du niveau de bonheur dans le monde au cours des dernières années. 
 
-### 2. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
+### 3. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
 
 La visualisation suivante s'attache aux pays ayant connu une hausse de leur score de bonheur entre 2015 et 2021. Elle représente les 10 taux d'accroissement de ce score les plus importants, en prenant le score de 2015 comme référence (un taux d'accroissement de 20% signifie donc qu'en 2021, le score de bonheur du pays est 20% plus élevé qu'en 2015)
 
@@ -414,6 +414,26 @@ plot_positive_progress <- df_diff %>%
 
 ggplotly(plot_positive_progress)
 ```
+
+### 4. La répartition du niveau de bonheur des différentes régions du monde chaque année
+
+Cette visualisation sous forme d'histogramme permet de visualiser assez rapidement le score de bonheur le plus présent dans une région. Le score de chaque pays est arrondi à l'entier le plus proche. Le graphique prend donc compte de chacun des scores individuellement puis s'organise suivant les régions.
+
+
+```{r}
+
+# Histogramme global année 2016 Maud
+
+data2016 <- filter(data, Year =='2016')
+
+dat2016 <- data2016 %>% 
+ mutate_if(is.numeric, round) %>% ggplot(aes(Happiness_score, color = Region, fill = Region)) + geom_histogram(alpha = 0.5) + scale_x_continuous(breaks=seq(0,10, by = 1)) + scale_color_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) + scale_fill_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) + ggtitle("Niveau de bonheur des différentes régions du monde en 2016")
+
+ggplotly(dat2016)
+
+
+``` 
+
 
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
