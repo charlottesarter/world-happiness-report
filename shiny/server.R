@@ -17,6 +17,7 @@ library(rmapshaper)
 library(prettydoc)
 library(plotly)
 library(scales)
+library(viridis)
 
 # Importation des datasets
 
@@ -194,7 +195,9 @@ shinyServer(function(input, output) {
   output$happiness_score_country_evolution <- renderPlot(
     data %>%
       filter(Country == input$country) %>%
-      ggplot(aes(x = Year, y = Happiness_score)) + geom_line(stat = "identity", color = "steelblue") + labs(title = paste("Evolution du bonheur: ", input$country), x = "Année", y = "Score de bonheur")
+      ggplot(aes(x = Year, y = Happiness_score, color = Happiness_score)) + 
+      geom_line(stat = "identity") + 
+      labs(title = paste("Evolution du bonheur: ", input$country), x = "Année", y = "Score de bonheur")
   )
 
   output$factors_contribution_graph <- renderPlot(
