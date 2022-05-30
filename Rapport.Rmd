@@ -311,7 +311,7 @@ Intro de la partie...
 
 Nous commencerons cette analyse par la visualisation du bonheur moyen au niveau mondial. La visualisation suivante est donc construite à partir de la moyenne globale des scores de bonheur de tous les pays chaque année.
 
-*Attention: on peut penser à première vue que les variations du bonheur moyen au fil des ans est importante. Il est important de prendre en compte l'échelle de l'axe: ces variations sont en réalité relativement faibles, cette échelle ayant précisément été choisie pour qu'elles soivent plus visuelles.*
+*Attention: on peut penser à première vue que les variations du bonheur moyen au fil des ans est importante. Il est important de prendre en compte l'échelle de l'axe: ces variations sont en réalité relativement faibles, cette échelle ayant précisément été choisie pour qu'elles soient plus visuelles.*
 
 
 ```{r}
