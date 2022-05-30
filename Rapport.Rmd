@@ -446,7 +446,7 @@ ggplotly(evolution_per_region)
 ### 5. Classement [à déplacer]
 
 ```{r}
-data %>%
+region_ranking_graph <- data %>%
   select(Year, Region, Happiness_score) %>%
   filter(Year == 2021) %>%
   group_by(Region) %>%
@@ -456,6 +456,8 @@ data %>%
   scale_fill_viridis_d() + 
   labs(title = "Classement des régions (année 2021)", x = "Score", y = "Région") +
   theme(legend.position = "none")
+
+ggplotly(region_ranking_graph)
 ```
 
 
