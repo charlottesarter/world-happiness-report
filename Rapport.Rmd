@@ -103,6 +103,7 @@ library(prettydoc)
 library(plotly)
 library(scales)
 library(data.table)
+library(knitr)
 
 # Importation des datasets
 
@@ -272,6 +273,34 @@ data <- merge(data, countries_corrected, by="Country")
 data <- merge(data, world_map_corrected, by="Country")
 
 ```
+# À savoir
+
+Avant de commencer l'analyse détaillée du jeu de données, il y a quelques informations à connaître.
+
+1. Comme nous allons analyser le score de bonheur des régions, nous avons jugé utile de présenter la **liste des pays de chaque région** :
+
+|Region                 |Countries |
+|:---------------------|:----------------------------------------------|
+|Australia and New Zealand       | Australia, New Zealand  |
+|Central and Eastern Europe      | Albania, Armenia, Azerbaijan, Belarus, Bosnia and Herzegovina, Bulgaria, Croatia, Czech Republic, Estonia, Georgia, Hungary, Kazakhstan, Kosovo, Kyrgyzstan, Latvia, Lithuania, Macedonia, Moldova, Montenegro, Poland, Romania, Russia, Serbia, Slovakia, Slovenia, Tajikistan, Turkmenistan, Ukraine, Uzbekistan |
+|Eastern Asia                    | China, Hong Kong, Japan, Mongolia, South Korea, Taiwan |
+|Latin America and Caribbean     | Argentina, Bolivia, Brazil, Chile, Colombia, Costa Rica, Dominican Republic, Ecuador, Guatemala, Haiti, Honduras, Jamaica, Mexico, Nicaragua, Panama, Paraguay, Peru, Salvador, Suriname, Trinidad and Tobago, Uruguay, Venezuela |
+|Middle East and Northern Africa | Algeria, Bahrain, Egypt, Iran, Iraq, Israel, Jordan, Kuwait, Lebanon, Libya, Morocco, Oman, Palestinian Territories, Qatar, Saudi Arabia, Syria, Tunisia, Turkey, United Arab Emirates, Yemen |
+|North America                   | Canada, United States |
+|Southeastern Asia               | Cambodia, Indonesia, Laos, Malaysia, Myanmar, Philippines, Singapore, Thailand, Vietnam |
+|Southern Asia                   | Afghanistan, Bangladesh, Bhutan, India, Nepal, Pakistan, Sri Lanka |
+|Sub-Saharan Africa              | Angola, Benin, Botswana, Burkina Faso, Burundi, Cameroon, Central African Republic, Chad, Comoros, Congo (Brazzaville), Congo (Kinshasa),Djibouti, Ethiopia, Gabon, Ghana, Guinea, Ivory Coast, Kenya, Lesotho, Liberia, Madagascar, Malawi, Mali, Mauritania, Mauritius, Mozambique, Niger, Nigeria, Rwanda, Senegal, Sierra Leone, Somaliland región, South Africa, Sudan, Swaziland, Tanzania, Togo, Uganda, Zambia, Zimbabwe |
+|Western Europe                  | Austria, Belgium, Cyprus, Denmark, Finland, France, Germany, Greece,Iceland, Ireland, Italy, Luxembourg, Malta, Netherlands, North Cyprus, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom |
+
+```{r répartition pays}
+
+data2015_sorted <- data2015_corrected %>% arrange(data2015_corrected$Region)
+repartition <- data2015_sorted %>% select("Region", "Country")
+
+#kable(repartition)
+
+```
+
 # I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
 Intro de la partie...
@@ -396,6 +425,10 @@ Dans cette partie, le but est de **déterminer si le bonheur a des préférences
 2.  Une carte du monde colorée par région en fonction du score de bonheur (avec ggmap ou leaflet)
 
 3.  Faire des scatterplots pour les différents critères en fonction du niveau de bonheur par région (moyenne sur toutes les années ou évolution dans le temps ?)
+
+#### La distribution des scores de bonheur de chaque région chaque année
+
+La visualisation du boxplot nous permet de situer rapidement les scores de bonheurs des pays d'une même région. On constate en un coup d'oeil que les 3 régions du monde les plus heureuses sont la Nouvelle Zélande, l'Amérique du Nord et l'Europe de l'Ouest. 
 
 ```{r graphe 1}
 
