@@ -369,7 +369,7 @@ On a ajouté à ces données par région la moyenne pour le monde. On peut donc 
 
 On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne globale, et qu'une moyenne par région nous montre des disparités bien plus importantes quant à l'évolution du niveau de bonheur dans le monde au cours des dernières années. 
 
-### 2. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
+### 3. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
 
 La visualisation suivante s'attache aux pays ayant connu une hausse de leur score de bonheur entre 2015 et 2021. Elle représente les 10 taux d'accroissement de ce score les plus importants, en prenant le score de 2015 comme référence (un taux d'accroissement de 20% signifie donc qu'en 2021, le score de bonheur du pays est 20% plus élevé qu'en 2015)
 
@@ -415,6 +415,34 @@ plot_positive_progress <- df_diff %>%
 ggplotly(plot_positive_progress)
 ```
 
+### 4. Le score de bonheur moyen par région chaque année
+
+La visualisation suivante représente l'évolution au cours des années du score de bonheur moyen de chaque région.
+Non, ces graphes ne sont pas identiques ;)
+L'intérêt principal de ce graphique est de constater en un coup d'oeil que les scores moyens par régions restent très stables. Les régions ont été ordonnées par ordre décroissant, de la région possédant le meilleur score à celle possédant le moins bon.
+
+```{r}
+# test facet graph per year + barchart happiness score per region
+
+df_facet <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Region, Year) %>%
+  summarise(Happiness_score_mean = mean(Happiness_score)) %>%
+  group_by(Year)
+
+# on ajoute un paramètre "theme" pour supprimer le nom des régions dans la graduation de l'axe x
+evolution_per_region <- df_facet %>%
+  ggplot(aes(x = reorder(Region, desc(Happiness_score_mean)), y = Happiness_score_mean, fill = reorder(Region, desc(Happiness_score_mean)))) + 
+  geom_bar(stat = "identity") + 
+  facet_wrap(Year ~ ., ncol = 3) + 
+  labs(title = "Score moyen par région pour chaque année", x = "Regions", y = "Score", fill = "Régions") + 
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
+
+ggplotly(evolution_per_region)
+
+
+```
+
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
@@ -443,20 +471,5 @@ ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 
 
 ```
 
-```{r}
-# test facet graph per year + barchart happiness score per region
 
-df_facet <- data %>% 
-  select(Year, Happiness_score, Region) %>%
-  group_by(Region, Year) %>%
-  summarise(Happiness_score = mean(Happiness_score)) %>%
-  group_by(Year)
-
-df_facet %>%
-  ggplot(aes(x = Region, y = Happiness_score, color = Region)) + geom_bar(stat = "identity") + facet_wrap(Year ~ ., ncol = 3)
-
-
-
-# ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
-```
 
