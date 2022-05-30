@@ -449,7 +449,8 @@ ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 
 df_facet <- data %>% 
   select(Year, Happiness_score, Region) %>%
   group_by(Region, Year) %>%
-  summarise(Happiness_score = mean(Happiness_score))
+  summarise(Happiness_score = mean(Happiness_score)) %>%
+  group_by(Year)
 
 df_facet %>%
   ggplot(aes(x = Region, y = Happiness_score, color = Region)) + geom_bar(stat = "identity") + facet_wrap(Year ~ ., ncol = 3)
