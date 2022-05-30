@@ -344,18 +344,20 @@ Ce graphique nous indique donc que le niveau moyen de bonheur dans le monde obse
 Cette seconde visualisation s'attache à représenter l'évolution du bonheur moyen **par région**, chaque ligne représentant les données d'une région. On transforme pour cela nos données de sorte à les regrouper par année ET par région, puis on calcule la moyenne du score de bonheur par région. On obtient donc le score de bonheur moyen par an et par région, dont on peut observer l'évolution sur la visualisation suivante:
 
 ```{r}
+# on récupère la moyenne des scores de bonheur pour chaque année dans le monde
 df <- data %>%
   select(Year, Happiness_score, Region) %>%
   group_by(Year) %>%
   summarise(Happiness_score = mean(Happiness_score)) %>%
   mutate(Region = "World")
   
-
+# on récupère la moyenne des scores de bonheur pour chaque année et pour chaque région
 df2 <- data %>% 
   select(Year, Happiness_score, Region) %>%
   group_by(Year, Region) %>%
   summarise(Happiness_score = mean(Happiness_score))
 
+# on ajoute la moyenne dans le monde à la moyenne de chaque région (pour pouvoir les comparer)
 plot_hs_mean_per_region <- rbind(df, df2) %>%
   ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5) + labs(title = "Evolution du score de bonheur par région", x = "Année", y = "Score de bonheur")
 
@@ -440,3 +442,20 @@ ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 
 
 
 ```
+
+```{r}
+# test facet graph per year + barchart happiness score per region
+
+df_facet <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Region, Year) %>%
+  summarise(Happiness_score = mean(Happiness_score))
+
+df_facet %>%
+  ggplot(aes(x = Region, y = Happiness_score, color = Region)) + geom_bar(stat = "identity") + facet_wrap(Year ~ ., ncol = 3)
+
+
+
+# ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+```
+
