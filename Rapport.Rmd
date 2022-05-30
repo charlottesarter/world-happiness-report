@@ -453,7 +453,9 @@ data %>%
   summarise(Happiness_score_mean = mean(Happiness_score)) %>%
   ggplot(aes(x = Happiness_score_mean, y = reorder(Region, Happiness_score_mean), fill = reorder(Region, desc(Happiness_score_mean)))) + 
   geom_bar(stat = "identity") +
-  scale_fill_viridis_d()
+  scale_fill_viridis_d() + 
+  labs(title = "Classement des régions (année 2021)", x = "Score", y = "Région") +
+  theme(legend.position = "none")
 ```
 
 
