@@ -443,6 +443,20 @@ ggplotly(evolution_per_region)
 
 ```
 
+### 5. Classement [à déplacer]
+
+```{r}
+data %>%
+  select(Year, Region, Happiness_score) %>%
+  filter(Year == 2021) %>%
+  group_by(Region) %>%
+  summarise(Happiness_score_mean = mean(Happiness_score)) %>%
+  ggplot(aes(x = Happiness_score_mean, y = reorder(Region, Happiness_score_mean), fill = reorder(Region, desc(Happiness_score_mean)))) + 
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d()
+```
+
+
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
