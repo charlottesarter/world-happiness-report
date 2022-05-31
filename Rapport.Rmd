@@ -320,7 +320,7 @@ Nous commencerons cette analyse par la visualisation du bonheur moyen au niveau 
 mean_hs_score_world <- data %>% 
   group_by(Year) %>%
   summarise(Happiness_score = mean(Happiness_score)) %>%
-  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity") + labs(title = "Evolution du score de bonheur moyen dans le monde", x = "Année", y = "Score de bonheur (moyenne monde)")
+  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity", color = "steelblue") + labs(title = "Evolution du score de bonheur moyen dans le monde", x = "Année", y = "Score de bonheur (moyenne monde)")
 
 ggplotly(mean_hs_score_world)
 
