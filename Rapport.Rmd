@@ -311,7 +311,7 @@ Intro de la partie...
 
 Nous commencerons cette analyse par la visualisation du bonheur moyen au niveau mondial. La visualisation suivante est donc construite à partir de la moyenne globale des scores de bonheur de tous les pays chaque année.
 
-*Attention: on peut penser à première vue que les variations du bonheur moyen au fil des ans est importante. Il est important de prendre en compte l'échelle de l'axe: ces variations sont en réalité relativement faibles, cette échelle ayant précisément été choisie pour qu'elles soivent plus visuelles.*
+>Attention : on peut penser à première vue que la variation du bonheur moyen au fil des ans est importante. Il est important de prendre en compte l'échelle de l'axe des ordonnées : la variation est en réalité relativement faible, cette échelle ayant précisément été choisie pour qu'elle soit plus visuelle.
 
 
 ```{r}
@@ -337,9 +337,9 @@ ggplotly(mean_hs_score_world)
 #   ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
 ```
 
-Ce graphique nous indique donc que le niveau moyen de bonheur dans le monde observe une tendance à la hausse, hormis une légère baisse en 2017. On peut cependant s'interroger sur la représentativité de ce résultat au vu de la moyenne globale effectuée. Qu'en est-il lorsque nous nous plaçons à l'échelle des différentes régions du monde?
+Ce graphique nous indique que le niveau moyen de bonheur dans le monde observe une tendance à la hausse, hormis une légère baisse en 2017. On peut cependant s'interroger sur la représentativité de ce résultat au vu de la moyenne globale effectuée. Qu'en est-il lorsque nous nous plaçons à l'échelle des différentes régions du monde?
 
-### 2. L'analyse temporelle par régions du monde
+### 2. L'analyse temporelle par région du monde
 
 Cette seconde visualisation s'attache à représenter l'évolution du bonheur moyen **par région**, chaque ligne représentant les données d'une région. On transforme pour cela nos données de sorte à les regrouper par année ET par région, puis on calcule la moyenne du score de bonheur par région. On obtient donc le score de bonheur moyen par an et par région, dont on peut observer l'évolution sur la visualisation suivante:
 
