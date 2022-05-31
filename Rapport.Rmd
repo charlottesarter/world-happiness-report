@@ -394,10 +394,13 @@ df_diff <- df_2015 %>%
   arrange(desc(Score_progression)) %>%
   head(10)
 
+greens = colorRampPalette(brewer.pal(9, "Greens"))
+
 plot_positive_progress <- df_diff %>%
-  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression, fill = reorder(Country, Score_progression))) + geom_bar(stat = "identity") + labs(title = "Les 10 pays dont le score a le plus progressé de 2015 à 2021", x = "Pays", y = "Pourcentage de progression")  + scale_y_continuous(labels = scales::percent) + scale_fill_brewer(palette="Greens") + theme(legend.position = "none")
+  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression, fill = reorder(Country, desc(Score_progression)))) + geom_bar(stat = "identity", fill = greens(10)) + labs(title = "Les 10 pays dont le score a le plus progressé de 2015 à 2021", x = "Pays", y = "Pourcentage de progression")  + scale_y_continuous(labels = scales::percent) + theme(legend.position = "none") 
 
 ggplotly(plot_positive_progress)
+
 ```
 Voyons maintenant le résultat pour les pays dont le score a le plus chuté entre 2015 et 2021:
 
@@ -408,16 +411,20 @@ df_diff <- df_2015 %>%
   arrange(Score_progression) %>%
   head(10)
 
+reds = colorRampPalette(brewer.pal(9, "Reds"))
+
 plot_positive_progress <- df_diff %>%
-  ggplot(aes(x = reorder(Country, Score_progression), y = Score_progression, fill = reorder(Country, desc(Score_progression)))) + geom_bar(stat = "identity") + labs(title = "Les 10 pays dont le score a le plus régressé de 2015 à 2021", x = "Pays", y = "Pourcentage de régression") + scale_y_continuous(labels = scales::percent) + scale_fill_brewer(palette="Reds") + theme(legend.position = "none")
+  ggplot(aes(x = reorder(Country, Score_progression), y = Score_progression, fill = reorder(Country, desc(Score_progression)))) + geom_bar(stat = "identity", fill = reds(10)) + labs(title = "Les 10 pays dont le score a le plus régressé de 2015 à 2021", x = "Pays", y = "Pourcentage de régression") + scale_y_continuous(labels = scales::percent) + scale_fill_brewer(palette="Reds") + theme(legend.position = "none")
 
 
 ggplotly(plot_positive_progress)
 ```
 
+
+
 ### 4. La répartition du niveau de bonheur des différentes régions du monde chaque année
 
-Cette visualisation sous forme d'histogramme permet de visualiser assez rapidement le score de bonheur le plus présent dans une région. Le score de chaque pays est arrondi à l'entier le plus proche. Le graphique prend donc compte de chacun des scores individuellement puis s'organise suivant les régions.
+Cet histogramme permet de visualiser le score de bonheur le plus présent dans une région. Le score de chaque pays est arrondi à l'entier le plus proche. Le graphique prend donc compte de chacun des scores de bonheur individuel de chaque pays, puis les regroupe par régions.
 
 
 ```{r}
@@ -433,6 +440,8 @@ ggplotly(dat2016)
 
 
 ``` 
+
+
 
 ### 4. Le score de bonheur moyen par région chaque année
 
