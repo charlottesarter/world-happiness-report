@@ -105,7 +105,6 @@ library(scales)
 library(data.table)
 library(knitr)
 library(RColorBrewer)
-library(devtools)
 
 # Importation des datasets
 
@@ -395,17 +394,13 @@ df_diff <- df_2015 %>%
   arrange(desc(Score_progression)) %>%
   head(10)
 
+greens = colorRampPalette(brewer.pal(9, "Greens"))
+
 plot_positive_progress <- df_diff %>%
-  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression, fill = reorder(Country, Score_progression))) + geom_bar(stat = "identity") + labs(title = "Les 10 pays dont le score a le plus progressé de 2015 à 2021", x = "Pays", y = "Pourcentage de progression")  + scale_y_continuous(labels = scales::percent) + scale_fill_brewer(palette="Greens") + theme(legend.position = "none") 
-
-brewer.pal(10, "Greens")
-
-greens<-buildpal("#ADD39D","#1B7D34","#E5F0DA","#142F1B","#3FA136",20)
-
-mypal <- colorRampPalette("Green",10)
-pal(10)
+  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression, fill = reorder(Country, desc(Score_progression)))) + geom_bar(stat = "identity", fill = greens(10)) + labs(title = "Les 10 pays dont le score a le plus progressé de 2015 à 2021", x = "Pays", y = "Pourcentage de progression")  + scale_y_continuous(labels = scales::percent) + theme(legend.position = "none") 
 
 ggplotly(plot_positive_progress)
+
 ```
 Voyons maintenant le résultat pour les pays dont le score a le plus chuté entre 2015 et 2021:
 
@@ -416,8 +411,10 @@ df_diff <- df_2015 %>%
   arrange(Score_progression) %>%
   head(10)
 
+reds = colorRampPalette(brewer.pal(9, "Reds"))
+
 plot_positive_progress <- df_diff %>%
-  ggplot(aes(x = reorder(Country, Score_progression), y = Score_progression, fill = reorder(Country, desc(Score_progression)))) + geom_bar(stat = "identity") + labs(title = "Les 10 pays dont le score a le plus régressé de 2015 à 2021", x = "Pays", y = "Pourcentage de régression") + scale_y_continuous(labels = scales::percent) + scale_fill_brewer(palette="Reds") + theme(legend.position = "none")
+  ggplot(aes(x = reorder(Country, Score_progression), y = Score_progression, fill = reorder(Country, desc(Score_progression)))) + geom_bar(stat = "identity", fill = reds(10)) + labs(title = "Les 10 pays dont le score a le plus régressé de 2015 à 2021", x = "Pays", y = "Pourcentage de régression") + scale_y_continuous(labels = scales::percent) + scale_fill_brewer(palette="Reds") + theme(legend.position = "none")
 
 
 ggplotly(plot_positive_progress)
