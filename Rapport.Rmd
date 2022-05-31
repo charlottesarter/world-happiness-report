@@ -488,6 +488,40 @@ region_ranking_graph <- data %>%
 ggplotly(region_ranking_graph)
 ```
 
+
+### X) Corrélation entre les différents facteurs et le score de bonheur
+
+Texte explicatif qui viendra un jour
+
+```{r}
+data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + geom_smooth()
+
+data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Generosity, y=Happiness_score)) + geom_point() + geom_smooth()
+
+data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Trust_government, y=Happiness_score)) + geom_point() + geom_smooth()
+
+data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Logged_gpd_per_capita, y=Happiness_score)) + geom_point() + geom_smooth()
+
+data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Life_expectancy, y=Happiness_score)) + geom_point() + geom_smooth()
+
+data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Social_support, y=Happiness_score)) + geom_point() + geom_smooth()
+
+
+```
+
+
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
 Dans cette partie, le but est de **déterminer si le bonheur a des préférences géographiques**, et d'identifier les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
