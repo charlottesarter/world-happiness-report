@@ -313,7 +313,6 @@ Nous commencerons cette analyse par la visualisation du bonheur moyen au niveau 
 
 >Attention : on peut penser à première vue que la variation du bonheur moyen au fil des ans est importante. Il est important de prendre en compte l'échelle de l'axe des ordonnées : la variation est en réalité relativement faible, cette échelle ayant précisément été choisie pour qu'elle soit plus visuelle.
 
-
 ```{r}
 # Graphes Evann
 
@@ -344,18 +343,20 @@ Ce graphique nous indique que le niveau moyen de bonheur dans le monde observe u
 Cette seconde visualisation s'attache à représenter l'évolution du bonheur moyen **par région**, chaque ligne représentant les données d'une région. On transforme pour cela nos données de sorte à les regrouper par année ET par région, puis on calcule la moyenne du score de bonheur par région. On obtient donc le score de bonheur moyen par an et par région, dont on peut observer l'évolution sur la visualisation suivante:
 
 ```{r}
+# on récupère la moyenne des scores de bonheur pour chaque année dans le monde
 df <- data %>%
   select(Year, Happiness_score, Region) %>%
   group_by(Year) %>%
   summarise(Happiness_score = mean(Happiness_score)) %>%
   mutate(Region = "World")
   
-
+# on récupère la moyenne des scores de bonheur pour chaque année et pour chaque région
 df2 <- data %>% 
   select(Year, Happiness_score, Region) %>%
   group_by(Year, Region) %>%
   summarise(Happiness_score = mean(Happiness_score))
 
+# on ajoute la moyenne dans le monde à la moyenne de chaque région (pour pouvoir les comparer)
 plot_hs_mean_per_region <- rbind(df, df2) %>%
   ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5) + labs(title = "Evolution du score de bonheur par région", x = "Année", y = "Score de bonheur")
 
@@ -367,7 +368,7 @@ On a ajouté à ces données par région la moyenne pour le monde. On peut donc 
 
 On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne globale, et qu'une moyenne par région nous montre des disparités bien plus importantes quant à l'évolution du niveau de bonheur dans le monde au cours des dernières années. 
 
-### 2. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
+### 3. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
 
 La visualisation suivante s'attache aux pays ayant connu une hausse de leur score de bonheur entre 2015 et 2021. Elle représente les 10 taux d'accroissement de ce score les plus importants, en prenant le score de 2015 comme référence (un taux d'accroissement de 20% signifie donc qu'en 2021, le score de bonheur du pays est 20% plus élevé qu'en 2015)
 
@@ -413,6 +414,69 @@ plot_positive_progress <- df_diff %>%
 ggplotly(plot_positive_progress)
 ```
 
+### 4. La répartition du niveau de bonheur des différentes régions du monde chaque année
+
+Cette visualisation sous forme d'histogramme permet de visualiser assez rapidement le score de bonheur le plus présent dans une région. Le score de chaque pays est arrondi à l'entier le plus proche. Le graphique prend donc compte de chacun des scores individuellement puis s'organise suivant les régions.
+
+
+```{r}
+
+# Histogramme global année 2016 Maud
+
+data2016 <- filter(data, Year =='2016')
+
+dat2016 <- data2016 %>% 
+ mutate_if(is.numeric, round) %>% ggplot(aes(Happiness_score, color = Region, fill = Region)) + geom_histogram(alpha = 0.5) + scale_x_continuous(breaks=seq(0,10, by = 1)) + scale_color_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) + scale_fill_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) + ggtitle("Niveau de bonheur des différentes régions du monde en 2016")
+
+ggplotly(dat2016)
+
+
+``` 
+
+### 4. Le score de bonheur moyen par région chaque année
+
+La visualisation suivante représente l'évolution au cours des années du score de bonheur moyen de chaque région.
+Non, ces graphes ne sont pas identiques ;)
+L'intérêt principal de ce graphique est de constater en un coup d'oeil que les scores moyens par régions restent très stables. Les régions ont été ordonnées par ordre décroissant, de la région possédant le meilleur score à celle possédant le moins bon.
+
+```{r}
+# test facet graph per year + barchart happiness score per region
+
+df_facet <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Region, Year) %>%
+  summarise(Happiness_score_mean = mean(Happiness_score)) %>%
+  group_by(Year)
+
+# on ajoute un paramètre "theme" pour supprimer le nom des régions dans la graduation de l'axe x
+evolution_per_region <- df_facet %>%
+  ggplot(aes(x = reorder(Region, desc(Happiness_score_mean)), y = Happiness_score_mean, fill = reorder(Region, desc(Happiness_score_mean)))) + 
+  geom_bar(stat = "identity") + 
+  facet_wrap(Year ~ ., ncol = 3) + 
+  labs(title = "Score moyen par région pour chaque année", x = "Regions", y = "Score", fill = "Régions") + 
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
+
+ggplotly(evolution_per_region)
+
+
+```
+
+### 5. Classement [à déplacer]
+
+```{r}
+region_ranking_graph <- data %>%
+  select(Year, Region, Happiness_score) %>%
+  filter(Year == 2021) %>%
+  group_by(Region) %>%
+  summarise(Happiness_score_mean = mean(Happiness_score)) %>%
+  ggplot(aes(x = Happiness_score_mean, y = reorder(Region, Happiness_score_mean), fill = reorder(Region, desc(Happiness_score_mean)))) + 
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d() + 
+  labs(title = "Classement des régions (année 2021)", x = "Score", y = "Région") +
+  theme(legend.position = "none")
+
+ggplotly(region_ranking_graph)
+```
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
@@ -440,3 +504,6 @@ ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 
 
 
 ```
+
+
+
