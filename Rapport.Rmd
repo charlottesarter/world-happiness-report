@@ -491,32 +491,49 @@ ggplotly(region_ranking_graph)
 
 ### X) Corrélation entre les différents facteurs et le score de bonheur
 
-Texte explicatif qui viendra un jour
+Texte explicatif qui viendra un jour, les graphiques sont bruts pour l'instant mais pas de panique
 
 ```{r}
-data %>%
+freedom_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + geom_smooth()
+  ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre liberté et bonheur", x = "Niveau de liberté", y = "Score de bonheur")
 
-data %>%
-  filter(Year == 2021) %>%
-  ggplot(aes(x=Generosity, y=Happiness_score)) + geom_point() + geom_smooth()
+freedom_correlation_graph %>% ggplotly()
 
-data %>%
-  filter(Year == 2021) %>%
-  ggplot(aes(x=Trust_government, y=Happiness_score)) + geom_point() + geom_smooth()
 
-data %>%
+generosity_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Logged_gpd_per_capita, y=Happiness_score)) + geom_point() + geom_smooth()
+  ggplot(aes(x=Generosity, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre générosité et bonheur", x = "Niveau de générosité", y = "Score de bonheur")
 
-data %>%
-  filter(Year == 2021) %>%
-  ggplot(aes(x=Life_expectancy, y=Happiness_score)) + geom_point() + geom_smooth()
+generosity_correlation_graph %>% ggplotly()
 
-data %>%
+
+trust_government_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Social_support, y=Happiness_score)) + geom_point() + geom_smooth()
+  ggplot(aes(x=Trust_government, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre confiance dans le gouvernement et bonheur", x = "Niveau de confiance dans le gouvernement", y = "Score de bonheur")
+
+trust_government_correlation_graph %>% ggplotly()
+
+
+gpd_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Logged_gpd_per_capita, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre PIB par habitant et bonheur", x = "Log(PIB par habitant)", y = "Score de bonheur")
+
+gpd_correlation_graph %>% ggplotly()
+
+
+life_expectancy_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Life_expectancy, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre espérance de vie et bonheur", x = "Espérance de vie", y = "Score de bonheur")
+
+life_expectancy_correlation_graph %>% ggplotly()
+
+
+social_support_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Social_support, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre soutien social et bonheur", x = "Niveau de soutien social", y = "Score de bonheur")
+
+social_support_correlation_graph %>% ggplotly()
 
 
 ```
