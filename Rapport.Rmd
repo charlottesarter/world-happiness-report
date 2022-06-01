@@ -491,7 +491,21 @@ ggplotly(region_ranking_graph)
 
 ### X) Corrélation entre les différents facteurs et le score de bonheur
 
-Texte explicatif qui viendra un jour, les graphiques sont bruts pour l'instant mais pas de panique
+Les scores de bonheur précédemment mis en lumière sont le résultats de différents facteurs:
+- la liberté
+- l'espérance de vie
+- le PIB par habitant
+- la générosité
+- la confiance dans le gouvernement en place
+- le support social
+
+Le jeu de données possède des champs décrivant le niveau de contribution de chacun de ces facteurs au score global (tous les champs dont le nom commence par Explained_by_...).
+
+En plus de ces champs, les jeux de données des années 2020 et 2021 possèdent des champs donnant des valeurs pour ces facteurs (Generosity, Freedom, Life_expectancy...).
+
+Cette partie s'attachera donc à tenter d'observer les corrélations pouvant exister entre ces facteurs et un score de bonheur élevé ou non.
+
+Commençons par le facteur "liberté": la visualisation suivante est un graphique en nuage de points, présentant en abscisse les valeurs enregistrées pour le facteur "liberté" et en ordonnée les valeurs de score de bonheur correspondantes.
 
 ```{r}
 freedom_correlation_graph <- data %>%
