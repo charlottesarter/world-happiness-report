@@ -510,14 +510,16 @@ Commençons par le facteur "liberté": la visualisation suivante est un graphiqu
 freedom_correlation_graph <- data %>%
   filter(Year == 2021) %>%
   ggplot(aes(x = Freedom, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
-  geom_point(aes(color = factor(Continent))) + 
+  geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x = Freedom, y = Happiness_score),
               method = "lm",
               col = "#92be72",
               se = FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre la liberté et le bonheur (2021)", x = "Niveau de liberté", y = "Score de bonheur")
+  labs(title = "Corrélation entre la liberté et le bonheur (2021)", 
+       x = "Niveau de liberté", 
+       y = "Score de bonheur")
 
 freedom_correlation_graph %>% ggplotly(tooltip = "text")
 ```
@@ -530,23 +532,53 @@ Effectuons la même analyse pour le PIB par habitant, l'espérance de vie et le 
 
 gpd_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Logged_gpd_per_capita, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre PIB par habitant et bonheur", x = "Log(PIB par habitant)", y = "Score de bonheur")
+  ggplot(aes(x=Logged_gpd_per_capita, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x=Logged_gpd_per_capita, y=Happiness_score),
+              method = "lm",
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre le PIB par habitant et le bonheur (2021)", 
+       x = "Log(PIB par habitant)", 
+       y = "Score de bonheur")
 
-gpd_correlation_graph %>% ggplotly()
+gpd_correlation_graph %>% ggplotly(tooltip = "text")
 
 
 life_expectancy_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Life_expectancy, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre espérance de vie et bonheur", x = "Espérance de vie", y = "Score de bonheur")
+  ggplot(aes(x=Life_expectancy, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x=Life_expectancy, y = Happiness_score),
+              method = "lm",
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre espérance de vie et bonheur", 
+       x = "Espérance de vie", 
+       y = "Score de bonheur")
 
-life_expectancy_correlation_graph %>% ggplotly()
+life_expectancy_correlation_graph %>% ggplotly(tooltip = "text")
 
 
 social_support_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Social_support, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre soutien social et bonheur", x = "Niveau de soutien social", y = "Score de bonheur")
+  ggplot(aes(x=Social_support, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x=Social_support, y = Happiness_score),
+              method = "lm",
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre soutien social et bonheur", 
+       x = "Niveau de soutien social", 
+       y = "Score de bonheur")
 
-social_support_correlation_graph %>% ggplotly()
+social_support_correlation_graph %>% ggplotly(tooltip = "text")
 
 
 ```
