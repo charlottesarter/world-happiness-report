@@ -252,23 +252,82 @@ data %>%
 
 # Carte du monde colorée en fonction du niveau de bonheur de chaque région
 
+# On récupère la moyenne des scores de bonheur pour chaque région pour l'année 2016
+
+df2 <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year, Region) %>%
+  summarise(Happiness_score = mean(Happiness_score)) %>% 
+  filter(Year == "2016")
+
+df2
+
 # Création de la fonction de palette numérique sur les scores de bonheur
 mypalette <- colorNumeric(
-  palette="magma", 
-  domain=data2016_corrected$Happiness_score, 
+  palette="viridis", 
+  domain=df2$Happiness_score, 
   na.color="transparent")
 
 map_regions <- leaflet() %>%
   addTiles() %>%
-  # polygone des regions
+  # polygone des pays
   addPolygons(data = data$Geometry,
-              label = data$Country,
-              fillColor = mypalette(data2016_corrected$Happiness_score),
+              label = data$Region,
+              fillColor = mypalette(df2$Happiness_score),
+              smoothFactor = 1,
               weight = 2,
               opacity = 1,
               color = "white"
-              )
+              ) %>%
+  addLegend("bottomright",
+            pal = mypalette, 
+            values = df2$Happiness_score,
+            title = "Score de bonheur",
+            opacity = 1
+            )
+
 map_regions
 
 # data$Country[is.na(data$Geometry)]
-data2016_corrected$Country[is.na(data$Happiness_score)]
+# data2016_corrected$Country[is.na(data$Happiness_score)]
+```
+
+```{r graphe 4}
+
+# Carte du monde colorée en fonction du niveau de bonheur de chaque pays
+
+# Création de la fonction de palette numérique sur les scores de bonheur
+
+mybins <- c(0,2,3,4,5,6,7,8)
+
+mypalette <- colorBin(
+  palette = "Spectral", 
+  domain = data2016_corrected$Happiness_score, 
+  na.color = "transparent",
+  bins = mybins)
+
+map_countries <- leaflet() %>%
+  addTiles() %>%
+  # polygone des pays
+  addPolygons(data = data$Geometry,
+              label = data$Country,
+              fillColor = mypalette(data2016_corrected$Happiness_score),
+              stroke = TRUE,
+              weight = 0.1,
+              opacity = 1,
+              color = "white"
+              ) %>%
+  addLegend("bottomright",
+            pal = mypalette, 
+            values = data2016_corrected$Happiness_score,
+            title = "Score de bonheur",
+            opacity = 1
+            )
+
+map_countries
+
+data2016_corrected
+
+# data$Country[is.na(data$Geometry)]
+# data2016_corrected$Country[is.na(data$Happiness_score)]
+```
