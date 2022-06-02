@@ -244,6 +244,12 @@ data2021_corrected <- data2021 %>%
          Explained_by_trust_government = `Explained by: Perceptions of corruption`,
          Dystopia_residual = `Dystopia + residual`)
 
+# On ajoute le ranking des pays pour 2021 au dataset
+
+data2021_corrected$Happiness_rank <-  rank(-data2021_corrected$Happiness_score)
+
+data2021_corrected
+
 # Fusion de tous les datasets
 
 data <- data2015_corrected %>% 
@@ -501,19 +507,9 @@ Commençons par le facteur "liberté": la visualisation suivante est un graphiqu
 
 ```{r}
 
-# On construit ce que l'on veut afficher lorsque l'on passe la souris sur un point 
-
-mytext <- paste(
-      "Country: ", data$Country,"<br/>", 
-      "Rank: ", data$Happiness_rank, "<br/>",
-      "Happiness score: ", data$Happiness_score, "<br/>",
-      "Freedom: ", data$Freedom,
-      sep="") %>%
-      lapply(htmltools::HTML)
-
 freedom_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x = Freedom, y = Happiness_score, text = paste("Country: ", Country, "<br/>", "Score: ", Happiness_score) %>% lapply(htmltools::HTML))) + 
+  ggplot(aes(x = Freedom, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = factor(Continent))) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x = Freedom, y = Happiness_score),
