@@ -513,21 +513,13 @@ freedom_correlation_graph <- data %>%
   ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre liberté et bonheur", x = "Niveau de liberté", y = "Score de bonheur")
 
 freedom_correlation_graph %>% ggplotly()
+```
 
+On constate immédiatement à la visualisation de ce graphique que le score de bonheur, comme on pouvait légitimement s'y attendre, est bien corrélé au score de bonheur des différents pays.
 
-generosity_correlation_graph <- data %>%
-  filter(Year == 2021) %>%
-  ggplot(aes(x=Generosity, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre générosité et bonheur", x = "Niveau de générosité", y = "Score de bonheur")
+Effectuons la même analyse pour le PIB par habitant, l'espérance de vie et le soutien social:
 
-generosity_correlation_graph %>% ggplotly()
-
-
-trust_government_correlation_graph <- data %>%
-  filter(Year == 2021) %>%
-  ggplot(aes(x=Trust_government, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre confiance dans le gouvernement et bonheur", x = "Niveau de confiance dans le gouvernement", y = "Score de bonheur")
-
-trust_government_correlation_graph %>% ggplotly()
-
+```{r}
 
 gpd_correlation_graph <- data %>%
   filter(Year == 2021) %>%
@@ -551,6 +543,25 @@ social_support_correlation_graph %>% ggplotly()
 
 
 ```
+
+On peut une fois encore observer une corrélation générale entre ces derniers facteurs et le score de bonheur.
+Cependant, chacun des facteurs fournis dans ce dataset ne contribue par nécessairement grandement au score de bonheur. En effet, voici les graphiques de corrélation obtenus pour les facteurs "générosité" et "confiance dans le gouvernement":
+
+```{r}
+generosity_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Generosity, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre générosité et bonheur", x = "Niveau de générosité", y = "Score de bonheur")
+
+generosity_correlation_graph %>% ggplotly()
+
+
+trust_government_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Trust_government, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre confiance dans le gouvernement et bonheur", x = "Niveau de confiance dans le gouvernement", y = "Score de bonheur")
+
+trust_government_correlation_graph %>% ggplotly()
+```
+
 
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
