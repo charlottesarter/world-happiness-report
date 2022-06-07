@@ -641,7 +641,7 @@ Dans cette partie, le but est de **déterminer si le bonheur a des préférences
 
 1.  Un boxplot qui indique la distribution des scores de bonheur de chaque région
 
-2.  Une carte du monde colorée par région en fonction du score de bonheur (avec ggmap ou leaflet)
+2.  Une carte du monde colorée par pays en fonction du score de bonheur (avec leaflet)
 
 3.  Faire des scatterplots pour les différents critères en fonction du niveau de bonheur par région (moyenne sur toutes les années ou évolution dans le temps ?)
 
@@ -649,7 +649,7 @@ Dans cette partie, le but est de **déterminer si le bonheur a des préférences
 
 La visualisation du boxplot nous permet de situer rapidement les scores de bonheurs des pays d'une même région. On constate en un coup d'oeil que les 3 régions du monde les plus heureuses sont la Nouvelle Zélande, l'Amérique du Nord et l'Europe de l'Ouest.
 
-```{r graphe 1}
+```{r boxplot score de bonheur}
 
 # Les régions et la distribution de leurs scores de bonheur (boxplot)
 
@@ -657,5 +657,46 @@ boxplot_happiness_score <- data %>% ggplot(aes(x = Region, y = Happiness_score, 
 
 ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 1500, transition = 500)
 
+
+```
+
+#### Le bonheur dans le monde 
+
+```{r carte bonheur dans le monde par pays}
+
+# Carte du monde colorée en fonction du niveau de bonheur de chaque pays
+
+data_map_countries <- data %>% filter(Year == "2016")
+
+# Création de la fonction de palette numérique sur les scores de bonheur
+
+mybins <- c(0,2,3,4,5,6,7,8)
+
+mypalette <- colorBin(
+  palette = "BuPu", 
+  domain = data_map_countries$Happiness_score, 
+  na.color = "transparent",
+  bins = mybins)
+
+
+map_countries <- leaflet() %>%
+  addTiles() %>%
+  # polygone des pays
+  addPolygons(data = data_map_countries$Geometry,
+              label = data_map_countries$Country,
+              fillColor = mypalette(data_map_countries$Happiness_score),
+              stroke = TRUE,
+              weight = 0.1,
+              fillOpacity = 0.9,
+              color = "white"
+              ) %>%
+  addLegend("bottomright",
+            pal = mypalette, 
+            values = data_map_countries$Happiness_score,
+            title = "Score de bonheur",
+            opacity = 1
+            )
+
+map_countries
 
 ```
