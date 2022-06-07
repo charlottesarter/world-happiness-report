@@ -248,8 +248,6 @@ data2021_corrected <- data2021 %>%
 
 data2021_corrected$Happiness_rank <-  rank(-data2021_corrected$Happiness_score)
 
-data2021_corrected
-
 # Fusion de tous les datasets
 
 data <- data2015_corrected %>% 
@@ -281,7 +279,6 @@ data <- merge(data, world_map_corrected, by="Country")
 
 data <- merge(data, continents, by="Country")
 
-colnames(data)
 
 ```
 
@@ -313,9 +310,16 @@ repartition <- data2015_sorted %>% select("Region", "Country")
 
 ```
 
+2. Qu'est ce que le bonheur ?
+
+Le bonheur est un **état émotionnel agréable, équilibré et durable** dans lequel se trouve quelqu'un qui estime être parvenu à la satisfaction des aspirations et désirs qu'il juge importants. Il perçoit alors sa propre situation de manière positive et ressent un **sentiment de plénitude et de sérénité**, sans stress ni inquiétude. Cette impression ressentie, indispensable à la survie des mammifères, est principalement le résultat de la production de sérotonine, réduisant la prise de risques et poussant ainsi l'individu à maintenir une situation qui lui est favorable. Le bonheur ne doit pas être confondu avec la **sensation passagère de plaisir**, issue principalement de la production de dopamine et non de sérotonine, mais représente au contraire un état d'équilibre, agréable, qui dure dans le temps.
+
+
 # I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
-Intro de la partie...
+Dans cette première partie, nous analysons l'évolution du bonheur entre 2015 et 2021. Nous proposons les modélisations suivantes :
+
+- 
 
 ## Les visualisations réalisées
 
