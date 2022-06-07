@@ -513,7 +513,7 @@ freedom_correlation_graph <- data %>%
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x = Freedom, y = Happiness_score),
-              method = "lm",
+              #method = "lm",
               col = "#92be72",
               se = FALSE,
               size = 1) + 
@@ -536,7 +536,7 @@ gpd_correlation_graph <- data %>%
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Logged_gpd_per_capita, y=Happiness_score),
-              method = "lm",
+              #method = "lm",
               col = "#92be72",
               se = FALSE,
               size = 1) + 
@@ -553,7 +553,7 @@ life_expectancy_correlation_graph <- data %>%
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Life_expectancy, y = Happiness_score),
-              method = "lm",
+              #method = "lm",
               col = "#92be72",
               se = FALSE,
               size = 1) + 
@@ -570,7 +570,7 @@ social_support_correlation_graph <- data %>%
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Social_support, y = Happiness_score),
-              method = "lm",
+              #method = "lm",
               col = "#92be72",
               se = FALSE,
               size = 1) + 
@@ -588,16 +588,35 @@ On peut une fois encore observer une corrélation générale entre ces derniers 
 ```{r}
 generosity_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Generosity, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre générosité et bonheur", x = "Niveau de générosité", y = "Score de bonheur")
+  ggplot(aes(x = Generosity, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x = Generosity, y = Happiness_score),
+              #method = "lm",
+              col = "#C42126",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre la générosité et le bonheur (2021)", 
+       x = "Niveau de générosité", 
+       y = "Score de bonheur")
 
-generosity_correlation_graph %>% ggplotly()
-
+generosity_correlation_graph %>% ggplotly(tooltip = "text")
 
 trust_government_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Trust_government, y=Happiness_score)) + geom_point() + geom_smooth() + labs(title = "Corrélation entre confiance dans le gouvernement et bonheur", x = "Niveau de confiance dans le gouvernement", y = "Score de bonheur")
+  ggplot(aes(x = Trust_government, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x = Trust_government, y = Happiness_score),
+              #method = "lm",
+              col = "#C42126",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre la confiance dans le gouvernement et le bonheur (2021)", 
+       x = "Niveau de confiance dans le gouvernement", 
+       y = "Score de bonheur")
 
-trust_government_correlation_graph %>% ggplotly()
+trust_government_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
