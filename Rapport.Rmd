@@ -279,6 +279,7 @@ data <- merge(data, world_map_corrected, by="Country")
 
 data <- merge(data, continents, by="Country")
 
+colnames(data)
 
 ```
 
