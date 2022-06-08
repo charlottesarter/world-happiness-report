@@ -653,10 +653,18 @@ La visualisation du boxplot nous permet de situer rapidement les scores de bonhe
 
 # Les régions et la distribution de leurs scores de bonheur (boxplot)
 
-boxplot_happiness_score <- data %>% ggplot(aes(x = Region, y = Happiness_score, color = Region)) + labs(x = "Région", y = "Score de bonheur", title = "Distribution des scores de bonheur dans les régions du monde", subtitle = "Données de 2015 à 2021") + geom_boxplot() + theme(axis.text.x = element_text(angle = 45))
+boxplot_happiness_score <- data %>% 
+  ggplot(aes(x = Region, 
+             y = Happiness_score, 
+             color = Region)) +
+  labs(x = "Région", 
+       y = "Score de bonheur", 
+       title = "Distribution des scores de bonheur dans les régions du monde", 
+       subtitle = "Données de 2015 à 2021") + 
+  geom_boxplot() + 
+  theme(axis.text.x = element_text(angle = 45))
 
 ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 1500, transition = 500)
-
 
 ```
 
@@ -678,17 +686,21 @@ mypalette <- colorBin(
   na.color = "transparent",
   bins = mybins)
 
+labels <- sprintf(
+  "<strong>%s</strong><br/>Rank:  %g<br/>Happiness Score: %g",
+  data_map_countries$Country, data_map_countries$Happiness_rank, data_map_countries$Happiness_score
+) %>% lapply(htmltools::HTML)
 
 map_countries <- leaflet() %>%
   addTiles() %>%
   # polygone des pays
   addPolygons(data = data_map_countries$Geometry,
-              label = data_map_countries$Country,
               fillColor = mypalette(data_map_countries$Happiness_score),
               stroke = TRUE,
               weight = 0.1,
               fillOpacity = 0.9,
-              color = "white"
+              color = "white",
+              label = labels
               ) %>%
   addLegend("bottomright",
             pal = mypalette, 
