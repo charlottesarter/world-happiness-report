@@ -730,13 +730,11 @@ map_countries <- leaflet() %>%
               weight = 2,
               opacity = 1,
               color = "white",
-              dashArray = "3",
               fillOpacity = 0.7,
               label = labels,
               highlightOptions = highlightOptions(
                                   weight = 5,
                                   color = "#666",
-                                  dashArray = "",
                                   fillOpacity = 0.7,
                                   bringToFront = TRUE)
               ) %>%
