@@ -1,0 +1,656 @@
+---
+title: "Le bonheur dans le monde"
+author: "Maud AGNES, Evann BONNAVENTURE & Charlotte SARTER"
+date: '2022-05-18'
+output: 
+  prettydoc::html_pretty:
+    theme: cayman
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE)
+```
+
+# Introduction
+
+Ce projet est réalisé dans le cadre de la matière **Visualisation de données** enseignée à l'Université de Technologie de Troyes.
+
+Notre analyse porte sur le **World Happiness Report**, une enquête annuelle qui récolte des données du monde entier pour indiquer **comment les gens évaluent leur propre vie** dans plus de 150 pays du globe. Le but de notre projet est de concevoir les meilleures visualisations possibles pour analyser les données du World Happiness Report et pour mettre en valeur les informations qui en découlent.
+
+![](https://www.sogeti.com/globalassets/common/1980x660-large-background-image/sogeti/worldhappinessreport2019-1980x660.jpg)
+
+### Lien des datasets
+
+-   [World Happiness Report](https://www.kaggle.com/datasets/unsdsn/world-happiness?select=2017.csv) (de 2015 à 2019)
+-   [World Happiness Report](https://www.kaggle.com/datasets/londeen/world-happiness-report-2020) (2020)
+-   [World Happiness Report](https://www.kaggle.com/datasets/ajaypalsinghlo/world-happiness-report-2021?select=world-happiness-report-2021.csv) (2021)
+-   [Healthy Lifestyle Cities Report 2021](https://www.kaggle.com/datasets/prasertk/healthy-lifestyle-cities-report-2021)
+
+> Le dernier dataset apporte des **indicateurs supplémentaires** sur ce qui est susceptible de provoquer le bonheur des populations (prix de la vie, soleil, obésité...). Cependant, il ne comporte uniquement les données de 2021, ainsi nous pourrons seulement le comparer avec le dataset qui comporte les données du World Happiness Report de 2021. Cela nous permettra d'apporter une nouvelle dimension à notre analyse.
+
+### Données
+
+Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de référence sur l'état du bonheur dans le monde. Il comporte des données de 2015 à 2021, et classe 155 pays selon leur niveau de bonheur. Il permet d'établir une corrélation entre différents critères (liberté, corruption, cadre de vie...) et le niveau de bonheur qui en découle.
+
+Les jeux de données initiaux comportent 13 variables :
+
+| Variable                       | Class     | Description                                                                                                                                                                                |
+|:----------------|:----------------|:-------------------------------------|
+| country                        | character | Nom du pays                                                                                                                                                                                |
+| region                         | character | Région à laquelle le pays appartient                                                                                                                                                       |
+| hapiness rank                  | integer   | Classement du pays sur la base du score du bonheur                                                                                                                                         |
+| hapiness score                 | double    | Un indicateur mesuré chaque année en posant aux personnes de l'échantillon la question suivante : "Comment évaluez-vous votre bonheur sur une échelle de 0 à 10 où 10 est le plus heureux" |
+| lower confidence interval      | double    | Intervalle de confiance inférieur du score de bonheur                                                                                                                                      |
+| upper confidence interval      | double    | Intervalle de confiance supérieur du score de bonheur                                                                                                                                      |
+| economy (GPD per capita)       | double    | La mesure dans laquelle le PIB contribue au calcul du score du bonheur                                                                                                                     |
+| family                         | double    | La mesure dans laquelle la famille contribue au calcul du score du bonheur                                                                                                                 |
+| health (life expectancy)       | double    | La mesure dans laquelle l'espérance de vie a contribué au calcul du score du bonheur                                                                                                       |
+| freedom                        | double    | La mesure dans laquelle la liberté a contribué au calcul du score du bonheur                                                                                                               |
+| trust (governement corruption) | double    | La mesure dans laquelle la perception de la corruption contribue au score de bonheur                                                                                                       |
+| generosity                     | double    | La mesure dans laquelle la générosité a contribué au calcul du score de bonheur                                                                                                            |
+| dystopia residual              | double    | "Résidu" correspondant à l'écart entre le modèle théorique et la réalité, auquel on ajoute un score de dystopie (score d'un pays hypothétique moins bien classé que tous les autre)        |
+
+Par la suite, nous avons ajouté plusieurs données nécessaires à la création de cartes : les **coordonnées géographiques des pays**, ainsi que leur **géométrie**, afin de pouvoir colorier les surfaces des pays sur les cartes.
+
+> L'ensemble des données utilisées est disponible dans le dossier `/data/`
+
+Ces données nous semblent pertinentes dans le cadre d'une analyse car :
+
+-   Elles sont analysables dans le **temps**
+-   Elles sont analysables **géographiquement**
+-   Elles permettent d'établir différents facteurs de contribution au bonheur en fonction des régions du monde, des cultures...
+
+### Plan d'analyse
+
+1.  **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ? (en regroupant par région, en utilisant des facet charts pour visualiser les différentes années en même temps)
+
+2.  **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ? Pourquoi ? ➡️ Utiliser les facteurs de contribution du score pour mettre en évidence des causes de disparité
+
+3.  Le niveau de bonheur est-il directement corrélé à la liberté des individus ? ➡️ Question extensible à la richesse, à l'espérance de vie...
+
+4.  Quelle combinaison de facteurs hauts entraîne une hausse du bonheur ? Quelle combinaison de facteurs bas entraîne une diminution de celui-ci ? (par exemple: avoir une espérance de vie élevée ET un PIB élevé ET un taux de liberté elevé implique-t-il nécessairement un haut niveau de bonheur, au-dessus d'un certain seuil ?)
+
+# Nettoyage des données
+
+Le **nettoyage des jeux de données** est la première étape du projet, et certainement l'une des plus importantes. Nous nous en sommes rendus compte après avoir essayé de concevoir des graphiques avec les jeux de données bruts : nous avons été très vite restreints, d'un côté car il était impossible d'analyser les données temporellement car les données étaient séparées dans des datasets différents, et de l'autre parce que les noms des variables comportaient des espaces et différaient d'un dataset à l'autre.
+
+Afin de pouvoir travailler efficacement, nous avons opéré le nettoyage suivant :
+
+1.  Nous avons commencé par **analyser tous les datasets** pour voir si les données nommées de la même manière correspondent à la même chose (ce qui n'était pas toujours le cas). Parfois, la variable "freedom" d'un dataset correspondait à la variable "explained_by_freedom" d'un autre dataset.
+
+2.  Nous avons ensuite **renommé toutes les colonnes de tous les datasets** de la même manière selon la **convention** définie ci-dessous.
+
+3.  Nous avons **fusionné l'ensemble des datasets** de manière à travailler sur un seul tableau propre à l'aide de filtres par la suite. Nous avions au préalable **ajouté une variable *Year*** car cette donnée n'était pas fournie à l'intérieur des datasets et nous aurions mélangé toutes les données lors de la fusion des datasets.
+
+4.  Afin de pouvoir travailler avec des cartes, nous avons été contraints d'ajouter pour chaque pays des **données géométriques et GPS**.
+
+#### Convention de nommage des colonnes
+
+-   Le nom des colonnes commence par une **M**ajuscule
+-   Les espaces sont remplacés par un underscore "\_"
+
+```{r cleaning}
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(leaflet)
+library(sf)
+library(rmapshaper)
+library(prettydoc)
+library(plotly)
+library(scales)
+library(data.table)
+library(knitr)
+library(RColorBrewer)
+
+# Importation des datasets
+
+data2015 <- tibble(read_csv('data/2015.csv'))
+data2016 <- tibble(read_csv('data/2016.csv'))
+data2017 <- tibble(read_csv('data/2017.csv'))
+data2018 <- tibble(read_csv('data/2018.csv'))
+data2019 <- tibble(read_csv('data/2019.csv'))
+data2020 <- tibble(read_csv('data/2020.csv'))
+data2021 <- tibble(read_csv('data/2021.csv'))
+countries <- tibble(read_csv('data/countries.csv'))
+world_map <- read_sf('data/world_map')
+continents <- read_csv('data/continents.csv')
+
+# Nettoyage du dataset "countries" pour pouvoir ajouter les coordonnées géographiques des pays
+
+countries_corrected <- countries %>%
+  rename(Country_code =`country`, 
+         Latitude = `latitude`,
+         Longitude = `longitude`,
+         Country = `name`)
+
+# Nettoyage du dataset "world_map" pour pouvoir manipuler les régions du monde sur une carte
+
+world_map_corrected <- world_map %>%
+  rename(Country =`NAME`, 
+         Geometry = `geometry`)
+
+# Renommage des colonnes (selon la convention définie précedemment) & ajout de la colonne "year" 
+
+data2015_corrected <- data2015 %>% 
+  mutate(lower_confidence_interval = `Happiness Score` - `Standard Error`, upper_confidence_interval = `Happiness Score` + `Standard Error`, Year = 2015) %>%
+  rename(Happiness_rank =`Happiness Rank`, 
+         Happiness_score = `Happiness Score`,
+         Standard_error = `Standard Error`,
+         Exp_by_economy_gdp_per_capita = `Economy (GDP per Capita)`,
+         Explained_by_social_support = Family,
+         Explained_by_life_expectancy = `Health (Life Expectancy)`,
+         Explained_by_freedom = Freedom,
+         Explained_by_trust_government = `Trust (Government Corruption)`,
+         Explained_by_generosity = Generosity,
+         Dystopia_residual = `Dystopia Residual`)
+
+data2016_corrected <- data2016 %>% 
+  mutate(Standard.Error = `Happiness Score` - `Lower Confidence Interval`, Year = 2016) %>%
+  rename(Happiness_rank = `Happiness Rank`, 
+         Happiness_score = `Happiness Score`,
+         Standard_error = Standard.Error,
+         Exp_by_economy_gdp_per_capita = `Economy (GDP per Capita)`,
+         Explained_by_social_support = Family,
+         Explained_by_life_expectancy = `Health (Life Expectancy)`,
+         Explained_by_freedom = Freedom,
+         Explained_by_trust_government = `Trust (Government Corruption)`,
+         Explained_by_generosity = Generosity,
+         Dystopia_residual = `Dystopia Residual`,
+         Lower_confidence_interval = `Lower Confidence Interval`,
+         Upper_confidence_interval = `Upper Confidence Interval`)
+
+data2017_corrected <- data2017 %>% 
+  mutate(Standard_error = Happiness.Score - Whisker.low, Year = 2017) %>%
+  rename(Happiness_rank = Happiness.Rank, 
+         Happiness_score = Happiness.Score,
+         Exp_by_economy_gdp_per_capita = Economy..GDP.per.Capita.,
+         Explained_by_social_support = Family,
+         Explained_by_life_expectancy = Health..Life.Expectancy.,
+         Explained_by_freedom = Freedom,
+         Explained_by_trust_government = Trust..Government.Corruption.,
+         Explained_by_generosity = Generosity,
+         Dystopia_residual = Dystopia.Residual,
+         Lower_confidence_interval = Whisker.low,
+         Upper_confidence_interval = Whisker.high)
+
+# on n'a pas l'information de l'erreur standard pour 2018
+data2018_corrected <- data2018 %>%
+  mutate(Year = 2018) %>%
+  rename(Country = `Country or region`, 
+         Happiness_score = Score, 
+         Happiness_rank = `Overall rank`,
+         Exp_by_economy_gdp_per_capita = `GDP per capita`,
+         Explained_by_freedom = `Freedom to make life choices`, 
+         Explained_by_trust_government = `Perceptions of corruption`, 
+         Explained_by_social_support = `Social support`,
+         Explained_by_life_expectancy = `Healthy life expectancy`,
+         Explained_by_generosity = Generosity) %>% 
+  mutate(Explained_by_trust_government = as.double(Explained_by_trust_government))
+
+data2019_corrected <- data2019 %>%
+  mutate(Year = 2019) %>%
+  rename(Country =`Country or region`, 
+         Happiness_score = Score, 
+         Happiness_rank = `Overall rank`,
+         Exp_by_economy_gdp_per_capita = `GDP per capita`,
+         Explained_by_freedom = `Freedom to make life choices`, 
+         Explained_by_trust_government = `Perceptions of corruption`, 
+         Explained_by_social_support = `Social support`,
+         Explained_by_life_expectancy = `Healthy life expectancy`,
+         Explained_by_generosity = Generosity) 
+
+data2020_corrected <- data2020 %>%
+  mutate(Year = 2020) %>%
+  rename(Happiness_score = `Ladder score`, 
+         Country = `Country name`, 
+         Regional_indicator = `Regional indicator`,
+         Standard_error = `Standard error of ladder score`,
+         Lower_confidence_interval = lowerwhisker, 
+         Upper_confidence_interval = upperwhisker, 
+         Logged_gpd_per_capita = `Logged GDP per capita`,
+         Social_support = `Social support`,
+         Life_expectancy = `Healthy life expectancy`,
+         Freedom = `Freedom to make life choices`,
+         Trust_government = `Perceptions of corruption`,
+         Dystopia_score = `Ladder score in Dystopia`,
+         Exp_by_economy_gdp_per_capita = `Explained by: Log GDP per capita`,
+         Explained_by_social_support = `Explained by: Social support`,
+         Explained_by_life_expectancy = `Explained by: Healthy life expectancy`, 
+         Explained_by_freedom = `Explained by: Freedom to make life choices`, 
+         Explained_by_generosity = `Explained by: Generosity`,
+         Explained_by_trust_government = `Explained by: Perceptions of corruption`,
+         Dystopia_residual = `Dystopia + residual`)
+
+data2021_corrected <- data2021 %>%
+  mutate(Year = 2021) %>%
+  rename(Happiness_score = `Ladder score`, 
+         Country = `Country name`, 
+         Regional_indicator = `Regional indicator`,
+         Standard_error = `Standard error of ladder score`,
+         Lower_confidence_interval = lowerwhisker, 
+         Upper_confidence_interval = upperwhisker, 
+         Logged_gpd_per_capita = `Logged GDP per capita`,
+         Social_support = `Social support`,
+         Life_expectancy = `Healthy life expectancy`,
+         Freedom = `Freedom to make life choices`,
+         Trust_government = `Perceptions of corruption`,
+         Dystopia_score = `Ladder score in Dystopia`,
+         Exp_by_economy_gdp_per_capita = `Explained by: Log GDP per capita`,
+         Explained_by_social_support = `Explained by: Social support`,
+         Explained_by_life_expectancy = `Explained by: Healthy life expectancy`, 
+         Explained_by_freedom = `Explained by: Freedom to make life choices`, 
+         Explained_by_generosity = `Explained by: Generosity`,
+         Explained_by_trust_government = `Explained by: Perceptions of corruption`,
+         Dystopia_residual = `Dystopia + residual`)
+
+# On ajoute le ranking des pays pour 2021 au dataset
+
+data2021_corrected$Happiness_rank <-  rank(-data2021_corrected$Happiness_score)
+
+# Fusion de tous les datasets
+
+data <- data2015_corrected %>% 
+  bind_rows(data2016_corrected) %>% 
+  bind_rows(data2017_corrected) %>%
+  bind_rows(data2018_corrected) %>%
+  bind_rows(data2019_corrected) %>%
+  bind_rows(data2020_corrected) %>%
+  bind_rows(data2021_corrected)
+
+# Complétion de la colonne "Region"
+
+regions <- data2015_corrected %>% select("Country", "Region")
+
+data <- merge(data, regions, by="Country")
+
+data <- data %>% select(-"Region.x")
+data <- data %>% rename("Region"="Region.y")
+
+# Ajout des coordonnées géographiques
+
+data <- merge(data, countries_corrected, by="Country")
+
+# Ajout des données géographiques (shapefile)
+
+data <- merge(data, world_map_corrected, by="Country")
+
+# Ajout des continents 
+
+data <- merge(data, continents, by="Country")
+
+
+```
+
+# À savoir
+
+Avant de commencer l'analyse détaillée du jeu de données, il y a quelques informations à connaître.
+
+1.  Comme nous allons analyser le score de bonheur des régions, nous avons jugé utile de présenter la **liste des pays de chaque région** :
+
+| Region                          | Countries                                                                                                                                                                                                                                                                                                                                                                                                                        |
+|:-----------------------|:-----------------------------------------------|
+| Australia and New Zealand       | Australia, New Zealand                                                                                                                                                                                                                                                                                                                                                                                                           |
+| Central and Eastern Europe      | Albania, Armenia, Azerbaijan, Belarus, Bosnia and Herzegovina, Bulgaria, Croatia, Czech Republic, Estonia, Georgia, Hungary, Kazakhstan, Kosovo, Kyrgyzstan, Latvia, Lithuania, Macedonia, Moldova, Montenegro, Poland, Romania, Russia, Serbia, Slovakia, Slovenia, Tajikistan, Turkmenistan, Ukraine, Uzbekistan                                                                                                               |
+| Eastern Asia                    | China, Hong Kong, Japan, Mongolia, South Korea, Taiwan                                                                                                                                                                                                                                                                                                                                                                           |
+| Latin America and Caribbean     | Argentina, Bolivia, Brazil, Chile, Colombia, Costa Rica, Dominican Republic, Ecuador, Guatemala, Haiti, Honduras, Jamaica, Mexico, Nicaragua, Panama, Paraguay, Peru, Salvador, Suriname, Trinidad and Tobago, Uruguay, Venezuela                                                                                                                                                                                                |
+| Middle East and Northern Africa | Algeria, Bahrain, Egypt, Iran, Iraq, Israel, Jordan, Kuwait, Lebanon, Libya, Morocco, Oman, Palestinian Territories, Qatar, Saudi Arabia, Syria, Tunisia, Turkey, United Arab Emirates, Yemen                                                                                                                                                                                                                                    |
+| North America                   | Canada, United States                                                                                                                                                                                                                                                                                                                                                                                                            |
+| Southeastern Asia               | Cambodia, Indonesia, Laos, Malaysia, Myanmar, Philippines, Singapore, Thailand, Vietnam                                                                                                                                                                                                                                                                                                                                          |
+| Southern Asia                   | Afghanistan, Bangladesh, Bhutan, India, Nepal, Pakistan, Sri Lanka                                                                                                                                                                                                                                                                                                                                                               |
+| Sub-Saharan Africa              | Angola, Benin, Botswana, Burkina Faso, Burundi, Cameroon, Central African Republic, Chad, Comoros, Congo (Brazzaville), Congo (Kinshasa),Djibouti, Ethiopia, Gabon, Ghana, Guinea, Ivory Coast, Kenya, Lesotho, Liberia, Madagascar, Malawi, Mali, Mauritania, Mauritius, Mozambique, Niger, Nigeria, Rwanda, Senegal, Sierra Leone, Somaliland región, South Africa, Sudan, Swaziland, Tanzania, Togo, Uganda, Zambia, Zimbabwe |
+| Western Europe                  | Austria, Belgium, Cyprus, Denmark, Finland, France, Germany, Greece,Iceland, Ireland, Italy, Luxembourg, Malta, Netherlands, North Cyprus, Norway, Portugal, Spain, Sweden, Switzerland, United Kingdom                                                                                                                                                                                                                          |
+
+```{r répartition pays}
+
+data2015_sorted <- data2015_corrected %>% arrange(data2015_corrected$Region)
+repartition <- data2015_sorted %>% select("Region", "Country")
+
+#kable(repartition)
+
+```
+
+2. Qu'est ce que le bonheur ?
+
+Le bonheur est un **état émotionnel agréable, équilibré et durable** dans lequel se trouve quelqu'un qui estime être parvenu à la satisfaction des aspirations et désirs qu'il juge importants. Il perçoit alors sa propre situation de manière positive et ressent un **sentiment de plénitude et de sérénité**, sans stress ni inquiétude. Cette impression ressentie, indispensable à la survie des mammifères, est principalement le résultat de la production de sérotonine, réduisant la prise de risques et poussant ainsi l'individu à maintenir une situation qui lui est favorable. Le bonheur ne doit pas être confondu avec la **sensation passagère de plaisir**, issue principalement de la production de dopamine et non de sérotonine, mais représente au contraire un état d'équilibre, agréable, qui dure dans le temps.
+
+
+# I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
+
+Dans cette première partie, nous analysons l'évolution du bonheur entre 2015 et 2021. Nous proposons les modélisations suivantes :
+
+- 
+
+## Les visualisations réalisées
+
+### 1. L'évolution du bonheur moyen dans le monde
+
+Nous commencerons cette analyse par la visualisation du bonheur moyen au niveau mondial. La visualisation suivante est donc construite à partir de la moyenne globale des scores de bonheur de tous les pays chaque année.
+
+> Attention : on peut penser à première vue que la variation du bonheur moyen au fil des ans est importante. Il est important de prendre en compte l'échelle de l'axe des ordonnées : la variation est en réalité relativement faible, cette échelle ayant précisément été choisie pour qu'elle soit plus visuelle.
+
+```{r}
+# Graphes Evann
+
+mean_hs_score_world <- data %>% 
+  group_by(Year) %>%
+  summarise(Happiness_score = mean(Happiness_score)) %>%
+  ggplot(aes(x=Year, y=Happiness_score)) + geom_line(stat = "identity", color = "steelblue") + labs(title = "Evolution du score de bonheur moyen dans le monde", x = "Année", y = "Score de bonheur (moyenne monde)")
+
+ggplotly(mean_hs_score_world)
+
+# data %>%
+#   ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# 
+# data %>%
+#   ggplot(aes(x=Explained_by_life_expectancy, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# 
+# data %>%
+#   ggplot(aes(x=Explained_by_social_support, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+# 
+# data %>%
+#   ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
+```
+
+Ce graphique nous indique que le niveau moyen de bonheur dans le monde observe une tendance à la hausse, hormis une légère baisse en 2017. On peut cependant s'interroger sur la représentativité de ce résultat au vu de la moyenne globale effectuée. Qu'en est-il lorsque nous nous plaçons à l'échelle des différentes régions du monde?
+
+### 2. L'analyse temporelle par région du monde
+
+Cette seconde visualisation s'attache à représenter l'évolution du bonheur moyen **par région**, chaque ligne représentant les données d'une région. On transforme pour cela nos données de sorte à les regrouper par année ET par région, puis on calcule la moyenne du score de bonheur par région. On obtient donc le score de bonheur moyen par an et par région, dont on peut observer l'évolution sur la visualisation suivante:
+
+```{r}
+# on récupère la moyenne des scores de bonheur pour chaque année dans le monde
+df <- data %>%
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year) %>%
+  summarise(Happiness_score = mean(Happiness_score)) %>%
+  mutate(Region = "World")
+  
+# on récupère la moyenne des scores de bonheur pour chaque année et pour chaque région
+df2 <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Year, Region) %>%
+  summarise(Happiness_score = mean(Happiness_score))
+
+# on ajoute la moyenne dans le monde à la moyenne de chaque région (pour pouvoir les comparer)
+plot_hs_mean_per_region <- rbind(df, df2) %>%
+  ggplot(aes(x = Year, y = Happiness_score)) + geom_line(aes(group = Region, colour = Region)) + ylim(4, 7.5) + labs(title = "Evolution du score de bonheur par région", x = "Année", y = "Score de bonheur")
+
+ggplotly(plot_hs_mean_per_region)
+
+```
+
+On a ajouté à ces données par région la moyenne pour le monde. On peut donc effectuer simplement des comparaisons (en cliquant sur l'étiquette d'une région pour la faire apparaître/disparaître notamment) entre les différentes régions.
+
+On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne globale, et qu'une moyenne par région nous montre des disparités bien plus importantes quant à l'évolution du niveau de bonheur dans le monde au cours des dernières années.
+
+### 3. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
+
+La visualisation suivante s'attache aux pays ayant connu une hausse de leur score de bonheur entre 2015 et 2021. Elle représente les 10 taux d'accroissement de ce score les plus importants, en prenant le score de 2015 comme référence (un taux d'accroissement de 20% signifie donc qu'en 2021, le score de bonheur du pays est 20% plus élevé qu'en 2015)
+
+```{r}
+df_2015 <- data %>%
+  filter((Year == 2015) & (Country != "Angola" & Country != "Bhutan" & Country != "Central African Republic" & Country != "Congo (Kinshasa)" & Country != "Djibouti" & Country != "Hong Kong" & Country != "Macedonia" & Country != "Oman" & Country != "Qatar" & Country != "Somaliland region" & Country != "Sudan" & Country != "Suriname" & Country != "Syria" & Country != "Taiwan" & Country != "Trinidad and Tobago"))  %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2015 = Happiness_score) %>%
+  tibble()
+
+df_2021 <- data %>%
+  filter(Year == 2021) %>%
+  select(Year, Country, Happiness_score) %>%
+  arrange(Country) %>%
+  rename(Score_2021 = Happiness_score) %>%
+  tibble()
+
+df_diff <- df_2015 %>%
+  mutate(Score_2021 = df_2021$Score_2021) %>%
+  mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
+  arrange(desc(Score_progression)) %>%
+  head(10)
+
+greens = colorRampPalette(rev(brewer.pal(9, "Greens")))
+
+plot_positive_progress <- df_diff %>%
+  ggplot(aes(x = reorder(Country, desc(Score_progression)), y = Score_progression)) + geom_bar(stat = "identity", fill = greens(10)) + labs(title = "Les 10 pays dont le score a le plus progressé de 2015 à 2021", x = "Pays", y = "Pourcentage de progression")  + scale_y_continuous(labels = scales::percent) + theme(legend.position = "none") 
+
+ggplotly(plot_positive_progress)
+
+```
+
+Voyons maintenant le résultat pour les pays dont le score a le plus chuté entre 2015 et 2021:
+
+```{r}
+df_diff <- df_2015 %>%
+  mutate(Score_2021 = df_2021$Score_2021) %>%
+  mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
+  arrange(Score_progression) %>%
+  head(10)
+
+reds = colorRampPalette(rev(brewer.pal(9, "Reds")))
+
+plot_positive_progress <- df_diff %>%
+  ggplot(aes(x = reorder(Country, Score_progression), y = Score_progression, fill = reorder(Country, Score_progression))) + geom_bar(stat = "identity", fill = reds(10)) + labs(title = "Les 10 pays dont le score a le plus régressé de 2015 à 2021", x = "Pays", y = "Pourcentage de régression") + scale_y_continuous(labels = scales::percent) + scale_fill_brewer(palette="Reds") + theme(legend.position = "none")
+
+
+ggplotly(plot_positive_progress)
+```
+
+### 4. La répartition du niveau de bonheur des différentes régions du monde chaque année
+
+Cet histogramme permet de visualiser le score de bonheur le plus présent dans une région. Le score de chaque pays est arrondi à l'entier le plus proche. Le graphique prend donc compte de chacun des scores de bonheur individuel de chaque pays, puis les regroupe par régions.
+
+```{r}
+
+
+data1 <- data %>% mutate_if(is.numeric, round) %>% group_by(Year) %>% ggplot(aes(Happiness_score, color = Region, fill = Region)) + geom_histogram(alpha = 0.5) + facet_wrap(Year ~ ., ncol = 3) + 
+  labs(title = "Niveau de bonheur des différentes régions du monde", x = "Score de bonheur")
+
+ggplotly(data1)
+
+```
+
+### 4. Le score de bonheur moyen par région chaque année
+
+La visualisation suivante représente l'évolution au cours des années du score de bonheur moyen de chaque région. Non, ces graphes ne sont pas identiques ;) L'intérêt principal de ce graphique est de constater en un coup d'oeil que les scores moyens par régions restent très stables. Les régions ont été ordonnées par ordre décroissant, de la région possédant le meilleur score à celle possédant le moins bon.
+
+```{r}
+# test facet graph per year + barchart happiness score per region
+
+df_facet <- data %>% 
+  select(Year, Happiness_score, Region) %>%
+  group_by(Region, Year) %>%
+  summarise(Happiness_score_mean = mean(Happiness_score)) %>%
+  group_by(Year)
+
+# on ajoute un paramètre "theme" pour supprimer le nom des régions dans la graduation de l'axe x
+evolution_per_region <- df_facet %>%
+  ggplot(aes(x = reorder(Region, desc(Happiness_score_mean)), y = Happiness_score_mean, fill = reorder(Region, desc(Happiness_score_mean)))) + 
+  geom_bar(stat = "identity") + 
+  facet_wrap(Year ~ ., ncol = 3) + 
+  labs(title = "Score moyen par région pour chaque année", x = "Regions", y = "Score", fill = "Régions") + 
+  theme(axis.title.x=element_blank(), axis.text.x=element_blank(), axis.ticks.x=element_blank())
+
+ggplotly(evolution_per_region)
+
+
+```
+
+### 5. Classement [à déplacer]
+
+```{r}
+region_ranking_graph <- data %>%
+  select(Year, Region, Happiness_score) %>%
+  filter(Year == 2021) %>%
+  group_by(Region) %>%
+  summarise(Happiness_score_mean = mean(Happiness_score)) %>%
+  ggplot(aes(x = Happiness_score_mean, y = reorder(Region, Happiness_score_mean), fill = reorder(Region, desc(Happiness_score_mean)))) + 
+  geom_bar(stat = "identity") +
+  scale_fill_viridis_d() + 
+  labs(title = "Classement des régions (année 2021)", x = "Score", y = "Région") +
+  theme(legend.position = "none")
+
+ggplotly(region_ranking_graph)
+```
+
+### X) Corrélation entre les différents facteurs et le score de bonheur
+
+Les scores de bonheur précédemment mis en lumière sont le résultats de différents facteurs: - la liberté - l'espérance de vie - le PIB par habitant - la générosité - la confiance dans le gouvernement en place - le support social
+
+Le jeu de données possède des champs décrivant le niveau de contribution de chacun de ces facteurs au score global (tous les champs dont le nom commence par Explained_by\_...).
+
+En plus de ces champs, les jeux de données des années 2020 et 2021 possèdent des champs donnant des valeurs pour ces facteurs (Generosity, Freedom, Life_expectancy...).
+
+Cette partie s'attachera donc à tenter d'observer les corrélations pouvant exister entre ces facteurs et un score de bonheur élevé ou non.
+
+Commençons par le facteur "liberté": la visualisation suivante est un graphique en nuage de points, présentant en abscisse les valeurs enregistrées pour le facteur "liberté" et en ordonnée les valeurs de score de bonheur correspondantes.
+
+```{r}
+
+freedom_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x = Freedom, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x = Freedom, y = Happiness_score),
+              #method = "lm",
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre la liberté et le bonheur (2021)", 
+       x = "Niveau de liberté", 
+       y = "Score de bonheur")
+
+freedom_correlation_graph %>% ggplotly(tooltip = "text")
+```
+
+On constate immédiatement à la visualisation de ce graphique que le score de bonheur, comme on pouvait légitimement s'y attendre, est bien corrélé au score de bonheur des différents pays.
+
+Effectuons la même analyse pour le PIB par habitant, l'espérance de vie et le soutien social:
+
+```{r}
+
+gpd_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Logged_gpd_per_capita, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x=Logged_gpd_per_capita, y=Happiness_score),
+              #method = "lm",
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre le PIB par habitant et le bonheur (2021)", 
+       x = "Log(PIB par habitant)", 
+       y = "Score de bonheur")
+
+gpd_correlation_graph %>% ggplotly(tooltip = "text")
+
+
+life_expectancy_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Life_expectancy, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x=Life_expectancy, y = Happiness_score),
+              #method = "lm",
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre espérance de vie et bonheur", 
+       x = "Espérance de vie", 
+       y = "Score de bonheur")
+
+life_expectancy_correlation_graph %>% ggplotly(tooltip = "text")
+
+
+social_support_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x=Social_support, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x=Social_support, y = Happiness_score),
+              #method = "lm",
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre soutien social et bonheur", 
+       x = "Niveau de soutien social", 
+       y = "Score de bonheur")
+
+social_support_correlation_graph %>% ggplotly(tooltip = "text")
+
+```
+<br>
+
+On peut une fois encore observer une corrélation générale entre ces derniers facteurs et le score de bonheur.  
+Cependant, chacun des facteurs fournis dans ce dataset ne contribue par nécessairement grandement au score de bonheur.  
+En effet, voici les graphiques de corrélation obtenus pour les facteurs "générosité" et "confiance dans le gouvernement":  
+
+<br>
+```{r}
+generosity_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x = Generosity, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x = Generosity, y = Happiness_score),
+              #method = "lm",
+              col = "#C42126",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre la générosité et le bonheur (2021)", 
+       x = "Niveau de générosité", 
+       y = "Score de bonheur")
+
+generosity_correlation_graph %>% ggplotly(tooltip = "text")
+
+trust_government_correlation_graph <- data %>%
+  filter(Year == 2021) %>%
+  ggplot(aes(x = Trust_government, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x = Trust_government, y = Happiness_score),
+              #method = "lm",
+              col = "#C42126",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre la confiance dans le gouvernement et le bonheur (2021)", 
+       x = "Niveau de confiance dans le gouvernement", 
+       y = "Score de bonheur")
+
+trust_government_correlation_graph %>% ggplotly(tooltip = "text")
+```
+<br>
+
+On constate cette fois-ci, et à l'inverse des graphes précédemment étudiés, que les valeurs sont relativement éparpillées et ne permettent pas d'établir une corrélation entre la générosité ou la confiance dans le gouvernement et le score de bonheur.  
+Ces facteurs sont donc a priori moins impactants sur les variations de score entre les différents pays.
+
+<br><br><br>
+
+# II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
+
+Dans cette partie, le but est de **déterminer si le bonheur a des préférences géographiques**, et d'identifier les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
+
+## Les visualisations réalisées
+
+1.  Un boxplot qui indique la distribution des scores de bonheur de chaque région
+
+2.  Une carte du monde colorée par région en fonction du score de bonheur (avec ggmap ou leaflet)
+
+3.  Faire des scatterplots pour les différents critères en fonction du niveau de bonheur par région (moyenne sur toutes les années ou évolution dans le temps ?)
+
+#### La distribution des scores de bonheur de chaque région chaque année
+
+La visualisation du boxplot nous permet de situer rapidement les scores de bonheurs des pays d'une même région. On constate en un coup d'oeil que les 3 régions du monde les plus heureuses sont la Nouvelle Zélande, l'Amérique du Nord et l'Europe de l'Ouest.
+
+```{r graphe 1}
+
+# Les régions et la distribution de leurs scores de bonheur (boxplot)
+
+boxplot_happiness_score <- data %>% ggplot(aes(x = Region, y = Happiness_score, color = Region)) + labs(x = "Région", y = "Score de bonheur", title = "Distribution des scores de bonheur dans les régions du monde", subtitle = "Données de 2015 à 2021") + geom_boxplot() + theme(axis.text.x = element_text(angle = 45))
+
+ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 1500, transition = 500)
+
+
+```
