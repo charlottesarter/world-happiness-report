@@ -35,7 +35,7 @@ Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de r
 Les jeux de données initiaux comportent 13 variables :
 
 | Variable                       | Class     | Description                                                                                                                                                                                |
-|:----------------|:----------------|:-------------------------------------|
+|:-----------------|:-----------------|:------------------------------------|
 | country                        | character | Nom du pays                                                                                                                                                                                |
 | region                         | character | Région à laquelle le pays appartient                                                                                                                                                       |
 | hapiness rank                  | integer   | Classement du pays sur la base du score du bonheur                                                                                                                                         |
@@ -50,7 +50,7 @@ Les jeux de données initiaux comportent 13 variables :
 | generosity                     | double    | La mesure dans laquelle la générosité a contribué au calcul du score de bonheur                                                                                                            |
 | dystopia residual              | double    | "Résidu" correspondant à l'écart entre le modèle théorique et la réalité, auquel on ajoute un score de dystopie (score d'un pays hypothétique moins bien classé que tous les autre)        |
 
-Par la suite, nous avons ajouté plusieurs données nécessaires à la création de cartes : les **coordonnées géographiques des pays**, ainsi que leur **géométrie**, afin de pouvoir colorier les surfaces des pays sur les cartes.
+Par la suite, nous avons ajouté plusieurs données nécessaires à la création de cartes : les **coordonnées géographiques des pays**, ainsi que leur **géométrie**, afin de pouvoir colorier les surfaces des pays sur les cartes. Nous avons également ajouté une colonne indiquant le **continent** sur lequel se trouve chaque pays.
 
 > L'ensemble des données utilisées est disponible dans le dossier `/data/`
 
@@ -58,7 +58,7 @@ Ces données nous semblent pertinentes dans le cadre d'une analyse car :
 
 -   Elles sont analysables dans le **temps**
 -   Elles sont analysables **géographiquement**
--   Elles permettent d'établir différents facteurs de contribution au bonheur en fonction des régions du monde, des cultures...
+-   Elles permettent d'étudier **différents facteurs de contribution au bonheur** en fonction des régions du monde, des cultures...
 
 ### Plan d'analyse
 
@@ -290,7 +290,7 @@ Avant de commencer l'analyse détaillée du jeu de données, il y a quelques inf
 1.  Comme nous allons analyser le score de bonheur des régions, nous avons jugé utile de présenter la **liste des pays de chaque région** :
 
 | Region                          | Countries                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|:-----------------------|:-----------------------------------------------|
+|:-----------------------|:----------------------------------------------|
 | Australia and New Zealand       | Australia, New Zealand                                                                                                                                                                                                                                                                                                                                                                                                           |
 | Central and Eastern Europe      | Albania, Armenia, Azerbaijan, Belarus, Bosnia and Herzegovina, Bulgaria, Croatia, Czech Republic, Estonia, Georgia, Hungary, Kazakhstan, Kosovo, Kyrgyzstan, Latvia, Lithuania, Macedonia, Moldova, Montenegro, Poland, Romania, Russia, Serbia, Slovakia, Slovenia, Tajikistan, Turkmenistan, Ukraine, Uzbekistan                                                                                                               |
 | Eastern Asia                    | China, Hong Kong, Japan, Mongolia, South Korea, Taiwan                                                                                                                                                                                                                                                                                                                                                                           |
@@ -311,16 +311,23 @@ repartition <- data2015_sorted %>% select("Region", "Country")
 
 ```
 
-2. Qu'est ce que le bonheur ?
+2.  Qu'est ce que le bonheur ?
+
+Avant d'étudier le World Happiness Report, il est important de **définir ce qu'est le bonheur**, car il peut s'agir d'une notion assez subjective.
 
 Le bonheur est un **état émotionnel agréable, équilibré et durable** dans lequel se trouve quelqu'un qui estime être parvenu à la satisfaction des aspirations et désirs qu'il juge importants. Il perçoit alors sa propre situation de manière positive et ressent un **sentiment de plénitude et de sérénité**, sans stress ni inquiétude. Cette impression ressentie, indispensable à la survie des mammifères, est principalement le résultat de la production de sérotonine, réduisant la prise de risques et poussant ainsi l'individu à maintenir une situation qui lui est favorable. Le bonheur ne doit pas être confondu avec la **sensation passagère de plaisir**, issue principalement de la production de dopamine et non de sérotonine, mais représente au contraire un état d'équilibre, agréable, qui dure dans le temps.
 
+Source : [Wikipedia](https://fr.wikipedia.org/wiki/Bonheur)
+
+3.  Est-ce que les données récoltées sont vraiment objectives ?
+
+La principale question posée lors des enquêtes sur le bonheur est : "Imaginez une échelle avec des barreaux numérotés de zéro en bas à dix en haut. Le barreau du haut représente la meilleure vie possible pour vous, et le barreau du bas la pire vie possible pour vous. Sur quel barreau pensez-vous vous tenir à ce moment de votre vie ?". Connue sous le nom d'**échelle de Cantril**, cette évaluation du bien-être, ainsi que la formulation précise de la question, constitue un standard commun pour les recherches sur le **bien-être subjectif**. En effet, le bonheur est une notion très subjective, et peut rapidement être faussée par les petits événements du quotidien. Si on pose la question à quelqu'un qui vient d'avoir un F en MATH02 et qui a loupé son train pour rentrer chez ses parents à Toulouse, il y a beaucoup de chances que sa réponse soit influencée par ses troubles actuels. Pourtant, ils ne définissent pas le bonheur sur le long terme de l'individu, seulement il est difficile pour l'homme d'avoir une vision d'ensemble sur sa vie. Ainsi, l'échelle de Cantril semble être selon les experts la mesure la plus fructueuse du bonheur des individus.
 
 # I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
 Dans cette première partie, nous analysons l'évolution du bonheur entre 2015 et 2021. Nous proposons les modélisations suivantes :
 
-- 
+-   
 
 ## Les visualisations réalisées
 
@@ -624,13 +631,15 @@ social_support_correlation_graph <- data %>%
 social_support_correlation_graph %>% ggplotly(tooltip = "text")
 
 ```
-<br>
-
-On peut une fois encore observer une corrélation générale entre ces derniers facteurs et le score de bonheur.  
-Cependant, chacun des facteurs fournis dans ce dataset ne contribue par nécessairement grandement au score de bonheur.  
-En effet, voici les graphiques de corrélation obtenus pour les facteurs "générosité" et "confiance dans le gouvernement":  
 
 <br>
+
+On peut une fois encore observer une corrélation générale entre ces derniers facteurs et le score de bonheur.\
+Cependant, chacun des facteurs fournis dans ce dataset ne contribue par nécessairement grandement au score de bonheur.\
+En effet, voici les graphiques de corrélation obtenus pour les facteurs "générosité" et "confiance dans le gouvernement":
+
+<br>
+
 ```{r}
 generosity_correlation_graph <- data %>%
   filter(Year == 2021) %>%
@@ -664,9 +673,10 @@ trust_government_correlation_graph <- data %>%
 
 trust_government_correlation_graph %>% ggplotly(tooltip = "text")
 ```
+
 <br>
 
-On constate cette fois-ci, et à l'inverse des graphes précédemment étudiés, que les valeurs sont relativement éparpillées et ne permettent pas d'établir une corrélation entre la générosité ou la confiance dans le gouvernement et le score de bonheur.  
+On constate cette fois-ci, et à l'inverse des graphes précédemment étudiés, que les valeurs sont relativement éparpillées et ne permettent pas d'établir une corrélation entre la générosité ou la confiance dans le gouvernement et le score de bonheur.\
 Ces facteurs sont donc a priori moins impactants sur les variations de score entre les différents pays.
 
 <br><br><br>
@@ -706,7 +716,7 @@ ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 
 
 ```
 
-#### Le bonheur dans le monde 
+#### Le bonheur dans le monde
 
 ```{r carte bonheur dans le monde par pays}
 
