@@ -323,6 +323,8 @@ Source : [Wikipedia](https://fr.wikipedia.org/wiki/Bonheur)
 
 La principale question posée lors des enquêtes sur le bonheur est : "Imaginez une échelle avec des barreaux numérotés de zéro en bas à dix en haut. Le barreau du haut représente la meilleure vie possible pour vous, et le barreau du bas la pire vie possible pour vous. Sur quel barreau pensez-vous vous tenir à ce moment de votre vie ?". Connue sous le nom d'**échelle de Cantril**, cette évaluation du bien-être, ainsi que la formulation précise de la question, constitue un standard commun pour les recherches sur le **bien-être subjectif**. En effet, le bonheur est une notion très subjective, et peut rapidement être faussée par les petits événements du quotidien. Si on pose la question à quelqu'un qui vient d'avoir un F en MATH02 et qui a loupé son train pour rentrer chez ses parents à Toulouse, il y a beaucoup de chances que sa réponse soit influencée par ses troubles actuels. Pourtant, ils ne définissent pas le bonheur sur le long terme de l'individu, seulement il est difficile pour l'homme d'avoir une vision d'ensemble sur sa vie. Ainsi, l'échelle de Cantril semble être selon les experts la mesure la plus fructueuse du bonheur des individus.
 
+Il faut donc garder à l'esprit que les données constituent une **auto-évaluation des individus**, ainsi elles sont par défaut subjectives. Cependant, elles tendent à être comparables grâce à l'échelle de Cantril, qui nous offre la mesure la plus universelle possible du bonheur.
+
 # I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
 Dans cette première partie, nous analysons l'évolution du bonheur entre 2015 et 2021. Nous proposons les modélisations suivantes :
