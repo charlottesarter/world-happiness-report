@@ -331,3 +331,11 @@ data2016_corrected
 # data$Country[is.na(data$Geometry)]
 # data2016_corrected$Country[is.na(data$Happiness_score)]
 ```
+
+```{r graphe 5}
+
+data2021_corrected
+
+
+
+```
