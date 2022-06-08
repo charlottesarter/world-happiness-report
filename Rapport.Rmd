@@ -260,8 +260,6 @@ data <- data2015_corrected %>%
   bind_rows(data2020_corrected) %>%
   bind_rows(data2021_corrected)
 
-head(data2016_corrected)
-
 # Complétion de la colonne "Region"
 
 regions <- data2015_corrected %>% select("Country", "Region")
@@ -282,8 +280,6 @@ data <- merge(data, world_map_corrected, by="Country")
 # Ajout des continents 
 
 data <- merge(data, continents, by="Country")
-
-colnames(data)
 
 ```
 
@@ -731,11 +727,18 @@ map_countries <- leaflet() %>%
   # polygone des pays
   addPolygons(data = data_map_countries$Geometry,
               fillColor = mypalette(data_map_countries$Happiness_score),
-              stroke = TRUE,
-              weight = 0.1,
-              fillOpacity = 0.9,
+              weight = 2,
+              opacity = 1,
               color = "white",
-              label = labels
+              dashArray = "3",
+              fillOpacity = 0.7,
+              label = labels,
+              highlightOptions = highlightOptions(
+                                  weight = 5,
+                                  color = "#666",
+                                  dashArray = "",
+                                  fillOpacity = 0.7,
+                                  bringToFront = TRUE)
               ) %>%
   addLegend("bottomright",
             pal = mypalette, 
