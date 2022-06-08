@@ -144,6 +144,7 @@ data2015_corrected <- data2015 %>%
          Explained_by_trust_government = `Trust (Government Corruption)`,
          Explained_by_generosity = Generosity,
          Dystopia_residual = `Dystopia Residual`)
+data2015_corrected$Exp_by_economy_gdp_per_capita <- as.double(data2015_corrected$Exp_by_economy_gdp_per_capita)
 
 data2016_corrected <- data2016 %>% 
   mutate(Standard.Error = `Happiness Score` - `Lower Confidence Interval`, Year = 2016) %>%
@@ -159,6 +160,7 @@ data2016_corrected <- data2016 %>%
          Dystopia_residual = `Dystopia Residual`,
          Lower_confidence_interval = `Lower Confidence Interval`,
          Upper_confidence_interval = `Upper Confidence Interval`)
+data2016_corrected$Exp_by_economy_gdp_per_capita <- as.double(data2016_corrected$Exp_by_economy_gdp_per_capita)
 
 data2017_corrected <- data2017 %>% 
   mutate(Standard_error = Happiness.Score - Whisker.low, Year = 2017) %>%
@@ -246,7 +248,7 @@ data2021_corrected <- data2021 %>%
 
 # On ajoute le ranking des pays pour 2021 au dataset
 
-data2021_corrected$Happiness_rank <-  rank(-data2021_corrected$Happiness_score)
+data2021_corrected$Happiness_rank <- rank(-data2021_corrected$Happiness_score)
 
 # Fusion de tous les datasets
 
