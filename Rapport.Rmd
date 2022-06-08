@@ -442,9 +442,16 @@ Cet histogramme permet de visualiser le score de bonheur le plus présent dans u
 
 ```{r}
 
-
-data1 <- data %>% mutate_if(is.numeric, round) %>% group_by(Year) %>% ggplot(aes(Happiness_score, color = Region, fill = Region)) + geom_histogram(alpha = 0.5) + facet_wrap(Year ~ ., ncol = 3) + 
-  labs(title = "Niveau de bonheur des différentes régions du monde", x = "Score de bonheur")
+data1 <- data %>% 
+  mutate_if(is.numeric, round) %>% 
+  ggplot(aes(x= Happiness_score,
+             color = Region,
+             fill= Region
+             )) + 
+  facet_wrap(Year ~ ., ncol = 2) +
+  labs(title = "Niveau de bonheur des différentes régions du monde", 
+       x = "Score de bonheur") + scale_x_continuous(breaks=seq(0,10, by = 1)) + scale_color_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) + scale_fill_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) +
+  geom_bar(width = 0.5)
 
 ggplotly(data1)
 
