@@ -214,7 +214,7 @@ data2020_corrected <- data2020 %>%
          Social_support = `Social support`,
          Life_expectancy = `Healthy life expectancy`,
          Freedom = `Freedom to make life choices`,
-         Trust_government = `Perceptions of corruption`,
+         Perceptions_of_corruption = `Perceptions of corruption`,
          Dystopia_score = `Ladder score in Dystopia`,
          Exp_by_economy_gdp_per_capita = `Explained by: Log GDP per capita`,
          Explained_by_social_support = `Explained by: Social support`,
@@ -236,7 +236,7 @@ data2021_corrected <- data2021 %>%
          Social_support = `Social support`,
          Life_expectancy = `Healthy life expectancy`,
          Freedom = `Freedom to make life choices`,
-         Trust_government = `Perceptions of corruption`,
+         Perceptions_of_corruption = `Perceptions of corruption`,
          Dystopia_score = `Ladder score in Dystopia`,
          Exp_by_economy_gdp_per_capita = `Explained by: Log GDP per capita`,
          Explained_by_social_support = `Explained by: Social support`,
@@ -610,16 +610,16 @@ generosity_correlation_graph %>% ggplotly(tooltip = "text")
 
 trust_government_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x = Trust_government, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  ggplot(aes(x = Perceptions_of_corruption, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
-              aes(x = Trust_government, y = Happiness_score),
+              aes(x = Perceptions_of_corruption, y = Happiness_score),
               #method = "lm",
               col = "#C42126",
               se = FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre la confiance dans le gouvernement et le bonheur (2021)", 
-       x = "Niveau de confiance dans le gouvernement", 
+  labs(title = "Corrélation entre impression de corruption et le bonheur (2021)", 
+       x = "Impression de corruption", 
        y = "Score de bonheur")
 
 trust_government_correlation_graph %>% ggplotly(tooltip = "text")
