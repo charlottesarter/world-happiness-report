@@ -5,6 +5,14 @@ library(dplyr)
 library(readr)
 library(plotly)
 
+cities <- cities %>% 
+  rename(Country = 'country',
+         City ='city')
+
+city <- cities %>% select("Country", "City")
+
+complement2021 <- merge(complement2021, city, by="City")
+
 
 # Comment évolue le bonheur au fil des années ?
 

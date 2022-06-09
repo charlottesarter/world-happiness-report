@@ -112,6 +112,7 @@ data2018 <- tibble(read_csv('data/2018.csv'))
 data2019 <- tibble(read_csv('data/2019.csv'))
 data2020 <- tibble(read_csv('data/2020.csv'))
 data2021 <- tibble(read_csv('data/2021.csv'))
+complement2021 <- tibble (read_csv('data/complement_2021.csv'))
 countries <- tibble(read_csv('data/countries.csv'))
 world_map <- read_sf('data/world_map')
 continents <- read_csv('data/continents.csv')
@@ -249,6 +250,28 @@ data2021_corrected <- data2021 %>%
 # On ajoute le ranking des pays pour 2021 au dataset
 
 data2021_corrected$Happiness_rank <- rank(-data2021_corrected$Happiness_score)
+
+# On ajoute le complement dataset2021
+
+cities <- read_csv2('data/city.csv')
+
+complement2021 <- merge(complement2021, cities, by="City")
+
+data2021_complement <- merge(complement2021,data2021_corrected, by="Country")
+
+data2021_complement <- data2021_complement %>%
+  rename (Sunshine_time='Sunshine hours(City)',
+          Water_price = 'Cost of a bottle of water(City)',
+          Obesity_level ='Obesity levels(Country)',
+          Pollution_score='Pollution(Index score) (City)',
+          Annual_work_time='Annual avg. hours worked',
+          Outdoor_activities='Outdoor activities(City)',
+          Number_of_takeout_places ='Number of take out places(City)',
+          Gym_monthlycost='Cost of a monthly gym membership(City)')
+
+data2021_complement <- data2021_complement[,-7]
+data2021_complement <- data2021_complement[,-9]
+
 
 # Fusion de tous les datasets
 
@@ -687,6 +710,24 @@ Ces facteurs sont donc a priori moins impactants sur les variations de score ent
 
 <br><br><br>
 
+X.2/ Corrélation entre les différents facteurs proposés dans un dataset supplémentaire de 2021
+
+```{r}
+pollution_correlation_graph <- data2021_complement %>%
+  ggplot(aes(x = Pollution_score, y = Happiness_score)) + 
+  geom_point(aes(color = Regional_indicator)) + 
+  scale_x_discrete(breaks=c("10","20","30","40","50","60","70","80","90","100"))
+pollution_correlation_graph +
+  geom_smooth(aes(x = Pollution_score, y = Happiness_score),
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre la pollution et le bonheur (2021)", 
+       x = "Niveau de pollution", 
+       y = "Score de bonheur")
+
+pollution_correlation_graph %>% ggplotly()
+```
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
 Dans cette partie, le but est de **déterminer si le bonheur a des préférences géographiques**, et d'identifier les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
