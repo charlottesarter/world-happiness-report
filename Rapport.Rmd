@@ -718,19 +718,19 @@ X.2/ Corrélation entre les différents facteurs proposés dans un dataset suppl
 
 ```{r}
 pollution_correlation_graph <- data2021_complement %>%
-  ggplot(aes(x = Freedom, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
-  geom_point(aes(color = Continent)) + 
-  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
-              aes(x = Freedom, y = Happiness_score),
-              #method = "lm",
+  ggplot(aes(x = Pollution_score, y = Happiness_score)) + 
+  geom_point(aes(color = Regional_indicator)) + 
+  scale_x_discrete(breaks=c("10","20","30","40","50","60","70","80","90","100"))
+pollution_correlation_graph +
+  geom_smooth(aes(x = Pollution_score, y = Happiness_score),
               col = "#92be72",
               se = FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre la liberté et le bonheur (2021)", 
-       x = "Niveau de liberté", 
+  labs(title = "Corrélation entre la pollution et le bonheur (2021)", 
+       x = "Niveau de pollution", 
        y = "Score de bonheur")
 
-freedom_correlation_graph %>% ggplotly(tooltip = "text")
+pollution_correlation_graph %>% ggplotly()
 ```
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
