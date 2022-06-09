@@ -112,6 +112,7 @@ data2018 <- tibble(read_csv('data/2018.csv'))
 data2019 <- tibble(read_csv('data/2019.csv'))
 data2020 <- tibble(read_csv('data/2020.csv'))
 data2021 <- tibble(read_csv('data/2021.csv'))
+complement2021 <- tibble (read_csv('data/complement_2021.csv'))
 countries <- tibble(read_csv('data/countries.csv'))
 world_map <- read_sf('data/world_map')
 continents <- read_csv('data/continents.csv')
@@ -249,6 +250,14 @@ data2021_corrected <- data2021 %>%
 # On ajoute le ranking des pays pour 2021 au dataset
 
 data2021_corrected$Happiness_rank <- rank(-data2021_corrected$Happiness_score)
+
+# On ajoute le complement dataset2021
+
+cities <- read_csv2('data/city.csv')
+
+complement2021 <- merge(complement2021, cities, by="City")
+
+data2021_complement <- merge(complement2021,data2021_corrected, by="Country")
 
 # Fusion de tous les datasets
 
