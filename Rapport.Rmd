@@ -35,7 +35,7 @@ Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de r
 Les jeux de données initiaux comportent 13 variables :
 
 | Variable                       | Class     | Description                                                                                                                                                                                |
-|:-----------------|:-----------------|:------------------------------------|
+|:-------------------------------|:----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | country                        | character | Nom du pays                                                                                                                                                                                |
 | region                         | character | Région à laquelle le pays appartient                                                                                                                                                       |
 | hapiness rank                  | integer   | Classement du pays sur la base du score du bonheur                                                                                                                                         |
@@ -290,7 +290,7 @@ Avant de commencer l'analyse détaillée du jeu de données, il y a quelques inf
 1.  Comme nous allons analyser le score de bonheur des régions, nous avons jugé utile de présenter la **liste des pays de chaque région** :
 
 | Region                          | Countries                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|:-----------------------|:----------------------------------------------|
+|:--------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Australia and New Zealand       | Australia, New Zealand                                                                                                                                                                                                                                                                                                                                                                                                           |
 | Central and Eastern Europe      | Albania, Armenia, Azerbaijan, Belarus, Bosnia and Herzegovina, Bulgaria, Croatia, Czech Republic, Estonia, Georgia, Hungary, Kazakhstan, Kosovo, Kyrgyzstan, Latvia, Lithuania, Macedonia, Moldova, Montenegro, Poland, Romania, Russia, Serbia, Slovakia, Slovenia, Tajikistan, Turkmenistan, Ukraine, Uzbekistan                                                                                                               |
 | Eastern Asia                    | China, Hong Kong, Japan, Mongolia, South Korea, Taiwan                                                                                                                                                                                                                                                                                                                                                                           |
@@ -491,11 +491,7 @@ ggplotly(data1)
 
 ```
 
-On remarque que la plupart des régions du monde voient le score de bonheur des différents pays répartis sur trois scores de bonheur différents. Cependant les scores de bonheur sont souvent consécutifs (3-4-5, 2-3-4,..) ce qui montre un lien évident entre le score de bonheur d'un pays et la région du monde dans laquelle il se situe. 
-On constate aussi que depuis 2018, en l'Amérique latine le score de bonheur est à 6 pour une très grande majorité des pays. La région est donc assez équilibrée tout comme l'Australie et la Nouvelle-Zélande qui ont un score de bonheur a 7 depuis 2015.
-L'Europe de l'Est quant à elle est toujours la seule à avoir dans certains pays un score de bonheur à 8.
-Les régions les moins heureuses d'après les graphique sont depuis 2015, l'Afriquesubsaharienne et l'Asie du Sud. L'Afrique du Nord et de l'Est semble voir son score de bonheur augmenter au fil des années.
-
+On remarque que la plupart des régions du monde voient le score de bonheur des différents pays répartis sur trois scores de bonheur différents. Cependant les scores de bonheur sont souvent consécutifs (3-4-5, 2-3-4,..) ce qui montre un lien évident entre le score de bonheur d'un pays et la région du monde dans laquelle il se situe. On constate aussi que depuis 2018, en l'Amérique latine le score de bonheur est à 6 pour une très grande majorité des pays. La région est donc assez équilibrée tout comme l'Australie et la Nouvelle-Zélande qui ont un score de bonheur a 7 depuis 2015. L'Europe de l'Est quant à elle est toujours la seule à avoir dans certains pays un score de bonheur à 8. Les régions les moins heureuses d'après les graphique sont depuis 2015, l'Afriquesubsaharienne et l'Asie du Sud. L'Afrique du Nord et de l'Est semble voir son score de bonheur augmenter au fil des années.
 
 ### 4. Le score de bonheur moyen par région chaque année
 
