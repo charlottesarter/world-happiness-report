@@ -325,6 +325,8 @@ La principale question posée lors des enquêtes sur le bonheur est : "Imaginez 
 
 Il faut donc garder à l'esprit que les données constituent une **auto-évaluation des individus**, ainsi elles sont par défaut subjectives. Cependant, elles tendent à être comparables grâce à l'échelle de Cantril, qui nous offre la mesure la plus universelle possible du bonheur.
 
+Sources : [Cairn.info](https://www.cairn.info/revue-francaise-d-economie-2012-3-page-35.htm) & [Our World in Data](https://ourworldindata.org/bonheur-et-satisfaction)
+
 # I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
 Dans cette première partie, nous analysons l'évolution du bonheur entre 2015 et 2021. Nous proposons les modélisations suivantes :
