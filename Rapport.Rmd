@@ -259,6 +259,20 @@ complement2021 <- merge(complement2021, cities, by="City")
 
 data2021_complement <- merge(complement2021,data2021_corrected, by="Country")
 
+data2021_complement <- data2021_complement %>%
+  rename (Sunshine_time='Sunshine hours(City)',
+          Water_price = 'Cost of a bottle of water(City)',
+          Obesity_level ='Obesity levels(Country)',
+          Pollution_score='Pollution(Index score) (City)',
+          Annual_work_time='Annual avg. hours worked',
+          Outdoor_activities='Outdoor activities(City)',
+          Number_of_takeout_places ='Number of take out places(City)',
+          Gym_monthlycost='Cost of a monthly gym membership(City)')
+
+data2021_complement <- data2021_complement[,-7]
+data2021_complement <- data2021_complement[,-9]
+
+
 # Fusion de tous les datasets
 
 data <- data2015_corrected %>% 
@@ -700,6 +714,24 @@ Ces facteurs sont donc a priori moins impactants sur les variations de score ent
 
 <br><br><br>
 
+X.2/ Corrélation entre les différents facteurs proposés dans un dataset supplémentaire de 2021
+
+```{r}
+pollution_correlation_graph <- data2021_complement %>%
+  ggplot(aes(x = Freedom, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  geom_point(aes(color = Continent)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x = Freedom, y = Happiness_score),
+              #method = "lm",
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre la liberté et le bonheur (2021)", 
+       x = "Niveau de liberté", 
+       y = "Score de bonheur")
+
+freedom_correlation_graph %>% ggplotly(tooltip = "text")
+```
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
 Dans cette partie, le but est de **déterminer si le bonheur a des préférences géographiques**, et d'identifier les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
