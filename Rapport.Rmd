@@ -352,9 +352,7 @@ Sources : [Cairn.info](https://www.cairn.info/revue-francaise-d-economie-2012-3-
 
 # I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
-Dans cette première partie, nous analysons l'évolution du bonheur entre 2015 et 2021. Nous proposons les modélisations suivantes :
-
--   
+Cette première partie s'attachera à répondre à la question: comment a évolué le score au fil des années disponibles dans notre dataset (de 2015 à 2021)? Le déroulement de l'analyse nous amènera par la suite à diviser cette question en plusieurs sous-questions moins vastes.
 
 ## Les visualisations réalisées
 
@@ -379,24 +377,16 @@ mean_hs_score_world <- data %>%
 
 ggplotly(mean_hs_score_world)
 
-# data %>%
-#   ggplot(aes(x=Explained_by_freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
-# 
-# data %>%
-#   ggplot(aes(x=Explained_by_life_expectancy, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
-# 
-# data %>%
-#   ggplot(aes(x=Explained_by_social_support, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
-# 
-# data %>%
-#   ggplot(aes(x=Freedom, y=Happiness_score)) + geom_point() + facet_wrap(Year ~ ., ncol = 3) + geom_smooth()
 ```
 
-Ce graphique nous indique que le niveau moyen de bonheur dans le monde observe une tendance à la hausse, hormis une légère baisse en 2017. On peut cependant s'interroger sur la représentativité de ce résultat au vu de la moyenne globale effectuée. Qu'en est-il lorsque nous nous plaçons à l'échelle des différentes régions du monde?
+Ce graphique nous indique que le niveau moyen de bonheur dans le monde observe une tendance à la hausse, hormis une légère baisse en 2017.   
+Fait intéressant, on n'observe pas de baisse en 2020, année d'apparition du covid et de confinements généralisés dans de nombreux pays.
+On peut cependant s'interroger sur la représentativité de ce résultat au vu de la moyenne globale effectuée. Qu'en est-il lorsque nous nous plaçons à l'échelle des différentes régions du monde?
 
 ### 2. L'analyse temporelle par région du monde
 
-Cette seconde visualisation s'attache à représenter l'évolution du bonheur moyen **par région**, chaque ligne représentant les données d'une région. On transforme pour cela nos données de sorte à les regrouper par année ET par région, puis on calcule la moyenne du score de bonheur par région. On obtient donc le score de bonheur moyen par an et par région, dont on peut observer l'évolution sur la visualisation suivante:
+Cette seconde visualisation s'attache à répondre à la question plus précise de l'évolution du score de bonheur moyen **par région**, chaque ligne représentant les données d'une région. On transforme pour cela nos données de sorte à les regrouper par année ET par région, puis on calcule la moyenne du score de bonheur par région pour chaque année.  
+On peut donc observer l'évolution des scores obtenus via ce regroupement par la visualisation suivante:
 
 ```{r analyse temporelle par région}
 
@@ -430,7 +420,10 @@ ggplotly(plot_hs_mean_per_region)
 
 On a ajouté à ces données par région la moyenne pour le monde. On peut donc effectuer simplement des comparaisons (en cliquant sur l'étiquette d'une région pour la faire apparaître/disparaître notamment) entre les différentes régions.
 
-On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne globale, et qu'une moyenne par région nous montre des disparités bien plus importantes quant à l'évolution du niveau de bonheur dans le monde au cours des dernières années.
+On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne globale, et qu'une moyenne par région nous montre des disparités bien plus importantes quant à l'évolution du niveau de bonheur dans le monde au cours des dernières années.  
+L'Asie du Sud, par exemple, observe une tendance à la baisse de son score de bonheur depuis 2017, tandis que l'Europe occidentale observe une tendance à la hausse sur cette même période.
+
+Pour terminer sur cette aspect de l'évolution du score de bonheur, une visualisation est disponible 
 
 ### 3. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
 
@@ -720,8 +713,7 @@ X.2/ Corrélation entre les différents facteurs proposés dans un dataset suppl
 pollution_correlation_graph <- data2021_complement %>%
   ggplot(aes(x = Pollution_score, y = Happiness_score)) + 
   geom_point(aes(color = Regional_indicator)) + 
-  scale_x_discrete(breaks=c("10","20","30","40","50","60","70","80","90","100"))
-pollution_correlation_graph +
+  scale_x_discrete(breaks=c("10","20","30","40","50","60","70","80","90","100")) +
   geom_smooth(aes(x = Pollution_score, y = Happiness_score),
               col = "#92be72",
               se = FALSE,
@@ -817,4 +809,5 @@ map_countries
 
 ```
 
+# II) **Analyse des facteurs** : Quels facteurs contribuent le mieux au bonheur dans le monde ?
 
