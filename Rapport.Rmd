@@ -696,8 +696,8 @@ trust_government_correlation_graph <- data %>%
               col = "#C42126",
               se = FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre impression de corruption et le bonheur (2021)", 
-       x = "Impression de corruption", 
+  labs(title = "Corrélation entre la perception de corruption et le bonheur (2021)", 
+       x = "Perception de corruption", 
        y = "Score de bonheur")
 
 trust_government_correlation_graph %>% ggplotly(tooltip = "text")
@@ -728,6 +728,7 @@ pollution_correlation_graph +
 
 pollution_correlation_graph %>% ggplotly()
 ```
+
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
 Dans cette partie, le but est de **déterminer si le bonheur a des préférences géographiques**, et d'identifier les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
