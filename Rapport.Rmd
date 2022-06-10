@@ -35,7 +35,7 @@ Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de r
 Les jeux de données initiaux comportent 13 variables :
 
 | Variable                       | Class     | Description                                                                                                                                                                                |
-|:---------------|:---------------|:---------------------------------------|
+|:-------------------------------|:----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | country                        | character | Nom du pays                                                                                                                                                                                |
 | region                         | character | Région à laquelle le pays appartient                                                                                                                                                       |
 | hapiness rank                  | integer   | Classement du pays sur la base du score du bonheur                                                                                                                                         |
@@ -314,7 +314,7 @@ Avant de commencer l'analyse détaillée du jeu de données, il y a quelques inf
 1.  Comme nous allons analyser le score de bonheur des régions, nous avons jugé utile de présenter la **liste des pays de chaque région** :
 
 | Region                          | Countries                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|:-----------------|:-----------------------------------------------------|
+|:--------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Australia and New Zealand       | Australia, New Zealand                                                                                                                                                                                                                                                                                                                                                                                                           |
 | Central and Eastern Europe      | Albania, Armenia, Azerbaijan, Belarus, Bosnia and Herzegovina, Bulgaria, Croatia, Czech Republic, Estonia, Georgia, Hungary, Kazakhstan, Kosovo, Kyrgyzstan, Latvia, Lithuania, Macedonia, Moldova, Montenegro, Poland, Romania, Russia, Serbia, Slovakia, Slovenia, Tajikistan, Turkmenistan, Ukraine, Uzbekistan                                                                                                               |
 | Eastern Asia                    | China, Hong Kong, Japan, Mongolia, South Korea, Taiwan                                                                                                                                                                                                                                                                                                                                                                           |
@@ -531,12 +531,12 @@ repartition_bonheur <- data %>%
              color = Region,
              fill= Region
              )) + 
-  facet_wrap(Year ~ ., ncol = 2) +
+  facet_wrap(Year ~ ., ncol = 3) +
   labs(title = "Niveau de bonheur des différentes régions du monde", 
        x = "Score de bonheur") + 
   scale_x_continuous(breaks=seq(0,10, by = 1)) + 
-  scale_color_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) + 
-  scale_fill_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) +
+  #scale_color_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) + 
+  #scale_fill_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) +
   geom_bar(width = 0.5)
 
 ggplotly(repartition_bonheur)
@@ -603,15 +603,29 @@ ggplotly(region_ranking_graph)
 
 # II) **Analyse factorielle** : Quels facteurs contribuent le plus au bonheur dans le monde ?
 
-Les scores de bonheur précédemment mis en lumière sont le résultats de différents facteurs: - la liberté - l'espérance de vie - le PIB par habitant - la générosité - la confiance dans le gouvernement en place - le support social
+Les scores de bonheur précédemment mis en lumière s'expliquent par **différents facteurs** :
 
-Le jeu de données possède des champs décrivant le niveau de contribution de chacun de ces facteurs au score global (tous les champs dont le nom commence par Explained_by\_...).
+-   La liberté
+
+-   L'espérance de vie
+
+-   Le PIB par habitant
+
+-   La générosité
+
+-   La confiance dans le gouvernement en place
+
+-   Le support social (par la famille et les amis)
+
+Le jeu de données possède des champs décrivant le niveau de contribution de chacun de ces facteurs au score du bonheur (tous les champs dont le nom commence par Explained_by\_...).
 
 En plus de ces champs, les jeux de données des années 2020 et 2021 possèdent des champs donnant des valeurs pour ces facteurs (Generosity, Freedom, Life_expectancy...).
 
 Cette partie s'attachera donc à tenter d'observer les corrélations pouvant exister entre ces facteurs et un score de bonheur élevé ou non.
 
-Commençons par le facteur "liberté": la visualisation suivante est un graphique en nuage de points, présentant en abscisse les valeurs enregistrées pour le facteur "liberté" et en ordonnée les valeurs de score de bonheur correspondantes.
+Pour chacun des facteurs étudiés, nous nous attendons à observer une corrélation linéaire positive : plus une population est riche, en bonne santé, libre, entourée et généreuse, plus elle est censée être heureuse, n'est-ce pas ?
+
+Commençons par le facteur **"Liberté"**: la visualisation suivante est un graphique en nuage de points, présentant en abscisse les valeurs enregistrées pour le facteur "liberté" et en ordonnée les valeurs de score de bonheur correspondantes pour chaque pays.
 
 ```{r corrélation liberté}
 
@@ -635,9 +649,9 @@ freedom_correlation_graph <- data %>%
 freedom_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
-On constate immédiatement à la visualisation de ce graphique que le score de bonheur, comme on pouvait légitimement s'y attendre, est bien corrélé au score de bonheur des différents pays.
+On constate immédiatement à la visualisation de ce graphique que le sentiment de liberté, comme on pouvait légitimement s'y attendre, est bien corrélé au score de bonheur des différents pays. Plus les habitants d'un pays se sentent libres, plus ils sont heureux.
 
-Effectuons la même analyse pour le PIB par habitant, l'espérance de vie et le soutien social:
+Effectuons la même analyse pour le **PIB par habitant**, l'**espérance de vie** et le **soutien social** :
 
 ```{r corrélation pib espérance de vie et support social}
 
@@ -699,13 +713,13 @@ social_support_correlation_graph %>% ggplotly(tooltip = "text")
 
 ```
 
-<br>
+On peut une fois encore observer une corrélation positive entre ces derniers facteurs et le score de bonheur.
 
-On peut une fois encore observer une corrélation générale entre ces derniers facteurs et le score de bonheur.\
-Cependant, chacun des facteurs fournis dans ce dataset ne contribue par nécessairement grandement au score de bonheur.\
-En effet, voici les graphiques de corrélation obtenus pour les facteurs "générosité" et "confiance dans le gouvernement":
+\
+Cependant, chacun des facteurs fournis dans ce dataset ne contribue par nécessairement grandement au score de bonheur.
 
-<br>
+\
+En effet, voici les graphiques de corrélation obtenus pour les facteurs "générosité" et "confiance dans le gouvernement" :
 
 ```{r corrélation générosité et perception de corruption}
 generosity_correlation_graph <- data %>%
