@@ -251,7 +251,7 @@ data2021_corrected <- data2021 %>%
 
 data2021_corrected$Happiness_rank <- rank(-data2021_corrected$Happiness_score)
 
-# On ajoute le complement dataset2021
+# Création et ajout du dataset supplémentaire à 2021
 
 cities <- read_csv2('data/city.csv')
 
@@ -261,16 +261,34 @@ data2021_complement <- merge(complement2021,data2021_corrected, by="Country")
 
 data2021_complement <- data2021_complement %>%
   rename (Sunshine_time='Sunshine hours(City)',
-          Water_price = 'Cost of a bottle of water(City)',
-          Obesity_level ='Obesity levels(Country)',
+          Water_price_sterling = 'Cost of a bottle of water(City)',
+          Obesity_level_pourcent ='Obesity levels(Country)',
           Pollution_score='Pollution(Index score) (City)',
           Annual_work_time='Annual avg. hours worked',
           Outdoor_activities='Outdoor activities(City)',
           Number_of_takeout_places ='Number of take out places(City)',
-          Gym_monthlycost='Cost of a monthly gym membership(City)')
+          Gym_monthlycost_sterling='Cost of a monthly gym membership(City)')
+
+# Supression des colonnes doubles pour data2021_complement
 
 data2021_complement <- data2021_complement[,-7]
 data2021_complement <- data2021_complement[,-9]
+
+# Retrait de l'unité dans les colonnes pour data2021_complement
+
+data2021_complement$Water_price <- sub("£","",data2021_complement$Water_price)
+data2021_complement$Gym_monthlycost <- sub("£","",data2021_complement$Gym_monthlycost)
+data2021_complement$Obesity_level <- sub("%","",data2021_complement$Obesity_level)
+
+# Modification du type en numeric
+
+data2021_complement$Sunshine_time <- as.numeric(data2021_complement$Sunshine_time)
+data2021_complement$Water_price <- as.numeric(data2021_complement$Water_price)
+data2021_complement$Obesity_level <- as.numeric(data2021_complement$Obesity_level)
+data2021_complement$Pollution_score <- as.numeric(data2021_complement$Pollution_score)
+data2021_complement$Annual_work_time <- as.numeric(data2021_complement$Annual_work_time)
+data2021_complement$Gym_monthlycost <- as.numeric(data2021_complement$Gym_monthlycost)
+
 
 
 # Fusion de tous les datasets
@@ -724,41 +742,45 @@ Le dataset spécifique à l'année 2021 prend en compte différents facteurs sup
 Le graphique qui suit montre la corrélation éventuelle entre le score de bonheur et le niveau de pollution de la ville. Les villes sont rassemblées par régions du monde. 
 
 ```{r}
-pollution_correlation_graph <- data2021_complement %>%
-  ggplot(aes(x = Pollution_score, 
-             y = Happiness_score)) + 
+pollution_correlation_graph <- data2021_complement  %>%
+  ggplot(aes(x=Pollution_score, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Regional_indicator)) + 
-  scale_x_discrete(breaks=c("10","20","30","40","50","60","70","80","90","100")) +
-  geom_smooth(aes(x = Pollution_score, 
-                  y = Happiness_score),
-                  col = "#92be72",
-                  se = FALSE,
-                  size = 1) + 
-  labs(title = "Corrélation entre le niveau de pollution et le bonheur (2021)", 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x= Pollution_score, y = Happiness_score),
+              #method = "lm",
+              col = "#92be72",
+              se =FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre le niveau de pollution et le score de bonheur", 
        x = "Niveau de pollution", 
        y = "Score de bonheur")
 
-pollution_correlation_graph %>% ggplotly()
+pollution_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 <<<<<<< HEAD
 <<<<<<< HEAD
 On constate une corrélation assez claire entre les deux facteurs. Plus le niveau de pollution est faible plus le score de bonheur est élevé. Le niveau de pollution semble donc être un facteur impactant le score de bonheur.
 
+Le dataset complément de 2021 propose aussi une colonne donnant le prix de l'eau des différentes villes. A nouveau si on compare ce chiffre avec le score de bonheur de la ville en question nous pouvons voir une corrélation assez surprenante.
+En effet, les lieux ou le prix de l'eau est le plus faible sont les lieux avec le score de bonheur le plus faible.
+On peut alors penser que plus le prix de l'eau est élevé plus le pays est riche et développé ce qui peut être un facteur impoprtant du score de bonheur.
+
 
 ```{r}
-sunshine_correlation_graph <- data2021_complement  %>%
-  ggplot(aes(x=Sunshine_time, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+water_correlation_graph <- data2021_complement  %>%
+  ggplot(aes(x=Water_price, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Regional_indicator)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
-              aes(x=Sunshine_time, y = Happiness_score),
+              aes(x=Water_price, y = Happiness_score),
               #method = "lm",
               col = "#92be72",
+              se =FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre le temps d'ensoleillement et le score de bonheur", 
-       x = "Temps d'ensoleillement annuel", 
+  labs(title = "Corrélation entre le prix de l'eau et le score de bonheur", 
+       x = "Prix de l'eau (£)", 
        y = "Score de bonheur")
 
-sunshine_correlation_graph %>% ggplotly(tooltip = "text")
+water_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
 
