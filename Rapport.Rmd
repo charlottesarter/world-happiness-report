@@ -35,7 +35,7 @@ Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de r
 Les jeux de données initiaux comportent 13 variables :
 
 | Variable                       | Class     | Description                                                                                                                                                                                |
-|:----------------|:----------------|:-------------------------------------|
+|:-----------------|:-----------------|:------------------------------------|
 | country                        | character | Nom du pays                                                                                                                                                                                |
 | region                         | character | Région à laquelle le pays appartient                                                                                                                                                       |
 | hapiness rank                  | integer   | Classement du pays sur la base du score du bonheur                                                                                                                                         |
@@ -50,7 +50,7 @@ Les jeux de données initiaux comportent 13 variables :
 | generosity                     | double    | La mesure dans laquelle la générosité a contribué au calcul du score de bonheur                                                                                                            |
 | dystopia residual              | double    | "Résidu" correspondant à l'écart entre le modèle théorique et la réalité, auquel on ajoute un score de dystopie (score d'un pays hypothétique moins bien classé que tous les autre)        |
 
-Par la suite, nous avons ajouté plusieurs données nécessaires à la création de cartes : les **coordonnées géographiques des pays**, ainsi que leur **géométrie**, afin de pouvoir colorier les surfaces des pays sur les cartes.
+Par la suite, nous avons ajouté plusieurs données nécessaires à la création de cartes : les **coordonnées géographiques des pays**, ainsi que leur **géométrie**, afin de pouvoir colorier les surfaces des pays sur les cartes. Nous avons également ajouté une colonne indiquant le **continent** sur lequel se trouve chaque pays.
 
 > L'ensemble des données utilisées est disponible dans le dossier `/data/`
 
@@ -58,7 +58,7 @@ Ces données nous semblent pertinentes dans le cadre d'une analyse car :
 
 -   Elles sont analysables dans le **temps**
 -   Elles sont analysables **géographiquement**
--   Elles permettent d'établir différents facteurs de contribution au bonheur en fonction des régions du monde, des cultures...
+-   Elles permettent d'étudier **différents facteurs de contribution au bonheur** en fonction des régions du monde, des cultures...
 
 ### Plan d'analyse
 
@@ -112,6 +112,7 @@ data2018 <- tibble(read_csv('data/2018.csv'))
 data2019 <- tibble(read_csv('data/2019.csv'))
 data2020 <- tibble(read_csv('data/2020.csv'))
 data2021 <- tibble(read_csv('data/2021.csv'))
+complement2021 <- tibble (read_csv('data/complement_2021.csv'))
 countries <- tibble(read_csv('data/countries.csv'))
 world_map <- read_sf('data/world_map')
 continents <- read_csv('data/continents.csv')
@@ -250,6 +251,28 @@ data2021_corrected <- data2021 %>%
 
 data2021_corrected$Happiness_rank <- rank(-data2021_corrected$Happiness_score)
 
+# On ajoute le complement dataset2021
+
+cities <- read_csv2('data/city.csv')
+
+complement2021 <- merge(complement2021, cities, by="City")
+
+data2021_complement <- merge(complement2021,data2021_corrected, by="Country")
+
+data2021_complement <- data2021_complement %>%
+  rename (Sunshine_time='Sunshine hours(City)',
+          Water_price = 'Cost of a bottle of water(City)',
+          Obesity_level ='Obesity levels(Country)',
+          Pollution_score='Pollution(Index score) (City)',
+          Annual_work_time='Annual avg. hours worked',
+          Outdoor_activities='Outdoor activities(City)',
+          Number_of_takeout_places ='Number of take out places(City)',
+          Gym_monthlycost='Cost of a monthly gym membership(City)')
+
+data2021_complement <- data2021_complement[,-7]
+data2021_complement <- data2021_complement[,-9]
+
+
 # Fusion de tous les datasets
 
 data <- data2015_corrected %>% 
@@ -290,7 +313,7 @@ Avant de commencer l'analyse détaillée du jeu de données, il y a quelques inf
 1.  Comme nous allons analyser le score de bonheur des régions, nous avons jugé utile de présenter la **liste des pays de chaque région** :
 
 | Region                          | Countries                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|:-----------------------|:-----------------------------------------------|
+|:-----------------------|:----------------------------------------------|
 | Australia and New Zealand       | Australia, New Zealand                                                                                                                                                                                                                                                                                                                                                                                                           |
 | Central and Eastern Europe      | Albania, Armenia, Azerbaijan, Belarus, Bosnia and Herzegovina, Bulgaria, Croatia, Czech Republic, Estonia, Georgia, Hungary, Kazakhstan, Kosovo, Kyrgyzstan, Latvia, Lithuania, Macedonia, Moldova, Montenegro, Poland, Romania, Russia, Serbia, Slovakia, Slovenia, Tajikistan, Turkmenistan, Ukraine, Uzbekistan                                                                                                               |
 | Eastern Asia                    | China, Hong Kong, Japan, Mongolia, South Korea, Taiwan                                                                                                                                                                                                                                                                                                                                                                           |
@@ -311,16 +334,27 @@ repartition <- data2015_sorted %>% select("Region", "Country")
 
 ```
 
-2. Qu'est ce que le bonheur ?
+2.  Qu'est ce que le bonheur ?
+
+Avant d'étudier le World Happiness Report, il est important de **définir ce qu'est le bonheur**, car il peut s'agir d'une notion assez subjective.
 
 Le bonheur est un **état émotionnel agréable, équilibré et durable** dans lequel se trouve quelqu'un qui estime être parvenu à la satisfaction des aspirations et désirs qu'il juge importants. Il perçoit alors sa propre situation de manière positive et ressent un **sentiment de plénitude et de sérénité**, sans stress ni inquiétude. Cette impression ressentie, indispensable à la survie des mammifères, est principalement le résultat de la production de sérotonine, réduisant la prise de risques et poussant ainsi l'individu à maintenir une situation qui lui est favorable. Le bonheur ne doit pas être confondu avec la **sensation passagère de plaisir**, issue principalement de la production de dopamine et non de sérotonine, mais représente au contraire un état d'équilibre, agréable, qui dure dans le temps.
 
+Source : [Wikipedia](https://fr.wikipedia.org/wiki/Bonheur)
+
+3.  Est-ce que les données récoltées sont vraiment objectives ?
+
+La principale question posée lors des enquêtes sur le bonheur est : "Imaginez une échelle avec des barreaux numérotés de zéro en bas à dix en haut. Le barreau du haut représente la meilleure vie possible pour vous, et le barreau du bas la pire vie possible pour vous. Sur quel barreau pensez-vous vous tenir à ce moment de votre vie ?". Connue sous le nom d'**échelle de Cantril**, cette évaluation du bien-être, ainsi que la formulation précise de la question, constitue un standard commun pour les recherches sur le **bien-être subjectif**. En effet, le bonheur est une notion très subjective, et peut rapidement être faussée par les petits événements du quotidien. Si on pose la question à quelqu'un qui vient d'avoir un F en MATH02 et qui a loupé son train pour rentrer chez ses parents à Toulouse, il y a beaucoup de chances que sa réponse soit influencée par ses troubles actuels. Pourtant, ils ne définissent pas le bonheur sur le long terme de l'individu, seulement il est difficile pour l'homme d'avoir une vision d'ensemble sur sa vie. Ainsi, l'échelle de Cantril semble être selon les experts la mesure la plus fructueuse du bonheur des individus.
+
+Il faut donc garder à l'esprit que les données constituent une **auto-évaluation des individus**, ainsi elles sont par défaut subjectives. Cependant, elles tendent à être comparables grâce à l'échelle de Cantril, qui nous offre la mesure la plus universelle possible du bonheur.
+
+Sources : [Cairn.info](https://www.cairn.info/revue-francaise-d-economie-2012-3-page-35.htm) & [Our World in Data](https://ourworldindata.org/bonheur-et-satisfaction)
 
 # I) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
 Dans cette première partie, nous analysons l'évolution du bonheur entre 2015 et 2021. Nous proposons les modélisations suivantes :
 
-- 
+-   
 
 ## Les visualisations réalisées
 
@@ -465,13 +499,26 @@ Cet histogramme permet de visualiser le score de bonheur le plus présent dans u
 
 ```{r répartition bonheur}
 
-
-data1 <- data %>% mutate_if(is.numeric, round) %>% group_by(Year) %>% ggplot(aes(Happiness_score, color = Region, fill = Region)) + geom_histogram(alpha = 0.5) + facet_wrap(Year ~ ., ncol = 3) + 
-  labs(title = "Niveau de bonheur des différentes régions du monde", x = "Score de bonheur")
+data1 <- data %>% 
+  mutate_if(is.numeric, round) %>% 
+  ggplot(aes(x= Happiness_score,
+             color = Region,
+             fill= Region
+             )) + 
+  facet_wrap(Year ~ ., ncol = 2) +
+  labs(title = "Niveau de bonheur des différentes régions du monde", 
+       x = "Score de bonheur") + scale_x_continuous(breaks=seq(0,10, by = 1)) + scale_color_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) + scale_fill_manual(values = c("#6c4292", "#2fd74a","#f76400","#9e0e0e", "#10cfab", "#df3d3d", "#d3cd0e", "#f8a925", "#1c64ab", "#126B2A")) +
+  geom_bar(width = 0.5)
 
 ggplotly(data1)
 
 ```
+
+On remarque que la plupart des régions du monde voient le score de bonheur des différents pays répartis sur trois scores de bonheur différents. Cependant les scores de bonheur sont souvent consécutifs (3-4-5, 2-3-4,..) ce qui montre un lien évident entre le score de bonheur d'un pays et la région du monde dans laquelle il se situe. 
+On constate aussi que depuis 2018, en l'Amérique latine le score de bonheur est à 6 pour une très grande majorité des pays. La région est donc assez équilibrée tout comme l'Australie et la Nouvelle-Zélande qui ont un score de bonheur a 7 depuis 2015.
+L'Europe de l'Est quant à elle est toujours la seule à avoir dans certains pays un score de bonheur à 8.
+Les régions les moins heureuses d'après les graphique sont depuis 2015, l'Afriquesubsaharienne et l'Asie du Sud. L'Afrique du Nord et de l'Est semble voir son score de bonheur augmenter au fil des années.
+
 
 ### 4. Le score de bonheur moyen par région chaque année
 
@@ -617,13 +664,15 @@ social_support_correlation_graph <- data %>%
 social_support_correlation_graph %>% ggplotly(tooltip = "text")
 
 ```
-<br>
-
-On peut une fois encore observer une corrélation générale entre ces derniers facteurs et le score de bonheur.  
-Cependant, chacun des facteurs fournis dans ce dataset ne contribue par nécessairement grandement au score de bonheur.  
-En effet, voici les graphiques de corrélation obtenus pour les facteurs "générosité" et "confiance dans le gouvernement":  
 
 <br>
+
+On peut une fois encore observer une corrélation générale entre ces derniers facteurs et le score de bonheur.\
+Cependant, chacun des facteurs fournis dans ce dataset ne contribue par nécessairement grandement au score de bonheur.\
+En effet, voici les graphiques de corrélation obtenus pour les facteurs "générosité" et "confiance dans le gouvernement":
+
+<br>
+
 ```{r}
 generosity_correlation_graph <- data %>%
   filter(Year == 2021) %>%
@@ -657,13 +706,32 @@ trust_government_correlation_graph <- data %>%
 
 trust_government_correlation_graph %>% ggplotly(tooltip = "text")
 ```
+
 <br>
 
-On constate cette fois-ci, et à l'inverse des graphes précédemment étudiés, que les valeurs sont relativement éparpillées et ne permettent pas d'établir une corrélation entre la générosité ou la confiance dans le gouvernement et le score de bonheur.  
+On constate cette fois-ci, et à l'inverse des graphes précédemment étudiés, que les valeurs sont relativement éparpillées et ne permettent pas d'établir une corrélation entre la générosité ou la confiance dans le gouvernement et le score de bonheur.\
 Ces facteurs sont donc a priori moins impactants sur les variations de score entre les différents pays.
 
 <br><br><br>
 
+X.2/ Corrélation entre les différents facteurs proposés dans un dataset supplémentaire de 2021
+
+```{r}
+pollution_correlation_graph <- data2021_complement %>%
+  ggplot(aes(x = Pollution_score, y = Happiness_score)) + 
+  geom_point(aes(color = Regional_indicator)) + 
+  scale_x_discrete(breaks=c("10","20","30","40","50","60","70","80","90","100"))
+pollution_correlation_graph +
+  geom_smooth(aes(x = Pollution_score, y = Happiness_score),
+              col = "#92be72",
+              se = FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre la pollution et le bonheur (2021)", 
+       x = "Niveau de pollution", 
+       y = "Score de bonheur")
+
+pollution_correlation_graph %>% ggplotly()
+```
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
 Dans cette partie, le but est de **déterminer si le bonheur a des préférences géographiques**, et d'identifier les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
@@ -699,7 +767,7 @@ ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 
 
 ```
 
-#### Le bonheur dans le monde 
+#### Le bonheur dans le monde
 
 ```{r carte bonheur dans le monde par pays}
 
@@ -730,13 +798,11 @@ map_countries <- leaflet() %>%
               weight = 2,
               opacity = 1,
               color = "white",
-              dashArray = "3",
               fillOpacity = 0.7,
               label = labels,
               highlightOptions = highlightOptions(
                                   weight = 5,
                                   color = "#666",
-                                  dashArray = "",
                                   fillOpacity = 0.7,
                                   bringToFront = TRUE)
               ) %>%
