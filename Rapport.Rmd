@@ -423,7 +423,11 @@ On a ajouté à ces données par région la moyenne pour le monde. On peut donc 
 On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne globale, et qu'une moyenne par région nous montre des disparités bien plus importantes quant à l'évolution du niveau de bonheur dans le monde au cours des dernières années.  
 L'Asie du Sud, par exemple, observe une tendance à la baisse de son score de bonheur depuis 2017, tandis que l'Europe occidentale observe une tendance à la hausse sur cette même période.
 
-Pour terminer sur cette aspect de l'évolution du score de bonheur, une visualisation est disponible 
+Pour terminer sur cette aspect de l'évolution du score de bonheur, une visualisation est disponible sur notre application Rshiny pour détailler l'évolution du score à l'échelle de différents pays spécifiques:
+
+[Insérer visu Rshiny]
+
+
 
 ### 3. Les pays dont le niveau de bonheur a le plus augmenté au cours des dernières années
 
