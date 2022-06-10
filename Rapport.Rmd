@@ -106,7 +106,7 @@ library(knitr)
 library(RColorBrewer)
 library(gapminder)
 
-# Importation des datasets
+# Import des datasets
 
 data2015 <- tibble(read_csv('data/2015.csv'))
 data2016 <- tibble(read_csv('data/2016.csv'))
@@ -793,12 +793,12 @@ generosity_correlation_graph <- data %>%
              y = Happiness_score, 
              text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
-  #geom_smooth(inherit.aes = FALSE,
-              #aes(x = Generosity, y = Happiness_score),
-              #method = "lm",
-              #col = "#C42126",
-              #se = FALSE,
-              #size = 1) + 
+  geom_smooth(inherit.aes = FALSE,
+  aes(x = Generosity, y = Happiness_score),
+  # method = "lm",
+  col = "#C42126",
+  se = FALSE,
+  size = 1) +
   labs(title = "Corrélation entre la générosité et le bonheur (2021)", 
        x = "Niveau de générosité", 
        y = "Score de bonheur")
