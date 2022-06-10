@@ -436,7 +436,7 @@ On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne 
 
 La visualisation suivante s'attache aux pays ayant connu une hausse de leur score de bonheur entre 2015 et 2021. Elle représente les 10 taux d'accroissement de ce score les plus importants, en prenant le score de 2015 comme référence (un taux d'accroissement de 20% signifie donc qu'en 2021, le score de bonheur du pays est 20% plus élevé qu'en 2015)
 
-```{r}
+```{r taux d'accroissement positif}
 
 df_2015 <- data %>%
   filter((Year == 2015) & (Country != "Angola" & Country != "Bhutan" & Country != "Central African Republic" & Country != "Congo (Kinshasa)" & Country != "Djibouti" & Country != "Hong Kong" & Country != "Macedonia" & Country != "Oman" & Country != "Qatar" & Country != "Somaliland region" & Country != "Sudan" & Country != "Suriname" & Country != "Syria" & Country != "Taiwan" & Country != "Trinidad and Tobago"))  %>%
@@ -477,7 +477,7 @@ ggplotly(plot_positive_progress)
 
 Voyons maintenant le résultat pour les pays dont le score a le plus chuté entre 2015 et 2021:
 
-```{r}
+```{r taux d'accroissement négatif}
 df_diff <- df_2015 %>%
   mutate(Score_2021 = df_2021$Score_2021) %>%
   mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
@@ -551,7 +551,7 @@ ggplotly(evolution_per_region)
 
 ### 5. Classement [à déplacer]
 
-```{r classement}
+```{r classement régions}
 
 region_ranking_graph <- data %>%
   select(Year, Region, Happiness_score) %>%
@@ -572,7 +572,7 @@ ggplotly(region_ranking_graph)
 
 ```
 
-### X) Corrélation entre les différents facteurs et le score de bonheur
+# II) *Analyse factorielle* : Quels facteurs contribuent le plus au bonheur dans le monde ?
 
 Les scores de bonheur précédemment mis en lumière sont le résultats de différents facteurs: - la liberté - l'espérance de vie - le PIB par habitant - la générosité - la confiance dans le gouvernement en place - le support social
 
@@ -584,11 +584,13 @@ Cette partie s'attachera donc à tenter d'observer les corrélations pouvant exi
 
 Commençons par le facteur "liberté": la visualisation suivante est un graphique en nuage de points, présentant en abscisse les valeurs enregistrées pour le facteur "liberté" et en ordonnée les valeurs de score de bonheur correspondantes.
 
-```{r}
+```{r corrélation liberté}
 
 freedom_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x = Freedom, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  ggplot(aes(x = Freedom, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x = Freedom, y = Happiness_score),
@@ -607,11 +609,13 @@ On constate immédiatement à la visualisation de ce graphique que le score de b
 
 Effectuons la même analyse pour le PIB par habitant, l'espérance de vie et le soutien social:
 
-```{r}
+```{r corrélation pib espérance de vie et support social}
 
 gpd_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Logged_gpd_per_capita, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  ggplot(aes(x = Logged_gpd_per_capita, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Logged_gpd_per_capita, y=Happiness_score),
@@ -628,7 +632,9 @@ gpd_correlation_graph %>% ggplotly(tooltip = "text")
 
 life_expectancy_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Life_expectancy, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  ggplot(aes(x = Life_expectancy, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Life_expectancy, y = Happiness_score),
@@ -645,7 +651,9 @@ life_expectancy_correlation_graph %>% ggplotly(tooltip = "text")
 
 social_support_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Social_support, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  ggplot(aes(x = Social_support, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Social_support, y = Happiness_score),
@@ -669,10 +677,12 @@ En effet, voici les graphiques de corrélation obtenus pour les facteurs "géné
 
 <br>
 
-```{r}
+```{r corrélation générosité et perception de corruption}
 generosity_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x = Generosity, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  ggplot(aes(x = Generosity, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x = Generosity, y = Happiness_score),
@@ -714,22 +724,23 @@ X.2/ Corrélation entre les différents facteurs proposés dans un dataset suppl
 
 ```{r}
 pollution_correlation_graph <- data2021_complement %>%
-  ggplot(aes(x = Pollution_score, y = Happiness_score)) + 
+  ggplot(aes(x = Pollution_score, 
+             y = Happiness_score)) + 
   geom_point(aes(color = Regional_indicator)) + 
-  scale_x_discrete(breaks=c("10","20","30","40","50","60","70","80","90","100"))
-pollution_correlation_graph +
-  geom_smooth(aes(x = Pollution_score, y = Happiness_score),
+  scale_x_discrete(breaks=c("10","20","30","40","50","60","70","80","90","100")) +
+  geom_smooth(aes(x = Pollution_score, 
+                  y = Happiness_score),
               col = "#92be72",
               se = FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre la pollution et le bonheur (2021)", 
+  labs(title = "Corrélation entre le niveau de pollution et le bonheur (2021)", 
        x = "Niveau de pollution", 
        y = "Score de bonheur")
 
 pollution_correlation_graph %>% ggplotly()
 ```
 
-# II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
+# III) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
 Dans cette partie, le but est de **déterminer si le bonheur a des préférences géographiques**, et d'identifier les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
 
@@ -813,3 +824,5 @@ map_countries <- leaflet() %>%
 map_countries
 
 ```
+
+
