@@ -35,7 +35,7 @@ Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de r
 Les jeux de données initiaux comportent 13 variables :
 
 | Variable                       | Class     | Description                                                                                                                                                                                |
-|:-----------------|:-----------------|:------------------------------------|
+|:-------------------------------|:----------|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | country                        | character | Nom du pays                                                                                                                                                                                |
 | region                         | character | Région à laquelle le pays appartient                                                                                                                                                       |
 | hapiness rank                  | integer   | Classement du pays sur la base du score du bonheur                                                                                                                                         |
@@ -66,7 +66,7 @@ Ces données nous semblent pertinentes dans le cadre d'une analyse car :
 
 2.  **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ? Pourquoi ? ➡️ Utiliser les facteurs de contribution du score pour mettre en évidence des causes de disparité
 
-3.  Le niveau de bonheur est-il directement corrélé à la liberté des individus ? ➡️ Question extensible à la richesse, à l'espérance de vie...
+3.  **Analyse factorielle** : Le niveau de bonheur est-il directement corrélé à la liberté des individus ? ➡️ Question extensible à la richesse, à l'espérance de vie...
 
 4.  Quelle combinaison de facteurs hauts entraîne une hausse du bonheur ? Quelle combinaison de facteurs bas entraîne une diminution de celui-ci ? (par exemple: avoir une espérance de vie élevée ET un PIB élevé ET un taux de liberté elevé implique-t-il nécessairement un haut niveau de bonheur, au-dessus d'un certain seuil ?)
 
@@ -313,7 +313,7 @@ Avant de commencer l'analyse détaillée du jeu de données, il y a quelques inf
 1.  Comme nous allons analyser le score de bonheur des régions, nous avons jugé utile de présenter la **liste des pays de chaque région** :
 
 | Region                          | Countries                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|:-----------------------|:----------------------------------------------|
+|:--------------------------------|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | Australia and New Zealand       | Australia, New Zealand                                                                                                                                                                                                                                                                                                                                                                                                           |
 | Central and Eastern Europe      | Albania, Armenia, Azerbaijan, Belarus, Bosnia and Herzegovina, Bulgaria, Croatia, Czech Republic, Estonia, Georgia, Hungary, Kazakhstan, Kosovo, Kyrgyzstan, Latvia, Lithuania, Macedonia, Moldova, Montenegro, Poland, Romania, Russia, Serbia, Slovakia, Slovenia, Tajikistan, Turkmenistan, Ukraine, Uzbekistan                                                                                                               |
 | Eastern Asia                    | China, Hong Kong, Japan, Mongolia, South Korea, Taiwan                                                                                                                                                                                                                                                                                                                                                                           |
@@ -433,7 +433,7 @@ Pour terminer sur cette aspect de l'évolution du score de bonheur, une visualis
 
 La visualisation suivante s'attache aux pays ayant connu une hausse de leur score de bonheur entre 2015 et 2021. Elle représente les 10 taux d'accroissement de ce score les plus importants, en prenant le score de 2015 comme référence (un taux d'accroissement de 20% signifie donc qu'en 2021, le score de bonheur du pays est 20% plus élevé qu'en 2015)
 
-```{r}
+```{r taux d'accroissement positif}
 
 df_2015 <- data %>%
   filter((Year == 2015) & (Country != "Angola" & Country != "Bhutan" & Country != "Central African Republic" & Country != "Congo (Kinshasa)" & Country != "Djibouti" & Country != "Hong Kong" & Country != "Macedonia" & Country != "Oman" & Country != "Qatar" & Country != "Somaliland region" & Country != "Sudan" & Country != "Suriname" & Country != "Syria" & Country != "Taiwan" & Country != "Trinidad and Tobago"))  %>%
@@ -474,7 +474,7 @@ ggplotly(plot_positive_progress)
 
 Voyons maintenant le résultat pour les pays dont le score a le plus chuté entre 2015 et 2021:
 
-```{r}
+```{r taux d'accroissement négatif}
 df_diff <- df_2015 %>%
   mutate(Score_2021 = df_2021$Score_2021) %>%
   mutate(Score_progression = (Score_2021 - Score_2015)/Score_2015) %>%
@@ -511,11 +511,7 @@ ggplotly(data1)
 
 ```
 
-On remarque que la plupart des régions du monde voient le score de bonheur des différents pays répartis sur trois scores de bonheur différents. Cependant les scores de bonheur sont souvent consécutifs (3-4-5, 2-3-4,..) ce qui montre un lien évident entre le score de bonheur d'un pays et la région du monde dans laquelle il se situe. 
-On constate aussi que depuis 2018, en l'Amérique latine le score de bonheur est à 6 pour une très grande majorité des pays. La région est donc assez équilibrée tout comme l'Australie et la Nouvelle-Zélande qui ont un score de bonheur a 7 depuis 2015.
-L'Europe de l'Est quant à elle est toujours la seule à avoir dans certains pays un score de bonheur à 8.
-Les régions les moins heureuses d'après les graphique sont depuis 2015, l'Afriquesubsaharienne et l'Asie du Sud. L'Afrique du Nord et de l'Est semble voir son score de bonheur augmenter au fil des années.
-
+On remarque que la plupart des régions du monde voient le score de bonheur des différents pays répartis sur trois scores de bonheur différents. Cependant les scores de bonheur sont souvent consécutifs (3-4-5, 2-3-4,..) ce qui montre un lien évident entre le score de bonheur d'un pays et la région du monde dans laquelle il se situe. On constate aussi que depuis 2018, en l'Amérique latine le score de bonheur est à 6 pour une très grande majorité des pays. La région est donc assez équilibrée tout comme l'Australie et la Nouvelle-Zélande qui ont un score de bonheur a 7 depuis 2015. L'Europe de l'Est quant à elle est toujours la seule à avoir dans certains pays un score de bonheur à 8. Les régions les moins heureuses d'après les graphique sont depuis 2015, l'Afriquesubsaharienne et l'Asie du Sud. L'Afrique du Nord et de l'Est semble voir son score de bonheur augmenter au fil des années.
 
 ### 4. Le score de bonheur moyen par région chaque année
 
@@ -552,7 +548,7 @@ ggplotly(evolution_per_region)
 
 ### 5. Classement [à déplacer]
 
-```{r classement}
+```{r classement régions}
 
 region_ranking_graph <- data %>%
   select(Year, Region, Happiness_score) %>%
@@ -573,7 +569,7 @@ ggplotly(region_ranking_graph)
 
 ```
 
-# II) *Analyse par facteurs* : Quels facteurs contribuent le mieux au bonheur dans le monde ?
+# II) *Analyse factorielle* : Quels facteurs contribuent le plus au bonheur dans le monde ?
 
 Les scores de bonheur précédemment mis en lumière sont le résultats de différents facteurs: - la liberté - l'espérance de vie - le PIB par habitant - la générosité - la confiance dans le gouvernement en place - le support social
 
@@ -585,11 +581,13 @@ Cette partie s'attachera donc à tenter d'observer les corrélations pouvant exi
 
 Commençons par le facteur "liberté": la visualisation suivante est un graphique en nuage de points, présentant en abscisse les valeurs enregistrées pour le facteur "liberté" et en ordonnée les valeurs de score de bonheur correspondantes.
 
-```{r}
+```{r corrélation liberté}
 
 freedom_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x = Freedom, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  ggplot(aes(x = Freedom, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x = Freedom, y = Happiness_score),
@@ -608,11 +606,13 @@ On constate immédiatement à la visualisation de ce graphique que le score de b
 
 Effectuons la même analyse pour le PIB par habitant, l'espérance de vie et le soutien social:
 
-```{r}
+```{r corrélation pib espérance de vie et support social}
 
 gpd_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Logged_gpd_per_capita, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  ggplot(aes(x = Logged_gpd_per_capita, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Logged_gpd_per_capita, y=Happiness_score),
@@ -629,7 +629,9 @@ gpd_correlation_graph %>% ggplotly(tooltip = "text")
 
 life_expectancy_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Life_expectancy, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  ggplot(aes(x = Life_expectancy, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Life_expectancy, y = Happiness_score),
@@ -646,7 +648,9 @@ life_expectancy_correlation_graph %>% ggplotly(tooltip = "text")
 
 social_support_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x=Social_support, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  ggplot(aes(x = Social_support, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Social_support, y = Happiness_score),
@@ -670,10 +674,12 @@ En effet, voici les graphiques de corrélation obtenus pour les facteurs "géné
 
 <br>
 
-```{r}
+```{r corrélation générosité et perception de corruption}
 generosity_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x = Generosity, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  ggplot(aes(x = Generosity, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x = Generosity, y = Happiness_score),
@@ -697,8 +703,8 @@ trust_government_correlation_graph <- data %>%
               col = "#C42126",
               se = FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre impression de corruption et le bonheur (2021)", 
-       x = "Impression de corruption", 
+  labs(title = "Corrélation entre la perception de corruption et le bonheur (2021)", 
+       x = "Perception de corruption", 
        y = "Score de bonheur")
 
 trust_government_correlation_graph %>% ggplotly(tooltip = "text")
@@ -719,19 +725,22 @@ Le graphique qui suit montre la corrélation éventuelle entre le score de bonhe
 
 ```{r}
 pollution_correlation_graph <- data2021_complement %>%
-  ggplot(aes(x = Pollution_score, y = Happiness_score)) + 
+  ggplot(aes(x = Pollution_score, 
+             y = Happiness_score)) + 
   geom_point(aes(color = Regional_indicator)) + 
   scale_x_discrete(breaks=c("10","20","30","40","50","60","70","80","90","100")) +
-  geom_smooth(aes(x = Pollution_score, y = Happiness_score),
-              col = "#92be72",
-              se = FALSE,
-              size = 1) + 
-  labs(title = "Corrélation entre la pollution et le bonheur (2021)", 
+  geom_smooth(aes(x = Pollution_score, 
+                  y = Happiness_score),
+                  col = "#92be72",
+                  se = FALSE,
+                  size = 1) + 
+  labs(title = "Corrélation entre le niveau de pollution et le bonheur (2021)", 
        x = "Niveau de pollution", 
        y = "Score de bonheur")
 
 pollution_correlation_graph %>% ggplotly()
 ```
+<<<<<<< HEAD
 <<<<<<< HEAD
 On constate une corrélation assez claire entre les deux facteurs. Plus le niveau de pollution est faible plus le score de bonheur est élevé. Le niveau de pollution semble donc être un facteur impactant le score de bonheur.
 
@@ -756,6 +765,9 @@ sunshine_correlation_graph %>% ggplotly(tooltip = "text")
 
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 =======
+=======
+
+>>>>>>> f51ab611e40703f1fd7a72716d246a134629140a
 # III) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 >>>>>>> f10a5da42b309b7838ccee53e04b3ad8c5a7dbdf
 
@@ -841,6 +853,4 @@ map_countries <- leaflet() %>%
 map_countries
 
 ```
-
-# II) **Analyse des facteurs** : Quels facteurs contribuent le mieux au bonheur dans le monde ?
 
