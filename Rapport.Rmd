@@ -716,6 +716,10 @@ Ces facteurs sont donc a priori moins impactants sur les variations de score ent
 
 X.2/ Corrélation entre les différents facteurs proposés dans un dataset supplémentaire de 2021
 
+Le dataset spécifique à l'année 2021 prend en compte différents facteurs supplémentaires. En effet on y trouve : le temps d'ensoleillement annuel de la ville, son taux de pollution, le prix de l'eau, le niveau d'obésité du pays, le temps de travail moyen, le nombre d'activités en extérieur.
+
+Le graphique qui suit montre la corrélation éventuelle entre le score de bonheur et le niveau de pollution de la ville. Les villes sont rassemblées par régions du monde. 
+
 ```{r}
 pollution_correlation_graph <- data2021_complement %>%
   ggplot(aes(x = Pollution_score, y = Happiness_score)) + 
@@ -732,6 +736,27 @@ pollution_correlation_graph +
 
 pollution_correlation_graph %>% ggplotly()
 ```
+On constate une corrélation assez claire entre les deux facteurs. Plus le niveau de pollution est faible plus le score de bonheur est élevé. Le niveau de pollution semble donc être un facteur impactant le score de bonheur.
+
+
+```{r}
+sunshine_correlation_graph <- data2021_complement  %>%
+  ggplot(aes(x=Sunshine_time, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  geom_point(aes(color = Regional_indicator)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x=Sunshine_time, y = Happiness_score),
+              #method = "lm",
+              col = "#92be72",
+              size = 1) + 
+  labs(title = "Corrélation entre le temps d'ensoleillement et le score de bonheur", 
+       x = "Temps d'ensoleillement annuel", 
+       y = "Score de bonheur")
+
+sunshine_correlation_graph %>% ggplotly(tooltip = "text")
+```
+
+
+
 # II) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
 Dans cette partie, le but est de **déterminer si le bonheur a des préférences géographiques**, et d'identifier les critères qui rendent les populations de régions spécifiques plus heureuses que les autres.
