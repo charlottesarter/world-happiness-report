@@ -35,7 +35,7 @@ Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de r
 Les jeux de données initiaux comportent 13 variables :
 
 | Variable                       | Class     | Description                                                                                                                                                                                |
-|:----------|:----------|:-------------------------------------------------|
+|:---------------|:---------------|:---------------------------------------|
 | country                        | character | Nom du pays                                                                                                                                                                                |
 | region                         | character | Région à laquelle le pays appartient                                                                                                                                                       |
 | hapiness rank                  | integer   | Classement du pays sur la base du score du bonheur                                                                                                                                         |
@@ -314,7 +314,7 @@ Avant de commencer l'analyse détaillée du jeu de données, il y a quelques inf
 1.  Comme nous allons analyser le score de bonheur des régions, nous avons jugé utile de présenter la **liste des pays de chaque région** :
 
 | Region                          | Countries                                                                                                                                                                                                                                                                                                                                                                                                                        |
-|:------------|:----------------------------------------------------------|
+|:-----------------|:-----------------------------------------------------|
 | Australia and New Zealand       | Australia, New Zealand                                                                                                                                                                                                                                                                                                                                                                                                           |
 | Central and Eastern Europe      | Albania, Armenia, Azerbaijan, Belarus, Bosnia and Herzegovina, Bulgaria, Croatia, Czech Republic, Estonia, Georgia, Hungary, Kazakhstan, Kosovo, Kyrgyzstan, Latvia, Lithuania, Macedonia, Moldova, Montenegro, Poland, Romania, Russia, Serbia, Slovakia, Slovenia, Tajikistan, Turkmenistan, Ukraine, Uzbekistan                                                                                                               |
 | Eastern Asia                    | China, Hong Kong, Japan, Mongolia, South Korea, Taiwan                                                                                                                                                                                                                                                                                                                                                                           |
@@ -385,7 +385,9 @@ mean_hs_score_world %>% ggplotly(tooltip = "text")
 
 ```
 
-Ce graphique nous indique que le niveau moyen de bonheur dans le monde observe une tendance à la hausse, hormis une légère baisse en 2017.\
+Ce graphique nous indique que le niveau moyen de bonheur dans le monde observe une tendance à la hausse, hormis une légère baisse en 2017.
+
+\
 Fait intéressant, on n'observe pas de baisse en 2020, année d'apparition du Covid-19 et de confinements généralisés dans de nombreux pays. On peut cependant s'interroger sur la représentativité de ce résultat au vu de la moyenne globale effectuée. Qu'en est-il lorsque nous nous plaçons à l'échelle des différentes **régions du monde** ?
 
 ### 2. L'analyse temporelle par région du monde
@@ -413,15 +415,20 @@ df2 <- data %>%
 # On ajoute la moyenne dans le monde à la moyenne de chaque région (pour pouvoir les comparer)
 plot_hs_mean_per_region <- rbind(df, df2) %>%
   ggplot(aes(x = Year, 
-             y = Happiness_score)) + 
-  geom_line(aes(group = Region, 
-                colour = Region)) + 
+             y = Happiness_score,
+             text = paste(Region, "\n", "Year: ", Year, "\n", "Region Happiness Score: ", round(Happiness_score,2)))) + 
+  geom_point(alpha = 0.001) +
+  geom_line(inherit.aes = FALSE,
+            aes(x = Year, 
+                y = Happiness_score,
+                group = Region, 
+                color = Region)) + 
   ylim(4, 7.5) + 
   labs(title = "Evolution du score de bonheur par région", 
        x = "Année", 
        y = "Score de bonheur")
 
-ggplotly(plot_hs_mean_per_region)
+plot_hs_mean_per_region %>% ggplotly(tooltip = "text")
 
 ```
 
@@ -429,7 +436,6 @@ On a ajouté à ces données triées par région la moyenne mondiale. On peut do
 
 On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne globale, et qu'une moyenne par région nous montre des disparités bien plus importantes quant à l'évolution du niveau de bonheur dans le monde au cours des dernières années.
 
-\
 L'Asie du Sud, par exemple, observe une tendance à la baisse de son score de bonheur depuis 2017, tandis que l'Europe occidentale observe une tendance à la hausse sur cette même période.
 
 Pour terminer sur cet aspect de l'évolution du score de bonheur, une visualisation est disponible sur notre application Rshiny pour détailler l'évolution du score à l'échelle de différents pays spécifiques:
@@ -736,7 +742,7 @@ X.2/ Corrélation entre les différents facteurs proposés dans un dataset suppl
 
 Le dataset spécifique à l'année 2021 prend en compte différents facteurs supplémentaires. En effet on y trouve : le temps d'ensoleillement annuel de la ville, son taux de pollution, le prix de l'eau, le niveau d'obésité du pays, le temps de travail moyen, le nombre d'activités en extérieur.
 
-Le graphique qui suit montre la corrélation éventuelle entre le score de bonheur et le niveau de pollution de la ville. Les villes sont rassemblées par régions du monde. 
+Le graphique qui suit montre la corrélation éventuelle entre le score de bonheur et le niveau de pollution de la ville. Les villes sont rassemblées par régions du monde.
 
 ```{r corrélation pollution}
 
