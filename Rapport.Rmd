@@ -377,6 +377,12 @@ Dans cette partie, nous identifierons les régions du monde et les pays où la p
 
 ## Les visualisations réalisées
 
+1. Le classement des régions en fonction de leur score de bonheur de 2021
+
+2. Les 10 pays les plus heureux en 2021
+
+3. Les 10 pays les moins heureux en 2021
+
 ### 1. Classement des régions en fonction de leur score de bonheur
 
 ```{r classement régions}
@@ -396,7 +402,7 @@ region_ranking_graph <- region_ranking_data %>%
              text = paste("Region Happiness Score: ", round(Happiness_score_mean,3)))) + 
   geom_bar(stat = "identity",
            fill = purples(10)) +
-  labs(title = "Classement des régions les plus heureuses (année 2021)", 
+  labs(title = "Classement des régions les plus heureuses (2021)", 
        x = "Score de bonheur", 
        y = "Région") +
   theme(legend.position = "none")
@@ -409,7 +415,64 @@ region_ranking_graph %>% ggplotly(tooltip = "text")
 
 #### 1. Top 10 des pays les plus heureux
 
+```{r classement pays heureux}
+
+yellow_greens = colorRampPalette(rev(brewer.pal(9, "YlGn")))
+
+country_ranking_data <- data %>%
+  select(Year, Country, Happiness_score, Happiness_rank) %>%
+  filter(Year == 2021) %>%
+  arrange(Happiness_rank)
+
+# On ne garde que les 10 premiers pays
+
+country_ranking_data <- country_ranking_data[1:10,]
+
+country_ranking_graph <- country_ranking_data %>%
+  ggplot(aes(x = Happiness_score, 
+             y = reorder(Country, Happiness_score),
+             text = paste("Happiness Score: ", round(Happiness_score,3)))) + 
+  geom_bar(stat = "identity",
+           fill = yellow_greens(10)) +
+  labs(title = "Classement des 10 pays les plus heureux (année 2021)", 
+       x = "Score de bonheur", 
+       y = "Pays") +
+  theme(legend.position = "none")
+
+country_ranking_graph %>% ggplotly(tooltip = "text")
+
+```
+
+
 #### 2. Top 10 des pays les moins heureux
+
+```{r classement pays pas heureux}
+
+yellow_reds = colorRampPalette(rev(brewer.pal(9, "YlOrRd")))
+
+country_ranking_data_bis <- data %>%
+  select(Year, Country, Happiness_score, Happiness_rank) %>%
+  filter(Year == 2021) %>%
+  arrange(desc(Happiness_rank))
+
+# On ne garde que les 10 derniers pays
+
+country_ranking_data_bis <- country_ranking_data_bis[1:10,]
+
+country_ranking_graph_bis <- country_ranking_data_bis %>%
+  ggplot(aes(x = Happiness_score, 
+             y = reorder(Country, desc(Happiness_score)),
+             text = paste("Happiness Score: ", round(Happiness_score,3)))) + 
+  geom_bar(stat = "identity",
+           fill = yellow_reds(10)) +
+  labs(title = "Classement des 10 pays les moins heureux (année 2021)", 
+       x = "Score de bonheur", 
+       y = "Pays") +
+  theme(legend.position = "none")
+
+country_ranking_graph_bis %>% ggplotly(tooltip = "text")
+
+```
 
 # **II) Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
@@ -436,7 +499,7 @@ mean_hs_score_world <- data %>%
             aes(x = Year, 
                 y = Happiness_score),
             stat = "identity", 
-            color = "steelblue") + 
+            color = "mediumpurple") + 
   labs(title = "Evolution du score de bonheur moyen dans le monde", 
        x = "Année", 
        y = "Score de bonheur (moyenne mondiale)")
