@@ -254,8 +254,9 @@ shinyServer(function(input, output) {
   output$happiness_score_country_evolution <- renderPlot(
     data %>%
       filter(Country == input$country) %>%
-      ggplot(aes(x = Year, y = Happiness_score, color = Happiness_score)) + 
-      geom_line(stat = "identity") + 
+      ggplot(aes(x = Year, y = Happiness_score)) + 
+      geom_point(alpha = (1/3)) +
+      geom_line(stat = "identity", color = "steelblue") + 
       labs(title = paste("Evolution du bonheur: ", input$country), x = "Année", y = "Score de bonheur")
   )
 

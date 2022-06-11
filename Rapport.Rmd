@@ -498,7 +498,7 @@ Ainsi, le **climat d'insécurité** dans lequel vivent les populations de ces pa
 
 # II) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
-Cette deuxième partie s'attachera à répondre à la question *"Comment a évolué le bonheur au fil des années entre 2015 à 2021 ?"* Le déroulement de l'analyse nous amènera par la suite à diviser cette question en plusieurs sous-questions moins vastes.
+Cette deuxième partie s'attachera à répondre à la question *"Comment a évolué le bonheur au fil des années entre 2015 à 2021 ?"*. Le déroulement de l'analyse nous amènera par la suite à diviser cette question en plusieurs sous-questions moins vastes.
 
 ## Les visualisations réalisées
 
@@ -591,7 +591,7 @@ L'*Asie du Sud*, par exemple, observe une tendance à la baisse de son score de 
 
 Pour terminer sur cet aspect de l'évolution du score de bonheur, une visualisation est disponible sur notre application Rshiny pour détailler l'évolution du score de bonheur à l'échelle de différents pays spécifiques:
 
-[Insérer visu Rshiny]
+
 
 ### 3. Les pays dont le niveau de bonheur a le plus varié au cours des dernières années
 
