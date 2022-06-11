@@ -21,7 +21,8 @@ dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("dashboard")),
-      menuItem("Les facteurs du bonheur", tabName = "happ_score_factors", icon = icon("dashboard"))
+      menuItem("Les facteurs du bonheur", tabName = "happ_score_factors", icon = icon("dashboard")),
+      menuItem("Carte du bonheur dans le monde", tabName = "maps", icon = icon("dashboard"))
     )
   ),
   dashboardBody(
@@ -51,6 +52,13 @@ dashboardPage(
             plotOutput("factors_contribution_graph")
           )
         )
+      ),
+      tabItem(tabName = "maps", icon = icon("dashboard"),
+              fluidRow(
+                box(
+                  # plotOutput("factors_contribution_graph")
+                )
+              )
       )
     )
   )

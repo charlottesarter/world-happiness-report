@@ -8,18 +8,21 @@
 #
 
 library(shiny)
-library(ggplot2)
 library(readr)
 library(dplyr)
+library(ggplot2)
 library(leaflet)
 library(sf)
 library(rmapshaper)
 library(prettydoc)
 library(plotly)
 library(scales)
-library(viridis)
+library(data.table)
+library(knitr)
+library(RColorBrewer)
+library(gapminder)
 
-# Importation des datasets
+# Import des datasets
 
 data2015 <- tibble(read_csv('../data/2015.csv'))
 data2016 <- tibble(read_csv('../data/2016.csv'))
@@ -28,8 +31,10 @@ data2018 <- tibble(read_csv('../data/2018.csv'))
 data2019 <- tibble(read_csv('../data/2019.csv'))
 data2020 <- tibble(read_csv('../data/2020.csv'))
 data2021 <- tibble(read_csv('../data/2021.csv'))
+complement2021 <- tibble (read_csv('../data/complement_2021.csv'))
 countries <- tibble(read_csv('../data/countries.csv'))
 world_map <- read_sf('../data/world_map')
+continents <- read_csv('../data/continents.csv')
 
 # Nettoyage du dataset "countries" pour pouvoir ajouter les coordonnées géographiques des pays
 
@@ -59,6 +64,7 @@ data2015_corrected <- data2015 %>%
          Explained_by_trust_government = `Trust (Government Corruption)`,
          Explained_by_generosity = Generosity,
          Dystopia_residual = `Dystopia Residual`)
+data2015_corrected$Exp_by_economy_gdp_per_capita <- as.double(data2015_corrected$Exp_by_economy_gdp_per_capita)
 
 data2016_corrected <- data2016 %>% 
   mutate(Standard.Error = `Happiness Score` - `Lower Confidence Interval`, Year = 2016) %>%
@@ -74,6 +80,7 @@ data2016_corrected <- data2016 %>%
          Dystopia_residual = `Dystopia Residual`,
          Lower_confidence_interval = `Lower Confidence Interval`,
          Upper_confidence_interval = `Upper Confidence Interval`)
+data2016_corrected$Exp_by_economy_gdp_per_capita <- as.double(data2016_corrected$Exp_by_economy_gdp_per_capita)
 
 data2017_corrected <- data2017 %>% 
   mutate(Standard_error = Happiness.Score - Whisker.low, Year = 2017) %>%
@@ -127,7 +134,7 @@ data2020_corrected <- data2020 %>%
          Social_support = `Social support`,
          Life_expectancy = `Healthy life expectancy`,
          Freedom = `Freedom to make life choices`,
-         Trust_government = `Perceptions of corruption`,
+         Perceptions_of_corruption = `Perceptions of corruption`,
          Dystopia_score = `Ladder score in Dystopia`,
          Exp_by_economy_gdp_per_capita = `Explained by: Log GDP per capita`,
          Explained_by_social_support = `Explained by: Social support`,
@@ -149,7 +156,7 @@ data2021_corrected <- data2021 %>%
          Social_support = `Social support`,
          Life_expectancy = `Healthy life expectancy`,
          Freedom = `Freedom to make life choices`,
-         Trust_government = `Perceptions of corruption`,
+         Perceptions_of_corruption = `Perceptions of corruption`,
          Dystopia_score = `Ladder score in Dystopia`,
          Exp_by_economy_gdp_per_capita = `Explained by: Log GDP per capita`,
          Explained_by_social_support = `Explained by: Social support`,
@@ -158,6 +165,50 @@ data2021_corrected <- data2021 %>%
          Explained_by_generosity = `Explained by: Generosity`,
          Explained_by_trust_government = `Explained by: Perceptions of corruption`,
          Dystopia_residual = `Dystopia + residual`)
+
+# On ajoute le ranking des pays pour 2021 au dataset
+
+data2021_corrected$Happiness_rank <- rank(-data2021_corrected$Happiness_score)
+
+# Création et ajout du dataset supplémentaire à 2021
+
+cities <- read_csv2('../data/city.csv')
+
+complement2021 <- merge(complement2021, cities, by="City")
+
+data2021_complement <- merge(complement2021,data2021_corrected, by="Country")
+
+data2021_complement <- data2021_complement %>%
+  rename (Sunshine_time='Sunshine hours(City)',
+          Water_price_sterling = 'Cost of a bottle of water(City)',
+          Obesity_level_pourcent ='Obesity levels(Country)',
+          Pollution_score='Pollution(Index score) (City)',
+          Annual_work_time='Annual avg. hours worked',
+          Outdoor_activities='Outdoor activities(City)',
+          Number_of_takeout_places ='Number of take out places(City)',
+          Gym_monthlycost_sterling='Cost of a monthly gym membership(City)')
+
+# Supression des colonnes doubles pour data2021_complement
+
+data2021_complement <- data2021_complement[,-7]
+data2021_complement <- data2021_complement[,-9]
+
+# Retrait de l'unité dans les colonnes pour data2021_complement
+
+data2021_complement$Water_price <- sub("£","",data2021_complement$Water_price)
+data2021_complement$Gym_monthlycost <- sub("£","",data2021_complement$Gym_monthlycost)
+data2021_complement$Obesity_level <- sub("%","",data2021_complement$Obesity_level)
+
+# Modification du type en numeric
+
+data2021_complement$Sunshine_time <- as.numeric(data2021_complement$Sunshine_time)
+data2021_complement$Water_price <- as.numeric(data2021_complement$Water_price)
+data2021_complement$Obesity_level <- as.numeric(data2021_complement$Obesity_level)
+data2021_complement$Pollution_score <- as.numeric(data2021_complement$Pollution_score)
+data2021_complement$Annual_work_time <- as.numeric(data2021_complement$Annual_work_time)
+data2021_complement$Gym_monthlycost <- as.numeric(data2021_complement$Gym_monthlycost)
+
+
 
 # Fusion de tous les datasets
 
@@ -185,7 +236,10 @@ data <- merge(data, countries_corrected, by="Country")
 # Ajout des données géographiques (shapefile)
 
 data <- merge(data, world_map_corrected, by="Country")
-data <-  data %>% tibble
+
+# Ajout des continents 
+
+data <- merge(data, continents, by="Country")
 
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
