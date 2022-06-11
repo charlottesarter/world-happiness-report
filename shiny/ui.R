@@ -56,7 +56,13 @@ dashboardPage(
       tabItem(tabName = "maps", icon = icon("dashboard"),
               fluidRow(
                 box(
-                  # plotOutput("factors_contribution_graph")
+                  leafletOutput("map_happiness_score")
+                )
+              ),
+              fluidRow(
+                box(
+                  radioButtons("year_map_happiness_score", label = "Sélectionner une année", 
+                               choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2016)
                 )
               )
       )
