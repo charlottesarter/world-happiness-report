@@ -591,7 +591,7 @@ L'*Asie du Sud*, par exemple, observe une tendance à la baisse de son score de 
 
 Pour terminer sur cet aspect de l'évolution du score de bonheur, une visualisation est disponible sur notre application Rshiny pour détailler l'évolution du score de bonheur à l'échelle de différents pays spécifiques:
 
-
+![](data/png_rmarkdown/rshiny_happiness_score_countries.png)
 
 ### 3. Les pays dont le niveau de bonheur a le plus varié au cours des dernières années
 
@@ -682,7 +682,7 @@ La visualisation suivante représente l'**évolution du score de bonheur moyen d
 
 > Non, ces graphes ne sont pas identiques ;) 
 
-L'intérêt principal de ce graphique est de constater en un coup d'oeil que **les scores moyens par région restent très stables**. Les régions ont été ordonnées par ordre décroissant, de la région possédant le meilleur score à celle possédant le moins bon en XXXX.
+L'intérêt principal de ce graphique est de constater en un coup d'oeil que **les scores moyens par région restent très stables**. Globalement, chaque région du monde conserve un score de bonheur similaire, est l'allure globale de ces graphes évolue peu au cours des années.
 
 ```{r bonheur par région}
 # Test facet graph per year + barchart happiness score per region
