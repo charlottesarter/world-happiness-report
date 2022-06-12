@@ -1076,3 +1076,25 @@ Le graphique est en accord avec ce qui avait été observé. En effet, plus le P
 
 
 # V) Quelle combinaison de facteurs hauts entraîne une hausse du bonheur ?
+
+```{r}
+# data %>%
+#       group_by(Year) %>%
+#       summarise(Explained_by_generosity = mean(Explained_by_generosity),
+#                 Explained_by_life_expectancy = mean(Explained_by_life_expectancy),
+#                 Explained_by_freedom = mean(Explained_by_freedom),
+#                 Explained_by_social_support = mean(Explained_by_social_support),
+#                 Explained_by_trust_government = mean(Explained_by_trust_government))
+#       select(Explained_by_generosity, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_social_support, Explained_by_trust_government) %>%
+#       
+#       # on transpose le dataframe et on le passe en Tibble
+#       t() %>%
+#       tibble() %>%
+#       mutate(Factor_names = c("Generosity", "Life expectancy", "Freedom", "Social support", "Trust in government")) %>%
+#       rename(Factor_values = ".") %>%
+#       
+#       # construction du graphique
+#       ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), y = Factor_values)) + geom_bar(stat = "identity", fill = "steelblue") + labs(title = "Classement des facteurs de bonheur d'un pays", x = "Facteurs de bonheur", y = "Valeur")
+
+```
+
