@@ -963,7 +963,7 @@ trust_government_correlation_graph <- data %>%
   #             col = "#92be72",
   #             se = FALSE,
   #             size = 1) + 
-  labs(title = "Corrélation entre la perception de corruption et le bonheur (2021)", 
+  labs(title = "Score de bonheur en fonction de la perception de corruption", 
        x = "Perception de corruption", 
        y = "Score de bonheur")
 
@@ -989,7 +989,7 @@ generosity_correlation_graph <- data %>%
   # col = "#C42126",
   # se = FALSE,
   # size = 1) +
-  labs(title = "Corrélation entre la générosité et le bonheur (2021)", 
+  labs(title = "Score de bonheur en fonction du niveau de générosité", 
        x = "Niveau de générosité", 
        y = "Score de bonheur")
 
