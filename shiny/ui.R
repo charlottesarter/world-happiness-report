@@ -10,6 +10,7 @@
 library(shiny)
 library(shinydashboard)
 library(readr)
+library(leaflet)
 
 # on récupère la liste des pays à mettre dans notre select input depuis un csv
 countries_names = read_lines("../data/countries_names.csv")
