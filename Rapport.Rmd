@@ -957,12 +957,12 @@ trust_government_correlation_graph <- data %>%
   filter(Year == 2021) %>%
   ggplot(aes(x = Perceptions_of_corruption, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
-  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
-              aes(x = Perceptions_of_corruption, y = Happiness_score),
-              #method = "lm",
-              col = "#92be72",
-              se = FALSE,
-              size = 1) + 
+  # geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+  #             aes(x = Perceptions_of_corruption, y = Happiness_score),
+  #             #method = "lm",
+  #             col = "#92be72",
+  #             se = FALSE,
+  #             size = 1) + 
   labs(title = "Corrélation entre la perception de corruption et le bonheur (2021)", 
        x = "Perception de corruption", 
        y = "Score de bonheur")
@@ -983,12 +983,12 @@ generosity_correlation_graph <- data %>%
              y = Happiness_score, 
              text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
-  geom_smooth(inherit.aes = FALSE,
-  aes(x = Generosity, y = Happiness_score),
-  # method = "lm",
-  col = "#C42126",
-  se = FALSE,
-  size = 1) +
+  # geom_smooth(inherit.aes = FALSE,
+  # aes(x = Generosity, y = Happiness_score),
+  # # method = "lm",
+  # col = "#C42126",
+  # se = FALSE,
+  # size = 1) +
   labs(title = "Corrélation entre la générosité et le bonheur (2021)", 
        x = "Niveau de générosité", 
        y = "Score de bonheur")
