@@ -1153,7 +1153,7 @@ factors_per_region_graph <- data %>%
     theme(axis.title.x=element_blank(), 
         axis.text.x=element_blank(), 
         axis.ticks.x=element_blank()) +
-    labs(title = "Importance des différents facteurs de bonheur par région", fill = "Facteurs", y = "Valeur")
+    labs(title = "Importance des différents facteurs de bonheur par région en 2021", fill = "Facteurs", y = "Valeur")
 
 ggplotly(factors_per_region_graph)
 
