@@ -1106,7 +1106,7 @@ pib_water_correlation_graph %>% ggplotly(tooltip = "text")
 Le graphique est en accord avec ce qui avait été observé. En effet, plus le PIB est élevé plus le prix de l'eau augmente ce qui entraine une forme de corrélation entre le prix de l'eau et le score de bonheur.
 
 
-# V) Quelle combinaison de facteurs hauts entraîne une hausse du bonheur ?
+# V) L'importance des différents facteurs selon la région
 
 ```{r combinaison facteurs}
 factors_per_region_graph <- data %>%
