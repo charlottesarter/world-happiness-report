@@ -94,6 +94,7 @@ Afin de pouvoir travailler efficacement, nous avons opéré le nettoyage suivant
 ```{r cleaning}
 library(readr)
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(leaflet)
 library(sf)
@@ -1108,29 +1109,28 @@ Le graphique est en accord avec ce qui avait été observé. En effet, plus le P
 # V) Quelle combinaison de facteurs hauts entraîne une hausse du bonheur ?
 
 ```{r combinaison facteurs}
- # data %>%
- #       group_by(Year) %>%
- #       summarise(Explained_by_generosity = mean(Explained_by_generosity),
- #                 Explained_by_life_expectancy = mean(Explained_by_life_expectancy),
- #                 Explained_by_freedom = mean(Explained_by_freedom),
- #                 Explained_by_social_support = mean(Explained_by_social_support),
- #                 Explained_by_trust_government = mean(Explained_by_trust_government))
- #       select(Explained_by_generosity, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_social_support, Explained_by_trust_government) %>%
- #       
- #       # on transpose le dataframe et on le passe en Tibble
- #       t() %>%
- #       tibble() %>%
- #       mutate(Factor_names = c("Generosity", "Life expectancy", "Freedom", "Social support", "Trust in government")) %>%
- #       rename(Factor_values = ".") %>%
- #       
- #       # construction du graphique
- #       ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), 
- #                  y = Factor_values)) + 
- #         geom_bar(stat = "identity", 
- #                  fill = "steelblue") + 
- #         labs(title = "Classement des facteurs de bonheur d'un pays", 
- #              x = "Facteurs de bonheur", 
- #              y = "Valeur")
+factors_per_region_graph <- data %>%
+  select(Year, Region, Exp_by_economy_gdp_per_capita, Explained_by_social_support, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_trust_government, Explained_by_generosity) %>%
+  group_by(Year, Region) %>%
+  summarise(across(everything(), list(mean))) %>%
+  rename("Economy factor" = Exp_by_economy_gdp_per_capita_1,
+         "Social factor" = Explained_by_social_support_1,
+         "Life expectancy factor" = Explained_by_life_expectancy_1,
+         "Freedom factor" = Explained_by_freedom_1,
+         "Trust in government factor" = Explained_by_trust_government_1,
+         "Generosity factor" = Explained_by_generosity_1) %>%
+  gather("Factor_name", "Factor_value", -Year, -Region) %>%
+  filter(Year == 2021) %>%
+  
+  ggplot(aes(x = reorder(Factor_name, desc(Factor_value)), y = Factor_value, fill = reorder(Factor_name, desc(Factor_value)))) +
+    geom_bar(stat = "identity") +
+    facet_wrap(Region ~ ., ncol = 2) +
+    theme(axis.title.x=element_blank(), 
+        axis.text.x=element_blank(), 
+        axis.ticks.x=element_blank()) +
+    labs(title = "Importance des différents facteurs de bonheur par région", fill = "Facteurs", y = "Valeur")
+
+ggplotly(factors_per_region_graph)
 
 ```
 
