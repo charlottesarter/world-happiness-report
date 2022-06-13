@@ -30,7 +30,7 @@ Notre analyse porte sur le **World Happiness Report**, une enquête annuelle qui
 
 ### Données
 
-Le jeu de données que nous avons choisi d'étudier est issu d'une enquête de référence sur l'état du bonheur dans le monde. Il comporte des données de 2015 à 2021, et classe 155 pays selon leur niveau de bonheur. Il permet d'établir une corrélation entre différents critères (liberté, corruption, cadre de vie...) et le niveau de bonheur qui en découle.
+Le jeu de données que nous avons choisi d'étudier est issu d'une **enquête de référence sur l'état du bonheur dans le monde**. Il comporte des données **de 2015 à 2021**, et classe **155 pays** selon leur niveau de bonheur. Pour établir ce classement, l’ONU demande à un **échantillon d’environ 1 000 personnes** de “répondre à une série de questions sur la perception de leur qualité de vie sur une échelle de 1 à 10” (*échelle de Cantril*). Il permet d'établir une corrélation entre différents critères (liberté, corruption, cadre de vie...) et le niveau de bonheur qui en découle.
 
 Les jeux de données initiaux comportent 13 variables :
 
@@ -457,7 +457,7 @@ country_ranking_graph %>% ggplotly(tooltip = "text")
 
 ```
 
-Contrairement à la visualisation précédante, on constate que la majorité des pays de ce Top 10 n'appartienent pas aux deux régions les mieux classées (sans compter la *Nouvelle Zélande* qui occupe la 9ème position du classement). En effet, **9 des 10 pays du classement font partie de l'*Europe de l'Ouest***, pourtant elle n'occupe que la 3ème place du classement par région. Cela montre qu'il doit y avoir des disparités entre les pays de cette région.
+Contrairement à la visualisation précédente, on constate que la majorité des pays de ce Top 10 n'appartienent pas aux deux régions les mieux classées (sans compter la *Nouvelle Zélande* qui occupe la 9ème position du classement). En effet, **9 des 10 pays du classement font partie de l'*Europe de l'Ouest***, pourtant elle n'occupe que la 3ème place du classement par région. Cela montre qu'il doit y avoir des disparités entre les pays de cette région.
 
 
 #### 2. Top 10 des pays les moins heureux
@@ -643,6 +643,8 @@ plot_positive_progress %>% ggplotly(tooltip = "text")
 
 Nous sommes **mitigés** face aux informations qui ressortent de ce graphique. D'un côté, il nous paraît logique que les pays avec le plus fort taux d'accroissement sont des **pays dont le score de bonheur est assez bas, et peut donc facilement s'améliorer**. D'un autre côté, lorsqu'on s'intéresse à la situation actuelle au Bénin, on constate que le pays est situé dans une région soumise à beaucoup d'actes terroristes, et que la cybercriminalité se développe beaucoup dans le pays. On peut alors s'interroger sur les **limites du World Happiness Report** : quelle partie de la population du pays est interrogée ? **Est-ce que l'échantillon interrogé est vraiment représentatif de l'avis de la population ?**
 
+> Remarque : L'échantillon interrogé compte environ 1000 individus, ce qui ne représente que **0,008% de la population** du Bénin, qui compte un peu plus de 12 millions d'habitants en 2020. 
+
 #### b) Les pays avec la plus grande régression de leur score de bonheur entre 2015 et 2021
 
 Voyons maintenant le résultat pour **les pays dont le score a le plus chuté entre 2015 et 2021** :
@@ -682,7 +684,7 @@ La visualisation suivante représente l'**évolution du score de bonheur moyen d
 
 > Non, ces graphes ne sont pas identiques ;) 
 
-L'intérêt principal de ce graphique est de constater en un coup d'oeil que **les scores moyens par région restent très stables**. Les régions ont été ordonnées par ordre décroissant, de la région possédant le meilleur score à celle possédant le moins bon en XXXX.
+L'intérêt principal de ce graphique est de constater en un coup d'oeil que **les scores moyens par région restent très stables**.
 
 ```{r bonheur par région}
 # Test facet graph per year + barchart happiness score per region
@@ -702,8 +704,8 @@ evolution_per_region <- df_facet %>%
   geom_bar(stat = "identity") + 
   facet_wrap(Year ~ ., ncol = 3) + 
   labs(title = "Score de bonheur moyen par région pour chaque année", 
-       x = "Regions", 
-       y = "Score", 
+       x = "Régions", 
+       y = "Score de bonheur moyen", 
        fill = "Régions") + 
   theme(axis.title.x=element_blank(), 
         axis.text.x=element_blank(), 
@@ -714,7 +716,15 @@ evolution_per_region %>% ggplotly(tooltip = "text")
 
 ```
 
-**EXPLICATIONS**
+
+En effet, le classement des quatre régions les plus heureuses, soit l'*Australie et la Nouvelle Zélande*, l'*Amérique du Nord*, l'*Europe de l'Ouest* et l'*Amérique Latine* n'a pas évolué entre 2015 et 2021.
+
+On constate cependant que l'*Europe de l'Est* a devancé l'*Asie du Sud-Est*, que l'*Asie de l'Est* a devancé l'*Afrique du Nord et le Moyen-Orient*, et que l*Afrique sub-saharienne* a devancé l'*Asie du Sud-Ouest*.
+
+Ce dernier constat est sûrement dû au fait que le score de bonheur de l'*Afghanistan* (*Asie du Sud-Ouest*) a beaucoup chuté, puisqu'il est passé de 3,58 à 2,52 en l'espace de 6 ans.
+
+> Il faut donc faire attention à l'**interprétation des informations** : la situation de crise d'un seul pays peut être responsable de la chute d'une région dans le classement.
+
 
 # III) **Analyse géographique** : Y'a-t-il des régions du monde moins heureuses que d'autres ?
 
@@ -730,7 +740,7 @@ Dans cette partie, le but est de **mieux visualiser les préférences géographi
 
 ### 1. La distribution des scores de bonheur de chaque région chaque année
 
-La visualisation du boxplot nous permet de situer rapidement les scores de bonheurs des pays d'une même région. On constate en un coup d'oeil que les 3 régions du monde les plus heureuses sont la Nouvelle Zélande, l'Amérique du Nord et l'Europe de l'Ouest.
+La visualisation en boxplot nous permet de **situer rapidement les scores de bonheurs des pays d'une même région**. On constate en un coup d'oeil que **certaines régions font l'objet de beaucoup de disparités**.
 
 ```{r boxplot score de bonheur}
 
@@ -745,15 +755,22 @@ boxplot_happiness_score <- data %>%
        title = "Distribution des scores de bonheur dans les régions du monde", 
        subtitle = "Données de 2015 à 2021") + 
   geom_boxplot() + 
-  theme(axis.text.x = element_text(angle = 45))
+  theme(axis.text.x = element_text(angle = 45))+ 
+  theme(legend.position = "none")
 
 ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 1500, transition = 500)
 
 ```
 
+En effet, l*Afrique du Nord et le Moyen-Orient* et l'*Asie du Sud-Est* présentent un écart de score de bonheur respectif de 3.2 et 2.98 entre leur pays le plus heureux et leur pays le moins heureux (2015). Cela montre que **les inégalités** (de développement, de conditions de vie, de richesse, de santé...)  que l'on observe à l'échelle mondiale **s'observent aussi plus localement à l'échelle des différentes régions du monde**. 
+
+**PLUS D'EXPLICATIONS?**
+
 ### 2. La répartition du niveau de bonheur des différentes régions du monde chaque année
 
-Ce diagramme en barres permet de visualiser le score de bonheur le plus présent dans une région. Le score de chaque pays est arrondi à l'entier le plus proche. Le graphique prend donc compte de chacun des scores de bonheur individuel de chaque pays, puis les regroupe par régions.
+Ce diagramme en barres permet de visualiser d'une autre manière la répartition du bonheur des pays d'une même région. 
+
+Le score de bonheur de chaque pays est arrondi à l'entier le plus proche. Le graphique prend en compte chacun des scores de bonheur individuel de chaque pays, puis les regroupe par régions.
 
 ```{r répartition bonheur}
 
@@ -776,7 +793,19 @@ repartition_bonheur %>% ggplotly(tooltip = c("text", "y"))
 
 ```
 
-On remarque que la plupart des régions du monde voient le score de bonheur des différents pays répartis sur trois scores de bonheur différents. Cependant les scores de bonheur sont souvent consécutifs (3-4-5, 2-3-4,..) ce qui montre un lien évident entre le score de bonheur d'un pays et la région du monde dans laquelle il se situe. On constate aussi que depuis 2018, en l'Amérique latine le score de bonheur est à 6 pour une très grande majorité des pays. La région est donc assez équilibrée tout comme l'Australie et la Nouvelle-Zélande qui ont un score de bonheur a 7 depuis 2015. L'Europe de l'Est quant à elle est toujours la seule à avoir dans certains pays un score de bonheur à 8. Les régions les moins heureuses d'après les graphique sont depuis 2015, l'Afriquesubsaharienne et l'Asie du Sud. L'Afrique du Nord et de l'Est semble voir son score de bonheur augmenter au fil des années.
+On remarque que la plupart des régions du monde voient le score de bonheur des différents pays répartis sur trois entiers consécutifs. Cela montre un **lien évident entre le score de bonheur d'un pays et la région du monde dans laquelle il se situe**.
+
+On constate aussi que depuis 2018, en *Amérique latine*, le score de bonheur avoisine 6 pour une très grande majorité des pays. La région est donc assez équilibrée et égalitaire. 
+
+L'*Europe de l'Est*, quant à elle, est toujours la seule à avoir dans certains pays un score de bonheur à 8. Les régions les moins heureuses d'après les graphiques sont depuis 2015, l'*Afrique subsaharienne* et l'*Asie du Sud-Est*. L'*Afrique du Nord et le Moyen-Orient* et de l'*Afrique de l'Est* semblent voir leurs scores de bonheur augmenter au fil des années.
+
+> Cette visualisation peut paraître redondante avec les deux précédentes, mais elle permet de mieux visualiser la **répartition des pays (et des régions) sur l'échelle du bonheur**. 
+
+Si on regarde l'évolution globale de la hauteur des barres, on constate que la répartition du bonheur en 2016 était beaucoup plus uniforme qu'à l'heure actuelle.
+
+> En 2016, il y avait autant de pays avec un score de 4 que de pays avec un score de 5 ou 6. En 2021, la répartition des pays est beaucoup plus hétérogène.
+
+Cela montre que l'on tend vers une **hétérogénéité croissante mais positive** (puisque de plus en plus de pays sont heureux et de moins en moins sont malheureux) **de la répartition du bonheur dans le monde**.
 
 ### 3. Le bonheur dans le monde : visualisation sur une carte
 
@@ -983,12 +1012,12 @@ generosity_correlation_graph <- data %>%
              y = Happiness_score, 
              text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
-  geom_smooth(inherit.aes = FALSE,
-  aes(x = Generosity, y = Happiness_score),
+  #geom_smooth(inherit.aes = FALSE,
+  #aes(x = Generosity, y = Happiness_score),
   # method = "lm",
-  col = "#C42126",
-  se = FALSE,
-  size = 1) +
+  #col = "#C42126",
+  #se = FALSE,
+  #size = 1) +
   labs(title = "Corrélation entre la générosité et le bonheur (2021)", 
        x = "Niveau de générosité", 
        y = "Score de bonheur")
@@ -1076,3 +1105,5 @@ Le graphique est en accord avec ce qui avait été observé. En effet, plus le P
 
 
 # V) Quelle combinaison de facteurs hauts entraîne une hausse du bonheur ?
+
+
