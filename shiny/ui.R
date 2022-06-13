@@ -10,6 +10,7 @@
 library(shiny)
 library(shinydashboard)
 library(readr)
+library(leaflet)
 
 # on récupère la liste des pays à mettre dans notre select input depuis un csv
 countries_names = read_lines("../data/countries_names.csv")
@@ -56,7 +57,13 @@ dashboardPage(
       tabItem(tabName = "maps", icon = icon("dashboard"),
               fluidRow(
                 box(
-                  # plotOutput("factors_contribution_graph")
+                  leafletOutput("map_happiness_score")
+                )
+              ),
+              fluidRow(
+                box(
+                  radioButtons("year_map_happiness_score", label = "Sélectionner une année", 
+                               choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2016)
                 )
               )
       )

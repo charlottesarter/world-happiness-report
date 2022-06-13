@@ -498,7 +498,7 @@ Ainsi, le **climat d'insécurité** dans lequel vivent les populations de ces pa
 
 # II) **Analyse temporelle** : Comment évolue le bonheur moyen au fil des années ?
 
-Cette deuxième partie s'attachera à répondre à la question *"Comment a évolué le bonheur au fil des années entre 2015 à 2021 ?"* Le déroulement de l'analyse nous amènera par la suite à diviser cette question en plusieurs sous-questions moins vastes.
+Cette deuxième partie s'attachera à répondre à la question *"Comment a évolué le bonheur au fil des années entre 2015 à 2021 ?"*. Le déroulement de l'analyse nous amènera par la suite à diviser cette question en plusieurs sous-questions moins vastes.
 
 ## Les visualisations réalisées
 
@@ -591,7 +591,7 @@ L'*Asie du Sud*, par exemple, observe une tendance à la baisse de son score de 
 
 Pour terminer sur cet aspect de l'évolution du score de bonheur, une visualisation est disponible sur notre application Rshiny pour détailler l'évolution du score de bonheur à l'échelle de différents pays spécifiques:
 
-[Insérer visu Rshiny]
+![](data/png_rmarkdown/rshiny_happiness_score_countries.png)
 
 ### 3. Les pays dont le niveau de bonheur a le plus varié au cours des dernières années
 
@@ -684,7 +684,8 @@ La visualisation suivante représente l'**évolution du score de bonheur moyen d
 
 > Non, ces graphes ne sont pas identiques ;) 
 
-L'intérêt principal de ce graphique est de constater en un coup d'oeil que **les scores moyens par région restent très stables**.
+L'intérêt principal de ce graphique est de constater en un coup d'oeil que **les scores moyens par région restent très stables**. Globalement, chaque région du monde conserve un score de bonheur similaire, et l'allure globale de ces graphes évolue peu au cours des années.
+
 
 ```{r bonheur par région}
 # Test facet graph per year + barchart happiness score per region
@@ -986,13 +987,13 @@ trust_government_correlation_graph <- data %>%
   filter(Year == 2021) %>%
   ggplot(aes(x = Perceptions_of_corruption, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
-  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
-              aes(x = Perceptions_of_corruption, y = Happiness_score),
-              #method = "lm",
-              col = "#92be72",
-              se = FALSE,
-              size = 1) + 
-  labs(title = "Corrélation entre la perception de corruption et le bonheur (2021)", 
+  # geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+  #             aes(x = Perceptions_of_corruption, y = Happiness_score),
+  #             #method = "lm",
+  #             col = "#92be72",
+  #             se = FALSE,
+  #             size = 1) + 
+  labs(title = "Score de bonheur en fonction de la perception de corruption", 
        x = "Perception de corruption", 
        y = "Score de bonheur")
 
@@ -1018,7 +1019,7 @@ generosity_correlation_graph <- data %>%
   #col = "#C42126",
   #se = FALSE,
   #size = 1) +
-  labs(title = "Corrélation entre la générosité et le bonheur (2021)", 
+  labs(title = "Corrélation entre la générosité et le bonheur (2021)",
        x = "Niveau de générosité", 
        y = "Score de bonheur")
 
@@ -1105,5 +1106,32 @@ Le graphique est en accord avec ce qui avait été observé. En effet, plus le P
 
 
 # V) Quelle combinaison de facteurs hauts entraîne une hausse du bonheur ?
+
+```{r combinaison facteurs}
+ data %>%
+       group_by(Year) %>%
+       summarise(Explained_by_generosity = mean(Explained_by_generosity),
+                 Explained_by_life_expectancy = mean(Explained_by_life_expectancy),
+                 Explained_by_freedom = mean(Explained_by_freedom),
+                 Explained_by_social_support = mean(Explained_by_social_support),
+                 Explained_by_trust_government = mean(Explained_by_trust_government))
+       select(Explained_by_generosity, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_social_support, Explained_by_trust_government) %>%
+       
+       # on transpose le dataframe et on le passe en Tibble
+       t() %>%
+       tibble() %>%
+       mutate(Factor_names = c("Generosity", "Life expectancy", "Freedom", "Social support", "Trust in government")) %>%
+       rename(Factor_values = ".") %>%
+       
+       # construction du graphique
+       ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), 
+                  y = Factor_values)) + 
+         geom_bar(stat = "identity", 
+                  fill = "steelblue") + 
+         labs(title = "Classement des facteurs de bonheur d'un pays", 
+              x = "Facteurs de bonheur", 
+              y = "Valeur")
+
+```
 
 
