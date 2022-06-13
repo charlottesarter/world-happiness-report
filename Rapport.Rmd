@@ -1106,13 +1106,38 @@ pib_water_correlation_graph %>% ggplotly(tooltip = "text")
 Le graphique est en accord avec ce qui avait été observé. En effet, plus le PIB est élevé plus le prix de l'eau augmente ce qui entraine une forme de corrélation entre le prix de l'eau et le score de bonheur.
 
 
-# V) L'importance des différents facteurs selon la région
+# V) Quels facteurs prédominent ?
+
+## Classement au niveau mondial
+```{r}
+world_factors_ranking_graph <- data %>%
+  select(Exp_by_economy_gdp_per_capita, Explained_by_social_support, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_trust_government, Explained_by_generosity) %>%
+  summarise(across(everything(), list(mean), na.rm = TRUE)) %>%
+  rename("Economy factor" = Exp_by_economy_gdp_per_capita_1,
+         "Social factor" = Explained_by_social_support_1,
+         "Life expectancy factor" = Explained_by_life_expectancy_1,
+         "Freedom factor" = Explained_by_freedom_1,
+         "Trust in government factor" = Explained_by_trust_government_1,
+         "Generosity factor" = Explained_by_generosity_1) %>%
+  gather("Factor_name", "Factor_value") %>%
+  
+  ggplot(aes(y = reorder(Factor_name, Factor_value), x = Factor_value)) + 
+  geom_bar(stat = "identity", fill = "steelblue") +
+  labs(title = "Classement des facteurs de bonheur (moyenne)", 
+       x = "Valeur", 
+       y = "Facteur") +
+  theme(legend.position = "none")
+
+ggplotly(world_factors_ranking_graph)
+```
+
+## Classement au niveau régional (2021)
 
 ```{r combinaison facteurs}
 factors_per_region_graph <- data %>%
   select(Year, Region, Exp_by_economy_gdp_per_capita, Explained_by_social_support, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_trust_government, Explained_by_generosity) %>%
   group_by(Year, Region) %>%
-  summarise(across(everything(), list(mean))) %>%
+  summarise(across(everything(), list(mean), na.rm = TRUE)) %>%
   rename("Economy factor" = Exp_by_economy_gdp_per_capita_1,
          "Social factor" = Explained_by_social_support_1,
          "Life expectancy factor" = Explained_by_life_expectancy_1,
