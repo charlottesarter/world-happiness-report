@@ -241,6 +241,11 @@ data <- merge(data, world_map_corrected, by="Country")
 
 data <- merge(data, continents, by="Country")
 
+
+# Création de la fonction de palette numérique sur les scores de bonheur
+
+mybins <- c(0,2,3,4,5,6,7,8)
+
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
@@ -249,8 +254,9 @@ shinyServer(function(input, output) {
   output$happiness_score_country_evolution <- renderPlot(
     data %>%
       filter(Country == input$country) %>%
-      ggplot(aes(x = Year, y = Happiness_score, color = Happiness_score)) + 
-      geom_line(stat = "identity") + 
+      ggplot(aes(x = Year, y = Happiness_score)) + 
+      geom_point(alpha = (1/3)) +
+      geom_line(stat = "identity", color = "steelblue") + 
       labs(title = paste("Evolution du bonheur: ", input$country), x = "Année", y = "Score de bonheur")
   )
 
@@ -268,6 +274,44 @@ shinyServer(function(input, output) {
       
       # construction du graphique
       ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), y = Factor_values)) + geom_bar(stat = "identity", fill = "steelblue") + labs(title = "Classement des facteurs de bonheur d'un pays", x = "Facteurs de bonheur", y = "Valeur")
+  )
+  
+  data_map_countries <- reactive(data %>% filter(Year == input$year_map_happiness_score))
+  
+  mypalette <- reactive(colorBin(
+    palette = "BuPu", 
+    domain = data_map_countries()$Happiness_score, 
+    na.color = "transparent",
+    bins = mybins))
+  
+  labels <- reactive(sprintf(
+    "<strong>%s</strong><br/>Rank:  %g<br/>Happiness Score: %g",
+    data_map_countries()$Country, data_map_countries()$Happiness_rank, data_map_countries()$Happiness_score
+  ) %>% lapply(htmltools::HTML))
+  
+  output$map_happiness_score <- renderLeaflet(
+    leaflet() %>%
+      addTiles() %>%
+      # polygone des pays
+      addPolygons(data = data_map_countries()$Geometry,
+                  fillColor = mypalette()(data_map_countries()$Happiness_score),
+                  weight = 2,
+                  opacity = 1,
+                  color = "white",
+                  fillOpacity = 0.8,
+                  label = labels(),
+                  highlightOptions = highlightOptions(
+                    weight = 5,
+                    color = "#666",
+                    fillOpacity = 0.7,
+                    bringToFront = TRUE)
+      ) %>%
+      addLegend("bottomright",
+                pal = mypalette(), 
+                values = data_map_countries()$Happiness_score,
+                title = "Score de bonheur",
+                opacity = 1
+      )
   )
 
 })
