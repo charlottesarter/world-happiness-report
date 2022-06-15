@@ -25,7 +25,7 @@ dashboardPage(
   dashboardSidebar(
     sidebarMenu(
       menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("globe")),
-      menuItem("Les facteurs de bonheur", tabName = "happ_score_factors", icon = icon("dashboard")),
+      menuItem("Les facteurs de bonheur", tabName = "happ_score_factors", icon = icon("globe")),
       menuItem("Carte du bonheur dans le monde", tabName = "maps", icon = icon("globe"))
     )
   ),

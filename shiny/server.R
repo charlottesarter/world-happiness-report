@@ -172,7 +172,7 @@ data2021_corrected$Happiness_rank <- rank(-data2021_corrected$Happiness_score)
 
 # Création et ajout du dataset supplémentaire à 2021
 
-cities <- read_csv2('data/city.csv')
+cities <- read_csv2('../data/city.csv')
 
 complement2021 <- merge(complement2021, cities, by="City")
 
@@ -292,11 +292,6 @@ shinyServer(function(input, output) {
     na.color = "transparent",
     bins = mybins))
   
-  labels <- reactive(sprintf(
-    "<strong>%s</strong><br/>Rank:  %g<br/>Happiness Score: %g",
-    data_map_countries()$Country, data_map_countries()$Happiness_rank, data_map_countries()$Happiness_score
-  )) %>% 
-  
   output$map_happiness_score <- renderLeaflet(
     leaflet() %>%
       addTiles() %>%
@@ -307,7 +302,7 @@ shinyServer(function(input, output) {
                   opacity = 1,
                   color = "white",
                   fillOpacity = 0.8,
-                  label = labels(),
+                  label = paste("Country: ", data_map_countries$Country, "Rank: ", data_map_countries$Happiness_rank, "Happiness Score: ", data_map_countries$Happiness_score),
                   highlightOptions = highlightOptions(
                     weight = 5,
                     color = "#666",
