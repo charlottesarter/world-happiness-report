@@ -27,8 +27,8 @@ dashboardPage(
     
     width = 300,
     sidebarMenu(
-      menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("globe")),
-      menuItem("Les facteurs de bonheur", tabName = "happ_score_factors", icon = icon("globe")),
+      menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("map")),
+      menuItem("Les facteurs de bonheur", tabName = "happ_score_factors", icon = icon("align-left")),
       menuItem("Carte du bonheur dans le monde", tabName = "maps", icon = icon("globe"))
     )
   ),
@@ -54,21 +54,22 @@ dashboardPage(
       tabItem(tabName = "happ_score_factors",
         fluidRow(
           box(
+            plotOutput("factors_contribution_graph")
+          ),
+          box(
             selectInput("country_factors", label = "Sélectionner un pays", choices = countries_names, 
                         selected = "Afghanistan")
           ),
           box(
             radioButtons("year_factors", label = "Sélectionner une année", 
                         choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2021)
-          ),
-          box(
-            plotOutput("factors_contribution_graph")
           )
         )
       ),
       tabItem(tabName = "maps",
               fluidRow(
                 box(
+                  width = 10,
                   leafletOutput("map_happiness_score")
                 )
               ),

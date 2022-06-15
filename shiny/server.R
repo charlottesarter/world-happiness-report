@@ -248,9 +248,33 @@ mybins <- c(0,2,3,4,5,6,7,8)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
+  output$minimum <- renderValueBox({
+    data_min <- data %>%
+      filter(Country == input$country)
+    
+    valueBox(round(min(data_min$Happiness_score),2), "Minimum", icon = icon("minus"),
+             color = "red")
+  })
+  
+  output$maximum <- renderValueBox({
+    data_max <- data %>%
+      filter(Country == input$country)
+    
+    valueBox(round(max(data_max$Happiness_score),2), "Maximum", icon = icon("plus"),
+             color = "green")
+  })
+  
+  output$average <- renderValueBox({
+    data_max <- data %>%
+      filter(Country == input$country)
+    
+    valueBox(round(mean(data_max$Happiness_score),2), "Average", icon = icon("asterisk"),
+             color = "blue")
+  })
+  
   output$countries <- renderTable(unique(data$Country))
   
-  output$happiness_score_country_evolution <- renderPlot(
+  output$happiness_score_country_evolution <- renderPlot({
     data %>%
       filter(Country == input$country) %>%
       ggplot(aes(x = Year, 
@@ -258,15 +282,21 @@ shinyServer(function(input, output) {
       geom_point() +
       geom_line(stat = "identity", 
                 color = "mediumpurple") + 
-      labs(title = paste("Evolution du bonheur: ", input$country), 
+      labs(title = paste("Évolution du bonheur :", input$country), 
            x = "Année", 
            y = "Score de bonheur")
-  )
+  })
 
-  output$factors_contribution_graph <- renderPlot(
+  output$factors_contribution_graph <- renderPlot({
     data %>%
       filter(Year == input$year_factors, Country == input$country_factors) %>%
       select(Exp_by_economy_gdp_per_capita, Explained_by_social_support, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_trust_government, Explained_by_generosity) %>%
+      rename('Economy' =`Exp_by_economy_gdp_per_capita`, 
+             'Social Support' = `Explained_by_social_support`,
+             'Life expectancy' = `Explained_by_life_expectancy`,
+             'Freedom' = `Explained_by_freedom`,
+             'Trust in government' = `Explained_by_trust_government`,
+             'Generosity' = `Explained_by_generosity`) %>%
       gather("Factor_name", "Factor_value") %>%
       
       ggplot(aes(y = reorder(Factor_name, Factor_value), 
@@ -278,7 +308,7 @@ shinyServer(function(input, output) {
            x = "Valeur", 
            y = "Facteur") +
       theme(legend.position = "none")
-  )
+  })
   
   data_map_countries <- reactive(data %>% filter(Year == input$year_map_happiness_score))
   
@@ -298,7 +328,7 @@ shinyServer(function(input, output) {
                   opacity = 1,
                   color = "white",
                   fillOpacity = 0.8,
-                  label = paste("Country: ", data_map_countries$Country, "Rank: ", data_map_countries$Happiness_rank, "Happiness Score: ", data_map_countries$Happiness_score),
+                  #label = paste("Country: ", data_map_countries$Country, "Rank: ", data_map_countries$Happiness_rank, "Happiness Score: ", data_map_countries$Happiness_score),
                   highlightOptions = highlightOptions(
                     weight = 5,
                     color = "#666",
