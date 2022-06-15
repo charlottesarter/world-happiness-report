@@ -10,6 +10,7 @@
 library(shiny)
 library(readr)
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(leaflet)
 library(sf)
@@ -208,8 +209,6 @@ data2021_complement$Pollution_score <- as.numeric(data2021_complement$Pollution_
 data2021_complement$Annual_work_time <- as.numeric(data2021_complement$Annual_work_time)
 data2021_complement$Gym_monthlycost <- as.numeric(data2021_complement$Gym_monthlycost)
 
-
-
 # Fusion de tous les datasets
 
 data <- data2015_corrected %>% 
@@ -249,32 +248,67 @@ mybins <- c(0,2,3,4,5,6,7,8)
 # Define server logic required to draw a histogram
 shinyServer(function(input, output) {
   
+  output$minimum <- renderValueBox({
+    data_min <- data %>%
+      filter(Country == input$country)
+    
+    valueBox(round(min(data_min$Happiness_score),2), "Minimum", icon = icon("minus"),
+             color = "red")
+  })
+  
+  output$maximum <- renderValueBox({
+    data_max <- data %>%
+      filter(Country == input$country)
+    
+    valueBox(round(max(data_max$Happiness_score),2), "Maximum", icon = icon("plus"),
+             color = "green")
+  })
+  
+  output$average <- renderValueBox({
+    data_max <- data %>%
+      filter(Country == input$country)
+    
+    valueBox(round(mean(data_max$Happiness_score),2), "Average", icon = icon("asterisk"),
+             color = "blue")
+  })
+  
   output$countries <- renderTable(unique(data$Country))
   
-  output$happiness_score_country_evolution <- renderPlot(
+  output$happiness_score_country_evolution <- renderPlot({
     data %>%
       filter(Country == input$country) %>%
-      ggplot(aes(x = Year, y = Happiness_score)) + 
-      geom_point(alpha = (1/3)) +
-      geom_line(stat = "identity", color = "steelblue") + 
-      labs(title = paste("Evolution du bonheur: ", input$country), x = "Année", y = "Score de bonheur")
-  )
+      ggplot(aes(x = Year, 
+                 y = Happiness_score)) + 
+      geom_point() +
+      geom_line(stat = "identity", 
+                color = "mediumpurple") + 
+      labs(title = paste("Évolution du bonheur :", input$country), 
+           x = "Année", 
+           y = "Score de bonheur")
+  })
 
-  output$factors_contribution_graph <- renderPlot(
+  output$factors_contribution_graph <- renderPlot({
     data %>%
-      filter(Country == input$country_factors) %>%
-      filter(Year == strtoi(input$year_factors)) %>%
-      select(Explained_by_generosity, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_social_support, Explained_by_trust_government) %>%
+      filter(Year == input$year_factors, Country == input$country_factors) %>%
+      select(Exp_by_economy_gdp_per_capita, Explained_by_social_support, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_trust_government, Explained_by_generosity) %>%
+      rename('Economy' =`Exp_by_economy_gdp_per_capita`, 
+             'Social Support' = `Explained_by_social_support`,
+             'Life expectancy' = `Explained_by_life_expectancy`,
+             'Freedom' = `Explained_by_freedom`,
+             'Trust in government' = `Explained_by_trust_government`,
+             'Generosity' = `Explained_by_generosity`) %>%
+      gather("Factor_name", "Factor_value") %>%
       
-      # on transpose le dataframe et on le passe en Tibble
-      t() %>%
-      tibble() %>%
-      mutate(Factor_names = c("Generosity", "Life expectancy", "Freedom", "Social support", "Trust in government")) %>%
-      rename(Factor_values = ".") %>%
-      
-      # construction du graphique
-      ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), y = Factor_values)) + geom_bar(stat = "identity", fill = "steelblue") + labs(title = "Classement des facteurs de bonheur d'un pays", x = "Facteurs de bonheur", y = "Valeur")
-  )
+      ggplot(aes(y = reorder(Factor_name, Factor_value), 
+                 x = Factor_value,
+                 text = paste("Factor value: ", round(Factor_value,3)))) + 
+      geom_bar(stat = "identity", 
+               fill = "mediumpurple") +
+      labs(title = "Classement des facteurs de bonheur (moyenne)", 
+           x = "Valeur", 
+           y = "Facteur") +
+      theme(legend.position = "none")
+  })
   
   data_map_countries <- reactive(data %>% filter(Year == input$year_map_happiness_score))
   
@@ -283,11 +317,6 @@ shinyServer(function(input, output) {
     domain = data_map_countries()$Happiness_score, 
     na.color = "transparent",
     bins = mybins))
-  
-  labels <- reactive(sprintf(
-    "<strong>%s</strong><br/>Rank:  %g<br/>Happiness Score: %g",
-    data_map_countries()$Country, data_map_countries()$Happiness_rank, data_map_countries()$Happiness_score
-  ) %>% lapply(htmltools::HTML))
   
   output$map_happiness_score <- renderLeaflet(
     leaflet() %>%
@@ -299,7 +328,7 @@ shinyServer(function(input, output) {
                   opacity = 1,
                   color = "white",
                   fillOpacity = 0.8,
-                  label = labels(),
+                  #label = paste("Country: ", data_map_countries$Country, "Rank: ", data_map_countries$Happiness_rank, "Happiness Score: ", data_map_countries$Happiness_score),
                   highlightOptions = highlightOptions(
                     weight = 5,
                     color = "#666",

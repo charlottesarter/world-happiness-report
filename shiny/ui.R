@@ -18,52 +18,65 @@ countries_names = read_lines("../data/countries_names.csv")
 # Define UI for application that draws a histogram
 
 dashboardPage(
-  dashboardHeader(title = "Dashboard"),
+  skin = "purple",
+  
+  dashboardHeader(title = "World Happiness Report",
+                  titleWidth = 300),
+  
   dashboardSidebar(
+    
+    width = 300,
     sidebarMenu(
-      menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("dashboard")),
-      menuItem("Les facteurs du bonheur", tabName = "happ_score_factors", icon = icon("dashboard")),
-      menuItem("Carte du bonheur dans le monde", tabName = "maps", icon = icon("dashboard"))
+      menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("map")),
+      menuItem("Les facteurs de bonheur", tabName = "happ_score_factors", icon = icon("align-left")),
+      menuItem("Carte du bonheur dans le monde", tabName = "maps", icon = icon("globe"))
     )
   ),
+  
   dashboardBody(
     tabItems(
       tabItem(tabName = "happ_score_by_country",
         fluidRow(
+          valueBoxOutput("maximum"),
+          valueBoxOutput("minimum"),
+          valueBoxOutput("average"),
           box(
-            selectInput("country", label = "Sélectionner un pays", choices = countries_names, 
-          selected = "Afghanistan")
+            width = 8,
+            plotOutput("happiness_score_country_evolution")
           ),
           box(
-            plotOutput("happiness_score_country_evolution")
-          )
+            width = 4,
+            selectInput("country", label = "Sélectionner un pays", choices = countries_names, 
+                        selected = "Afghanistan")
+          ),
         )
       ),
-      tabItem(tabName = "happ_score_factors", icon = icon("dashboard"),
+      tabItem(tabName = "happ_score_factors",
         fluidRow(
+          box(
+            plotOutput("factors_contribution_graph")
+          ),
           box(
             selectInput("country_factors", label = "Sélectionner un pays", choices = countries_names, 
                         selected = "Afghanistan")
           ),
           box(
             radioButtons("year_factors", label = "Sélectionner une année", 
-                        choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2015)
-          ),
-          box(
-            plotOutput("factors_contribution_graph")
+                        choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2021)
           )
         )
       ),
-      tabItem(tabName = "maps", icon = icon("dashboard"),
+      tabItem(tabName = "maps",
               fluidRow(
                 box(
+                  width = 10,
                   leafletOutput("map_happiness_score")
                 )
               ),
               fluidRow(
                 box(
                   radioButtons("year_map_happiness_score", label = "Sélectionner une année", 
-                               choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2016)
+                               choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2021)
                 )
               )
       )
