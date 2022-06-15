@@ -18,14 +18,18 @@ countries_names = read_lines("../data/countries_names.csv")
 # Define UI for application that draws a histogram
 
 dashboardPage(
-  dashboardHeader(title = "Dashboard"),
+  skin = "purple",
+  
+  dashboardHeader(title = "World Happiness Report"),
+  
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("dashboard")),
-      menuItem("Les facteurs du bonheur", tabName = "happ_score_factors", icon = icon("dashboard")),
-      menuItem("Carte du bonheur dans le monde", tabName = "maps", icon = icon("dashboard"))
+      menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("globe")),
+      menuItem("Les facteurs de bonheur", tabName = "happ_score_factors", icon = icon("dashboard")),
+      menuItem("Carte du bonheur dans le monde", tabName = "maps", icon = icon("globe"))
     )
   ),
+  
   dashboardBody(
     tabItems(
       tabItem(tabName = "happ_score_by_country",
@@ -39,7 +43,7 @@ dashboardPage(
           )
         )
       ),
-      tabItem(tabName = "happ_score_factors", icon = icon("dashboard"),
+      tabItem(tabName = "happ_score_factors",
         fluidRow(
           box(
             selectInput("country_factors", label = "Sélectionner un pays", choices = countries_names, 
@@ -47,14 +51,14 @@ dashboardPage(
           ),
           box(
             radioButtons("year_factors", label = "Sélectionner une année", 
-                        choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2015)
+                        choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2021)
           ),
           box(
             plotOutput("factors_contribution_graph")
           )
         )
       ),
-      tabItem(tabName = "maps", icon = icon("dashboard"),
+      tabItem(tabName = "maps",
               fluidRow(
                 box(
                   leafletOutput("map_happiness_score")
@@ -63,7 +67,7 @@ dashboardPage(
               fluidRow(
                 box(
                   radioButtons("year_map_happiness_score", label = "Sélectionner une année", 
-                               choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2016)
+                               choices = c(2015, 2016, 2017, 2018, 2019, 2020, 2021), selected = 2021)
                 )
               )
       )

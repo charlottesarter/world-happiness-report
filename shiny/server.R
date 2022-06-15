@@ -172,7 +172,7 @@ data2021_corrected$Happiness_rank <- rank(-data2021_corrected$Happiness_score)
 
 # Création et ajout du dataset supplémentaire à 2021
 
-cities <- read_csv2('../data/city.csv')
+cities <- read_csv2('data/city.csv')
 
 complement2021 <- merge(complement2021, cities, by="City")
 
@@ -207,8 +207,6 @@ data2021_complement$Obesity_level <- as.numeric(data2021_complement$Obesity_leve
 data2021_complement$Pollution_score <- as.numeric(data2021_complement$Pollution_score)
 data2021_complement$Annual_work_time <- as.numeric(data2021_complement$Annual_work_time)
 data2021_complement$Gym_monthlycost <- as.numeric(data2021_complement$Gym_monthlycost)
-
-
 
 # Fusion de tous les datasets
 
@@ -254,26 +252,36 @@ shinyServer(function(input, output) {
   output$happiness_score_country_evolution <- renderPlot(
     data %>%
       filter(Country == input$country) %>%
-      ggplot(aes(x = Year, y = Happiness_score)) + 
-      geom_point(alpha = (1/3)) +
-      geom_line(stat = "identity", color = "steelblue") + 
-      labs(title = paste("Evolution du bonheur: ", input$country), x = "Année", y = "Score de bonheur")
+      ggplot(aes(x = Year, 
+                 y = Happiness_score)) + 
+      geom_point() +
+      geom_line(stat = "identity", 
+                color = "mediumpurple") + 
+      labs(title = paste("Evolution du bonheur: ", input$country), 
+           x = "Année", 
+           y = "Score de bonheur")
   )
 
   output$factors_contribution_graph <- renderPlot(
     data %>%
       filter(Country == input$country_factors) %>%
       filter(Year == strtoi(input$year_factors)) %>%
-      select(Explained_by_generosity, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_social_support, Explained_by_trust_government) %>%
+      select(Exp_by_economy_gdp_per_capita, Explained_by_generosity, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_social_support, Explained_by_trust_government) %>%
       
       # on transpose le dataframe et on le passe en Tibble
       t() %>%
       tibble() %>%
-      mutate(Factor_names = c("Generosity", "Life expectancy", "Freedom", "Social support", "Trust in government")) %>%
+      mutate(Factor_names = c("GPD", "Generosity", "Life expectancy", "Freedom", "Social support", "Trust in government")) %>%
       rename(Factor_values = ".") %>%
       
       # construction du graphique
-      ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), y = Factor_values)) + geom_bar(stat = "identity", fill = "steelblue") + labs(title = "Classement des facteurs de bonheur d'un pays", x = "Facteurs de bonheur", y = "Valeur")
+      ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), 
+                 y = Factor_values)) + 
+      geom_bar(stat = "identity", 
+               fill = "mediumpurple") + 
+      labs(title = "Classement des facteurs de bonheur d'un pays", 
+           x = "Facteurs de bonheur", 
+           y = "Valeur")
   )
   
   data_map_countries <- reactive(data %>% filter(Year == input$year_map_happiness_score))
@@ -287,7 +295,7 @@ shinyServer(function(input, output) {
   labels <- reactive(sprintf(
     "<strong>%s</strong><br/>Rank:  %g<br/>Happiness Score: %g",
     data_map_countries()$Country, data_map_countries()$Happiness_rank, data_map_countries()$Happiness_score
-  ) %>% lapply(htmltools::HTML))
+  )) %>% 
   
   output$map_happiness_score <- renderLeaflet(
     leaflet() %>%
