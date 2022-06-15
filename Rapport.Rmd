@@ -1042,7 +1042,7 @@ Le graphique qui suit montre la corrélation éventuelle entre le score de bonhe
 
 pollution_correlation_graph <- data2021_complement %>%
   ggplot(aes(x = Pollution_score, 
-             y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+             y = Happiness_score, text = paste("Country: ", Country, "\n", "City: ", City, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Regional_indicator)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x= Pollution_score, y = Happiness_score),
@@ -1066,7 +1066,7 @@ On peut alors penser que plus le prix de l'eau est élevé plus le pays est rich
 
 ```{r}
 water_correlation_graph <- data2021_complement  %>%
-  ggplot(aes(x=Water_price, y=Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  ggplot(aes(x=Water_price, y=Happiness_score, text = paste("Country: ", Country, "\n", "City: ", City, "\n",  "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Regional_indicator)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Water_price, y = Happiness_score),
@@ -1087,7 +1087,7 @@ Afin de vérifier l'observation faites suite au graphique précédent il peut ê
 
 ```{r}
 pib_water_correlation_graph <- data2021_complement  %>%
-  ggplot(aes(x=Water_price, y=Logged_gpd_per_capita, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) + 
+  ggplot(aes(x=Water_price, y=Logged_gpd_per_capita, text = paste("Country: ", Country, "\n", "City: ", City, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Regional_indicator)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
               aes(x=Water_price, y =  Logged_gpd_per_capita),
