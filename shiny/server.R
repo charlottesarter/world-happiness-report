@@ -10,6 +10,7 @@
 library(shiny)
 library(readr)
 library(dplyr)
+library(tidyr)
 library(ggplot2)
 library(leaflet)
 library(sf)
@@ -264,24 +265,19 @@ shinyServer(function(input, output) {
 
   output$factors_contribution_graph <- renderPlot(
     data %>%
-      filter(Country == input$country_factors) %>%
-      filter(Year == strtoi(input$year_factors)) %>%
-      select(Exp_by_economy_gdp_per_capita, Explained_by_generosity, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_social_support, Explained_by_trust_government) %>%
+      filter(Year == input$year_factors, Country == input$country_factors) %>%
+      select(Exp_by_economy_gdp_per_capita, Explained_by_social_support, Explained_by_life_expectancy, Explained_by_freedom, Explained_by_trust_government, Explained_by_generosity) %>%
+      gather("Factor_name", "Factor_value") %>%
       
-      # on transpose le dataframe et on le passe en Tibble
-      t() %>%
-      tibble() %>%
-      mutate(Factor_names = c("GPD", "Generosity", "Life expectancy", "Freedom", "Social support", "Trust in government")) %>%
-      rename(Factor_values = ".") %>%
-      
-      # construction du graphique
-      ggplot(aes(x = reorder(Factor_names, desc(Factor_values)), 
-                 y = Factor_values)) + 
+      ggplot(aes(y = reorder(Factor_name, Factor_value), 
+                 x = Factor_value,
+                 text = paste("Factor value: ", round(Factor_value,3)))) + 
       geom_bar(stat = "identity", 
-               fill = "mediumpurple") + 
-      labs(title = "Classement des facteurs de bonheur d'un pays", 
-           x = "Facteurs de bonheur", 
-           y = "Valeur")
+               fill = "mediumpurple") +
+      labs(title = "Classement des facteurs de bonheur (moyenne)", 
+           x = "Valeur", 
+           y = "Facteur") +
+      theme(legend.position = "none")
   )
   
   data_map_countries <- reactive(data %>% filter(Year == input$year_map_happiness_score))

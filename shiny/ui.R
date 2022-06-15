@@ -20,9 +20,12 @@ countries_names = read_lines("../data/countries_names.csv")
 dashboardPage(
   skin = "purple",
   
-  dashboardHeader(title = "World Happiness Report"),
+  dashboardHeader(title = "World Happiness Report",
+                  titleWidth = 300),
   
   dashboardSidebar(
+    
+    width = 300,
     sidebarMenu(
       menuItem("Bonheur par pays", tabName = "happ_score_by_country", icon = icon("globe")),
       menuItem("Les facteurs de bonheur", tabName = "happ_score_factors", icon = icon("globe")),
@@ -34,13 +37,18 @@ dashboardPage(
     tabItems(
       tabItem(tabName = "happ_score_by_country",
         fluidRow(
+          valueBoxOutput("maximum"),
+          valueBoxOutput("minimum"),
+          valueBoxOutput("average"),
           box(
-            selectInput("country", label = "Sélectionner un pays", choices = countries_names, 
-          selected = "Afghanistan")
+            width = 8,
+            plotOutput("happiness_score_country_evolution")
           ),
           box(
-            plotOutput("happiness_score_country_evolution")
-          )
+            width = 4,
+            selectInput("country", label = "Sélectionner un pays", choices = countries_names, 
+                        selected = "Afghanistan")
+          ),
         )
       ),
       tabItem(tabName = "happ_score_factors",
