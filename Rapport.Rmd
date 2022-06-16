@@ -809,11 +809,17 @@ Cela montre que l'on tend vers une **hétérogénéité croissante mais positive
 
 ### 3. Le bonheur dans le monde : visualisation sur une carte
 
+c'est une des visualisations les plus attendues au vu de notre jeu de données : **une carte** ! Rien de mieux pour visualiser et situer géographiquement les pays et régions les plus heureux. 
+
+> Cette carte a été réalisée avec le package *Leaflet* de R. Elle est **interactive** : lorsque vous survolez un pays avec votre souris, le nom du pays, son classement et son score de bonheur précis s'affichent.
+
+
+
 ```{r carte bonheur dans le monde par pays}
 
 # Carte du monde colorée en fonction du niveau de bonheur de chaque pays
 
-data_map_countries <- data %>% filter(Year == "2016")
+data_map_countries <- data %>% filter(Year == "2021")
 
 # Création de la fonction de palette numérique sur les scores de bonheur
 
@@ -856,6 +862,12 @@ map_countries <- leaflet() %>%
 map_countries
 
 ```
+
+En un coup d'oeil, on visualise directement les pays et régions les plus heureux : ce sont ceux les plus foncés sur la carte, soit l'*Amérique du Nord*, l'*Europe du Nord* et de l'*Ouest* et l'*Australie et la Nouvelle-Zélande*. 
+
+On observe également que l'*Afrique* semble être le continent le moins heureux, avec un score de bonheur qui ne semble pas dépasser 5.
+
+Enfin, l'*Amérique latine* et l'*Asie* sont dans la moyenne, avec un score de bonheur qui se situe pour la majorité des pays entre 5 et 7.
 
 
 # IV) **Analyse factorielle** : Quels facteurs contribuent le plus au bonheur dans le monde ?
