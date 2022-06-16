@@ -811,6 +811,10 @@ Cela montre que l'on tend vers une **hétérogénéité croissante mais positive
 
 ### 3. Le bonheur dans le monde : visualisation sur une carte
 
+C'est une des visualisations les plus attendues au vu de notre jeu de données : **une carte** ! Rien de mieux pour visualiser et situer géographiquement les pays et régions les plus heureux. 
+
+> Cette carte a été réalisée avec le package *Leaflet* de R. Elle est **interactive** : lorsque vous survolez un pays avec votre souris, le nom du pays, son classement et son score de bonheur précis s'affichent.
+
 ```{r carte bonheur dans le monde par pays}
 
 # Carte du monde colorée en fonction du niveau de bonheur de chaque pays
@@ -870,7 +874,7 @@ Enfin, l'*Amérique latine* et l'*Asie* sont dans la moyenne, avec un score de b
 
 ### 4. Les cartes réalisées avec **Tableau** : un aperçu de la contribution des facteurs au bonheur
 
-Les cartes suivantes ont toutes été réalisées sur **Tableau**, et intégrées au rapport via des fichiers .png trouvables dans le dossier *\data*. L'intégralité de nos réalisations sur Tableau sont également disponibles dans le fichier "visualisations_tableau.twb".  
+Les cartes suivantes ont toutes été réalisées sur **Tableau**, et intégrées au rapport via des fichiers .png trouvables dans le dossier *\_data*. L'intégralité de nos réalisations sur Tableau sont également disponibles dans le fichier "visualisations_tableau.twb".  
 
 La carte suivante permet de visualiser la **contribution du support social au score de bonheur dans le monde**, moyennée de 2015 à 2021 :
 <br>
@@ -888,17 +892,17 @@ On constate cette fois des **niveaux de contribution plus faibles**, bien qu'exi
 
 Les scores de bonheur précédemment mis en lumière s'expliquent par **différents facteurs** :
 
--   La liberté
+-   La **liberté**
 
--   L'espérance de vie
+-   L'**espérance de vie**
 
--   Le PIB par habitant
+-   Le **PIB** par habitant
 
--   La générosité
+-   La **générosité**
 
--   La confiance dans le gouvernement en place
+-   La **confiance dans le gouvernement** en place
 
--   Le support social (par la famille et les amis)
+-   Le **support social** (par la famille et les amis)
 
 Le jeu de données possède des champs décrivant le niveau de contribution de chacun de ces facteurs au score du bonheur (tous les champs dont le nom commence par Explained_by\_...).
 
@@ -1263,11 +1267,8 @@ En effet, le climat global d'un pays peut être étudié par le biais de **diff�
 
 ### Notre avis sur le projet
 
-
-
-=======
 > "J'ai trouvé ce projet très intéressant et enrichissant. J'ai pu découvrir deux logiciels, Tableau et RStudio, et un nouveau langage de programmation dont l'utilité diffère des langages que je connais déjà comme le Java ou le C. J'ai trouvé que le R est un langage qui peut être difficile à débugger, ainsi j'ai beaucoup appris à mieux formuler mes problèmes pour être plus efficace lors de mes recheches de solutions sur internet. J'aurais aimé plus développer la **création de cartes interactives avec Leaflet**, notamment l'idée que j'avais en tête d'introduire un graphique dynamique dans les info-bulles des pays tracés sur la carte." *Charlotte* 
 
-Ce projet m’a permis de découvrir le langage R par le biais d’une étude assez libre. J'ai eu du mal par moment à aller au bout du graphique que j'avais en tête. J’aurais aimé que l’on puisse centrer une partie de l’étude sur un pays en particulier afin de voir les disparités à l’échelle d’un pays. Malheureusement, la plupart de nos données sont à plus grandes échelles et ne permettaient donc pas cette étude. *Maud*
+> "Ce projet m’a permis de découvrir le langage R par le biais d’une étude assez libre. J'ai eu du mal par moment à aller au bout du graphique que j'avais en tête. J’aurais aimé que l’on puisse centrer une partie de l’étude sur un pays en particulier afin de voir les disparités à l’échelle d’un pays. Malheureusement, la plupart de nos données sont à plus grandes échelles et ne permettaient donc pas cette étude." *Maud*
 
 
