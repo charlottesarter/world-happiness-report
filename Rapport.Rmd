@@ -869,6 +869,8 @@ On observe également que l'*Afrique* semble être le continent le moins heureux
 
 Enfin, l'*Amérique latine* et l'*Asie* sont dans la moyenne, avec un score de bonheur qui se situe pour la majorité des pays entre 5 et 7.
 
+> Cela correspond aux tendances observées précédemment, notamment via les classements des pays et régions en fonction de leur score de bonheur.
+
 
 # IV) **Analyse factorielle** : Quels facteurs contribuent le plus au bonheur dans le monde ?
 
