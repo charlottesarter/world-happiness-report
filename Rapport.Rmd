@@ -857,6 +857,33 @@ map_countries
 
 ```
 
+<<<<<<< HEAD
+=======
+En un coup d'oeil, on visualise directement les pays et régions les plus heureux : ce sont ceux les plus foncés sur la carte, soit l'*Amérique du Nord*, l'*Europe du Nord* et de l'*Ouest* et l'*Australie et la Nouvelle-Zélande*. 
+
+On observe également que l'*Afrique* semble être le continent le moins heureux, avec un score de bonheur qui ne semble pas dépasser 5.
+
+Enfin, l'*Amérique latine* et l'*Asie* sont dans la moyenne, avec un score de bonheur qui se situe pour la majorité des pays entre 5 et 7.
+
+> Cela correspond aux **tendances observées précédemment**, notamment via les classements des pays et régions en fonction de leur score de bonheur.
+
+### 4. Cartes Tableau: un aperçu des facteurs de bonheur
+
+Les cartes suivantes ont toutes été réalisées sur Tableau, et intégrées au rapport via des fichiers .png situés dans le dossier data. L'intégralité de nos réalisations sur Tableau sont également disponibles dans le fichier "visualisations_tableau.twb".  
+
+La carte suivante permet de visualiser la contribution du support social au score de bonheur dans le monde, moyennée de 2015 à 2021:
+<br>
+![](data/contribution_support_social.png)
+<br>
+On constate globalement que le support social contribue énormément au bonheur dans beaucoup de pays. Nous essaierons de voir si cette tendance se confirme à l'aide d'un graphique hiérarchisant la contribution de chaque facteur.  
+<br>
+Nous pourrions penser que la liberté des individus est un élément essentiel à leur bonheur. Voyons dans quelle mesure ce facteur y contribue:
+<br>
+![](data/contribution_liberte.png)
+<br>
+On constate cette fois des niveaux de contribution plus faible, bien qu'existants. Notamment, le contraste en Russie avec la précédente carte est saisissant, mais finalement relativement logique au vu du régime politique en place dans ce pays.
+
+>>>>>>> 1163a44d90d52226568b86d98294b71c00208f51
 
 # IV) **Analyse factorielle** : Quels facteurs contribuent le plus au bonheur dans le monde ?
 
@@ -1079,6 +1106,10 @@ On constate une corrélation assez claire entre les deux facteurs. Plus le nivea
 Il était donc interessant de regarder si le facteur de pollution était lié au niveau de développement d'un pays.
 
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1163a44d90d52226568b86d98294b71c00208f51
 ```{r}
 
 pollution_pib_correlation_graph <- data2021_complement %>%
@@ -1105,6 +1136,10 @@ Cette découverte paraît étrange au vu de ce que l'on peut entendre dans la vi
 
 
 Le dataset complément de 2021 propose aussi une colonne donnant le prix de l'eau des différentes villes. A nouveau si on compare ce chiffre avec le score de bonheur de la ville en question nous pouvons voir une corrélation assez surprenante.
+<<<<<<< HEAD
+=======
+
+>>>>>>> 1163a44d90d52226568b86d98294b71c00208f51
 En effet, les lieux ou le prix de l'eau est le plus faible sont les lieux avec le score de bonheur le plus faible.
 On peut alors penser que plus le prix de l'eau est élevé plus le pays est riche et développé ce qui peut être un facteur important du score de bonheur.
 
