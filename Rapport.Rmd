@@ -1081,7 +1081,7 @@ Celui que nous avons trouvé comporte les données de **44 villes** dans le mond
 
 
 
-Le graphique qui suit montre la corrélation éventuelle entre le score de bonheur et le niveau de pollution de la ville. Les villes sont rassemblées par régions du monde.
+Le graphique qui suit montre la corrélation éventuelle entre le score de bonheur et le niveau de pollution d'un ville. Les villes sont rassemblées par régions du monde.
 
 
 ```{r}
@@ -1104,12 +1104,14 @@ pollution_correlation_graph <- data2021_complement %>%
 pollution_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
-On constate une corrélation assez claire entre les deux facteurs. Plus le niveau de pollution est faible plus le score de bonheur est élevé. Le niveau de pollution semble donc être un facteur impactant le score de bonheur.
+On constate une corrélation assez claire entre les deux facteurs. **Plus le niveau de pollution est faible, plus le score de bonheur est élevé**. Le niveau de pollution semble donc être un facteur impactant le score de bonheur.
 
-Il était donc interessant de regarder si le facteur de pollution était lié au niveau de développement d'un pays.
+> En réalité, pour pousser notre analyse, il faudrait étudider la **corrélation entre le niveau de pollution et le niveau de développement des pays**. En effet, si on constate que les pays les plus pollués sont les moins développés, on ne pourrait pas affirmer que la pollution influe sur le score de bonheur des pays.
+
+Nous avons donc tracé le **graphique de corrélation entre le facteur de pollution et le niveau de développement** (PIB) des pays.
 
 
-```{r}
+```{r corrélation PIB pollution}
 
 pollution_pib_correlation_graph <- data2021_complement %>%
   ggplot(aes(x = Pollution_score, 
@@ -1122,19 +1124,19 @@ pollution_pib_correlation_graph <- data2021_complement %>%
               col = "#C42126",
               se =FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre le niveau de pollution et le score de bonheur", 
+  labs(title = "Corrélation entre le niveau de pollution et le PIB", 
        x = "Niveau de pollution", 
-       y = "log(PIB par habitant)")
+       y = "Log(PIB par habitant)")
 
 pollution_pib_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
-Le graphique ci-dessus montre une corrélation entre le niveau de pollution et le PIB par habitant. En effet, les pays ayant un PIB élevé sont aussi ceux ayant un score de pollution plus faible. 
-Cette découverte paraît étrange au vu de ce que l'on peut entendre dans la vie de tous les jours sur la Chine ou encore les Etats-Unis. Néanmoins, les pays en développement ou sous-développés ont d'autres préoccupation que leur impact environnemental ce qui peut expliquer le phénomène observé.
+Le graphique ci-dessus montre qu'il existe bien une corrélation entre le niveau de pollution et le PIB par habitant. En effet, **les pays ayant un PIB élevé sont ceux ayant un score de pollution plus faible**. 
+
+Cette découverte paraît étrange au vu de ce que l'on peut entendre dans la vie de tous les jours sur la Chine ou encore les États-Unis. Néanmoins, les pays en voie de développement ou sous-développés ont d'autres préoccupations plus importantes que leur impact environnemental, ce qui peut expliquer le phénomène observé.
 
 
-
-Le dataset complément de 2021 propose aussi une colonne donnant le prix de l'eau des différentes villes. A nouveau si on compare ce chiffre avec le score de bonheur de la ville en question nous pouvons voir une corrélation assez surprenante.
+Le dataset complémentaire propose également une variable qui correspond au **prix d'une bouteille d'eau** dans les différentes villes. A nouveau si on compare ce chiffre avec le score de bonheur de la ville en question nous pouvons voir une corrélation assez surprenante.
 
 
 En effet, les lieux ou le prix de l'eau est le plus faible sont les lieux avec le score de bonheur le plus faible.
@@ -1174,7 +1176,7 @@ pib_water_correlation_graph <- data2021_complement  %>%
               size = 1) + 
   labs(title = "Corrélation entre le prix de l'eau et le PIB par habitant", 
        x = "Prix de l'eau (£)", 
-       y = "log(PIB par habitant)")
+       y = "Log(PIB par habitant)")
 
 pib_water_correlation_graph %>% ggplotly(tooltip = "text")
 ```
