@@ -48,7 +48,7 @@ Les jeux de données initiaux comportent 13 variables :
 | freedom                        | double    | La mesure dans laquelle la liberté a contribué au calcul du score du bonheur                                                                                                               |
 | trust (governement corruption) | double    | La mesure dans laquelle la perception de la corruption contribue au score de bonheur                                                                                                       |
 | generosity                     | double    | La mesure dans laquelle la générosité a contribué au calcul du score de bonheur                                                                                                            |
-| dystopia residual              | double    | "Résidu" correspondant à l'écart entre le modèle théorique et la réalité, auquel on ajoute un score de dystopie (score d'un pays hypothétique moins bien classé que tous les autre)        |
+| dystopia residual              | double    | "Résidu" correspondant à l'écart entre le modèle théorique et la réalité, auquel on ajoute un score de dystopie (score d'un pays hypothétique moins bien classé que tous les autres)        |
 
 Par la suite, nous avons ajouté plusieurs données nécessaires à la création de cartes : les **coordonnées géographiques des pays**, ainsi que leur **géométrie**, afin de pouvoir colorier les surfaces des pays sur les cartes. Nous avons également ajouté une colonne indiquant le **continent** sur lequel se trouve chaque pays.
 
@@ -507,9 +507,9 @@ Cette deuxième partie s'attachera à répondre à la question *"Comment a évol
 
 2. Les courbes d'évolution du bonheur dans chacune des régions du monde entre 2015 et 2021
 
-3. Un Top 10 des pays dont le score de bonheur a le plus augmenté entre 2015 et 2021
+3. Les Top 10 des pays dont le score de bonheur a le plus augmenté / diminué entre 2015 et 2021
 
-4. Un Top 10 des pays dont le score de bonheur a le plus diminué entre 2015 et 2021
+4. L'évolution du score de bonheur moyen des régions chaque année entre 2015 et 2021 (bar chart)
 
 ### 1. L'évolution du bonheur moyen dans le monde
 
@@ -590,9 +590,9 @@ On se rend ici aisément compte qu'il ne fallait pas se contenter d'une moyenne 
 
 L'*Asie du Sud*, par exemple, observe une tendance à la baisse de son score de bonheur depuis 2017, tandis que l'*Europe occidentale* observe une tendance à la hausse sur cette même période.
 
-Pour terminer sur cet aspect de l'évolution du score de bonheur, une visualisation est disponible sur notre application Rshiny pour détailler l'évolution du score de bonheur à l'échelle de différents pays spécifiques:
+Pour terminer sur cet aspect de l'évolution du score de bonheur, une visualisation est disponible sur notre application Rshiny pour détailler l'évolution du score de bonheur à l'échelle des pays :
 
-![](data/png_rmarkdown/rshiny_happiness_score_countries.png)
+![](data/rshiny_happiness_score_countries.png)
 
 ### 3. Les pays dont le niveau de bonheur a le plus varié au cours des dernières années
 
@@ -734,7 +734,7 @@ Dans cette partie, le but est de **mieux visualiser les préférences géographi
 
 ## Les visualisations réalisées
 
-1.  Un boxplot qui indique la distribution des scores de bonheur de chaque région
+1.  Un boxplot qui indique la distribution des scores de bonheur de chaque région chaque année
 
 2.  Un bar chart qui indique la répartition des pays en fonction de leur score de bonheur
 
@@ -766,8 +766,6 @@ ggplotly(boxplot_happiness_score + aes(frame = Year)) |> animation_opts(frame = 
 
 En effet, l*Afrique du Nord et le Moyen-Orient* et l'*Asie du Sud-Est* présentent un écart de score de bonheur respectif de 3.2 et 2.98 entre leur pays le plus heureux et leur pays le moins heureux (2015). Cela montre que **les inégalités** (de développement, de conditions de vie, de richesse, de santé...)  que l'on observe à l'échelle mondiale **s'observent aussi plus localement à l'échelle des différentes régions du monde**. 
 
-**PLUS D'EXPLICATIONS?**
-
 ### 2. La répartition du niveau de bonheur des différentes régions du monde chaque année
 
 Ce diagramme en barres permet de visualiser d'une autre manière la répartition du bonheur des pays d'une même région. 
@@ -795,13 +793,13 @@ repartition_bonheur %>% ggplotly(tooltip = c("text", "y"))
 
 ```
 
-On remarque que la plupart des régions du monde voient le score de bonheur des différents pays répartis sur trois entiers consécutifs. Cela montre un **lien évident entre le score de bonheur d'un pays et la région du monde dans laquelle il se situe**.
+On remarque que la plupart des régions du monde voient les scores de bonheur des différents pays répartis sur trois entiers consécutifs. Cela montre un **lien évident entre le score de bonheur d'un pays et la région du monde dans laquelle il se situe**.
 
 On constate aussi que depuis 2018, en *Amérique latine*, le score de bonheur avoisine 6 pour une très grande majorité des pays. La région est donc assez équilibrée et égalitaire. 
 
 L'*Europe de l'Est*, quant à elle, est toujours la seule à avoir dans certains pays un score de bonheur à 8. Les régions les moins heureuses d'après les graphiques sont depuis 2015, l'*Afrique subsaharienne* et l'*Asie du Sud-Est*. L'*Afrique du Nord et le Moyen-Orient* et de l'*Afrique de l'Est* semblent voir leurs scores de bonheur augmenter au fil des années.
 
-> Cette visualisation peut paraître redondante avec les deux précédentes, mais elle permet de mieux visualiser la **répartition des pays (et des régions) sur l'échelle du bonheur**. 
+> Cette visualisation peut paraître redondante avec les deux précédentes, mais elle permet de mieux visualiser la **répartition des pays (et des régions) sur l'échelle de Cantril**. 
 
 Si on regarde l'évolution globale de la hauteur des barres, on constate que la répartition du bonheur en 2016 était beaucoup plus uniforme qu'à l'heure actuelle.
 
@@ -1001,9 +999,9 @@ trust_government_correlation_graph <- data %>%
 trust_government_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
-On constate bien que plus les habitants ressentent de la corruption dans leur pays, moins ils sont heureux. Autrement dit, plus les habitants ont confiance en leur gouvernement, plus ils sont heureux.
+On constate que **la plupart des pays**, peu importe leur localisation géographique et leur niveau de bonheur, **présentent une forte perception de corruption**. Ainsi, on ne peut pas vraiment établir de corrélation entre le niveau de bonheur des pays et leur confiance en leur gouvernement.
 
-Cependant, chacun des facteurs fournis dans ce dataset ne contribue par nécessairement grandement au score de bonheur.
+De plus, un second facteur, plus étonnant cette fois, ne contribue par non plus grandement au score de bonheur.
 
 En effet, voici le graphique de corrélation obtenu pour le facteur **"Générosité"** :
 
@@ -1028,12 +1026,30 @@ generosity_correlation_graph %>% ggplotly(tooltip = "text")
 
 ```
 
-On constate cette fois-ci, et à l'inverse des graphes précédemment étudiés, que les valeurs sont relativement éparpillées et **ne permettent pas d'établir une corrélation entre la générosité et le score de bonheur**.\
-Ce facteur sont donc a priori moins impactants sur les variations de score entre les différents pays.
+On constate cette fois-ci, et à l'inverse des graphes précédemment étudiés, que les valeurs sont relativement éparpillées et **ne permettent pas d'établir une corrélation entre la générosité et le score de bonheur**.
+Ce facteur sont donc a priori moins impactant sur les variations de score entre les différents pays.
 
 ### 2. La corrélation entre les différents facteurs proposés dans un dataset supplémentaire et les scores de bonheur de l'année 2021
 
-Le dataset spécifique à l'année 2021 prend en compte différents facteurs supplémentaires. En effet on y trouve : le temps d'ensoleillement annuel de la ville, son taux de pollution, le prix de l'eau, le niveau d'obésité du pays, le temps de travail moyen, le nombre d'activités en extérieur.
+Lorsque l'on se renseigne sur les facteurs qui propulsent la Finlande en tête du classement des pays les plus heureux, on observe que ce ne sont pas forcément ceux que nous venons d'étudier. En effet, les facteurs qui ressortent sont : une planification urbaine intelligente, la présence de beaucoup d'espaces verts, de bons systèmes de santé, d’éducation, de transports, d’imposition... 
+
+Nous avons donc recherché un **dataset supplémentaire, afin de compléter et d'enrichir notre analyse**.
+
+Celui que nous avons trouvé comporte les données de **44 villes** dans le monde, et plusieurs **nouveaux facteurs** dont :
+
+- Le **temps d'ensoleillement** annuel de la ville
+
+- Le **taux de pollution** de la ville
+
+- Le **prix d'une bouteille d'eau** dans la ville
+
+- Le **niveau d'obésité** du pays
+
+- Le **temps de travail moyen** des habitants dans l'année
+
+- Le **nombre d'activités en extérieur** proposées
+
+
 
 Le graphique qui suit montre la corrélation éventuelle entre le score de bonheur et le niveau de pollution de la ville. Les villes sont rassemblées par régions du monde.
 
