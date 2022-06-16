@@ -868,8 +868,7 @@ On observe également que l'*Afrique* semble être le continent le moins heureux
 
 Enfin, l'*Amérique latine* et l'*Asie* sont dans la moyenne, avec un score de bonheur qui se situe pour la majorité des pays entre 5 et 7.
 
-<<<<<<< HEAD
-> Cela correspond aux tendances observées précédemment, notamment via les classements des pays et régions en fonction de leur score de bonheur.  
+> Cela correspond aux **tendances observées précédemment**, notamment via les classements des pays et régions en fonction de leur score de bonheur.
 
 ### 4. Cartes Tableau: un aperçu des facteurs de bonheur
 
@@ -886,10 +885,7 @@ Nous pourrions penser que la liberté des individus est un élément essentiel �
 ![](data/contribution_liberte.png)
 <br>
 On constate cette fois des niveaux de contribution plus faible, bien qu'existants. Notamment, le contraste en Russie avec la précédente carte est saisissant, mais finalement relativement logique au vu du régime politique en place dans ce pays.
-=======
-> Cela correspond aux **tendances observées précédemment**, notamment via les classements des pays et régions en fonction de leur score de bonheur.
 
->>>>>>> 988930d21ab24a77a5581bda27bb817ee34106ae
 
 # IV) **Analyse factorielle** : Quels facteurs contribuent le plus au bonheur dans le monde ?
 
@@ -1123,7 +1119,7 @@ EXPLICATIONS MAUD
 
 Le dataset complémentaire propose également une varaible qui correspond au prix d'une bouteille d'eau dans les différentes villes. A nouveau si on compare ce chiffre avec le score de bonheur de la ville en question nous pouvons voir une corrélation assez surprenante.
 
-<<<<<<< HEAD
+
 ```{r}
 
 pollution_pib_correlation_graph <- data2021_complement %>%
@@ -1145,8 +1141,7 @@ pollution_pib_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
 Le dataset complément de 2021 propose aussi une colonne donnant le prix de l'eau des différentes villes. A nouveau si on compare ce chiffre avec le score de bonheur de la ville en question nous pouvons voir une corrélation assez surprenante.
-=======
->>>>>>> 8851799e8543cf528a6204a6d5e8ae4b4f6f5d47
+
 En effet, les lieux ou le prix de l'eau est le plus faible sont les lieux avec le score de bonheur le plus faible.
 
 On peut alors penser que plus le prix de l'eau est élevé plus le pays est riche et développé ce qui peut être un facteur important du score de bonheur.
