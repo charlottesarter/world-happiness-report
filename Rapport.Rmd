@@ -814,7 +814,6 @@ c'est une des visualisations les plus attendues au vu de notre jeu de données :
 > Cette carte a été réalisée avec le package *Leaflet* de R. Elle est **interactive** : lorsque vous survolez un pays avec votre souris, le nom du pays, son classement et son score de bonheur précis s'affichent.
 
 
-
 ```{r carte bonheur dans le monde par pays}
 
 # Carte du monde colorée en fonction du niveau de bonheur de chaque pays
@@ -869,6 +868,7 @@ On observe également que l'*Afrique* semble être le continent le moins heureux
 
 Enfin, l'*Amérique latine* et l'*Asie* sont dans la moyenne, avec un score de bonheur qui se situe pour la majorité des pays entre 5 et 7.
 
+<<<<<<< HEAD
 > Cela correspond aux tendances observées précédemment, notamment via les classements des pays et régions en fonction de leur score de bonheur.  
 
 ### 4. Cartes Tableau: un aperçu des facteurs de bonheur
@@ -886,6 +886,10 @@ Nous pourrions penser que la liberté des individus est un élément essentiel �
 ![](data/contribution_liberte.png)
 <br>
 On constate cette fois des niveaux de contribution plus faible, bien qu'existants. Notamment, le contraste en Russie avec la précédente carte est saisissant, mais finalement relativement logique au vu du régime politique en place dans ce pays.
+=======
+> Cela correspond aux **tendances observées précédemment**, notamment via les classements des pays et régions en fonction de leur score de bonheur.
+
+>>>>>>> 988930d21ab24a77a5581bda27bb817ee34106ae
 
 # IV) **Analyse factorielle** : Quels facteurs contribuent le plus au bonheur dans le monde ?
 
@@ -912,6 +916,10 @@ Cette partie s'attachera donc à tenter d'**observer les corrélations pouvant e
 Pour chacun des facteurs étudiés, nous nous attendons à observer une **corrélation linéaire positive** : plus une population est riche, en bonne santé, libre, entourée et généreuse, plus elle est censée être heureuse, n'est-ce pas ?
 
 ## Les visualisations réalisées
+
+1. La corrélation entre le score de bonheur des pays et chacun des facteurs étudiés
+
+2. L'analyse de facteurs supplémentaires 
 
 ### 1. La corrélation de chaque facteur et le score de bonheur des pays du monde
 
@@ -1080,10 +1088,12 @@ Celui que nous avons trouvé comporte les données de **44 villes** dans le mond
 
 
 
-Le graphique qui suit montre la corrélation éventuelle entre le score de bonheur et le niveau de pollution de la ville. Les villes sont rassemblées par régions du monde.
+Le graphique qui suit montre la corrélation éventuelle entre le score de bonheur et le **niveau de pollution** de la ville. 
+
+> Les villes sont colorées en fonction de la région du monde où elles sont situées.
 
 
-```{r}
+```{r corrélation pollution}
 
 pollution_correlation_graph <- data2021_complement %>%
   ggplot(aes(x = Pollution_score, 
@@ -1103,10 +1113,42 @@ pollution_correlation_graph <- data2021_complement %>%
 pollution_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
-On constate une corrélation assez claire entre les deux facteurs. Plus le niveau de pollution est faible plus le score de bonheur est élevé. Le niveau de pollution semble donc être un facteur impactant le score de bonheur.
+On constate une corrélation assez claire entre les deux facteurs. **Plus le niveau de pollution est faible, plus le score de bonheur des populations est élevé**. Le niveau de pollution semble donc être un facteur impactant le score de bonheur.
+
+> En réalité, pour pousser notre analyse, il faudrait étudider la **corrélation entre le niveau de pollution et le niveau de développement des pays**. En effet, si on constate que les pays les plus pollués sont les moins développés, on ne pourrait pas affirmer que la pollution influe sur le score de bonheur des pays.
+
+GRAPHE MAUD
+
+EXPLICATIONS MAUD
+
+Le dataset complémentaire propose également une varaible qui correspond au prix d'une bouteille d'eau dans les différentes villes. A nouveau si on compare ce chiffre avec le score de bonheur de la ville en question nous pouvons voir une corrélation assez surprenante.
+
+<<<<<<< HEAD
+```{r}
+
+pollution_pib_correlation_graph <- data2021_complement %>%
+  ggplot(aes(x = Pollution_score, 
+
+             y = Logged_gpd_per_capita, text = paste("Country: ", Country, "\n", "City: ", City, "\n", "Rank: ", Happiness_rank))) + 
+  geom_point(aes(color = Regional_indicator)) + 
+  geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
+              aes(x= Pollution_score, y = Logged_gpd_per_capita),
+              #method = "lm",
+              col = "#C42126",
+              se =FALSE,
+              size = 1) + 
+  labs(title = "Corrélation entre le niveau de pollution et le score de bonheur", 
+       x = "Niveau de pollution", 
+       y = "log(PIB par habitant)")
+
+pollution_pib_correlation_graph %>% ggplotly(tooltip = "text")
+```
 
 Le dataset complément de 2021 propose aussi une colonne donnant le prix de l'eau des différentes villes. A nouveau si on compare ce chiffre avec le score de bonheur de la ville en question nous pouvons voir une corrélation assez surprenante.
+=======
+>>>>>>> 8851799e8543cf528a6204a6d5e8ae4b4f6f5d47
 En effet, les lieux ou le prix de l'eau est le plus faible sont les lieux avec le score de bonheur le plus faible.
+
 On peut alors penser que plus le prix de l'eau est élevé plus le pays est riche et développé ce qui peut être un facteur important du score de bonheur.
 
 
@@ -1156,6 +1198,9 @@ Le graphique est en accord avec ce qui avait été observé. En effet, plus le P
 
 ## Classement au niveau mondial
 
+Nous avons voulu connaître l'influence de chaque facteur au niveau mondial. Le graphique ci-dessous regroupe toutes les régions et toutes les années et donne ainsi la valeur moyenne des différents facteurs.
+
+
 ```{r classement facteurs}
 
 world_factors_ranking_graph <- data %>%
@@ -1182,7 +1227,12 @@ world_factors_ranking_graph <- data %>%
 world_factors_ranking_graph %>% ggplotly(tooltip = "text")
 ```
 
+En moyenne et sur les 6 dernières années, c’est le facteur social qui influe le plus sur le bonheur suivi de l’économie. L'entourage d'une personne est donc un facteur universellement corrélé au niveau de bonheur. La confiance dans le gouvernement arrive en dernier dans ce classement. Cela confirme l'observation faite dans la partie étudiant la corrélation de chaque facteur avec le score de bonheur. En effet, la perception de la corruption était assez élevée pour tout le monde et donc pas corrélée au score de bonheur. Il est donc cohérent que la confiance du gouvernement ne soit pas un facteur d’influence important non plus.
+
+
 ## Classement au niveau régional (2021)
+
+A la suite du graphique précédent le graphique
 
 ```{r combinaison facteurs}
 factors_per_region_graph <- data %>%
