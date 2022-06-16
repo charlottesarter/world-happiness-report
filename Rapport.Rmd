@@ -1262,10 +1262,8 @@ En effet, le climat global d'un pays peut être étudié par le biais de **diff�
 ### Notre avis sur le projet
 
 
-
-=======
 > "J'ai trouvé ce projet très intéressant et enrichissant. J'ai pu découvrir deux logiciels, Tableau et RStudio, et un nouveau langage de programmation dont l'utilité diffère des langages que je connais déjà comme le Java ou le C. J'ai trouvé que le R est un langage qui peut être difficile à débugger, ainsi j'ai beaucoup appris à mieux formuler mes problèmes pour être plus efficace lors de mes recheches de solutions sur internet. J'aurais aimé plus développer la **création de cartes interactives avec Leaflet**, notamment l'idée que j'avais en tête d'introduire un graphique dynamique dans les info-bulles des pays tracés sur la carte." *Charlotte* 
 
-Ce projet m’a permis de découvrir le langage R par le biais d’une étude assez libre. J'ai eu du mal par moment à aller au bout du graphique que j'avais en tête. J’aurais aimé que l’on puisse centrer une partie de l’étude sur un pays en particulier afin de voir les disparités à l’échelle d’un pays. Malheureusement, la plupart de nos données sont à plus grandes échelles et ne permettaient donc pas cette étude. *Maud*
+>"Ce projet m’a permis de découvrir le langage R par le biais d’une étude assez libre. J'ai eu du mal par moment à aller au bout des graphiques que j'avais en tête. J’aurais aimé que l’on puisse centrer une partie de l’étude sur un pays en particulier afin de voir les disparités à l’échelle d’un pays. Malheureusement, la plupart de nos données sont à plus grandes échelles et ne permettaient donc pas cette étude." *Maud*
 
 
