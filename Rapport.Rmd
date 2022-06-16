@@ -1259,3 +1259,6 @@ Durant la suite de notre étude, nous avons analysé l'évolution du score de bo
 Cette observation nous a amené à nous questionner sur les buts du Happiness report. D’après différentes sources, cette étude contribuerait au réseau de solution de développement durable des etats unis. Elle permettrait notamment de donner une plus grande visibilité aux recherches qui analysent la construction et les moyens de favoriser le ‘bonheur’ à travers le monde. 
 
 En effet, le climat global du pays peut être étudié par le biais des différents facteurs. Nous nous sommes donc penchés sur ces facteurs afin de connaître leur impact sur le score de bonheur. Notre étude factorielle a confirmé certaines de nos idées préconçues : le niveau de liberté, le PIB par habitant ou encore le niveau de soutien social sont fortement corrélés au niveau de bonheur. D’autres données pourraient sûrement nous apporter plus d'informations quant aux facteurs influant sur le niveau de bonheur. Par exemple, les habitants de la Finlande (premier pays du classement) ne justifient pas seulement leur niveau de bonheur par les facteurs étudiés. En effet, beaucoup l'expliquent par le temps passé en extérieur. 
+
+
+
