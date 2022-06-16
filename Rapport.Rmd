@@ -592,7 +592,7 @@ L'*Asie du Sud*, par exemple, observe une tendance à la baisse de son score de 
 
 Pour terminer sur cet aspect de l'évolution du score de bonheur, une visualisation est disponible sur notre application Rshiny pour détailler l'évolution du score de bonheur à l'échelle de différents pays spécifiques:
 
-![](data/png_rmarkdown/rshiny_happiness_score_countries.png)
+![](data/rshiny_happiness_score_countries.png)
 
 ### 3. Les pays dont le niveau de bonheur a le plus varié au cours des dernières années
 
