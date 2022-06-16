@@ -738,7 +738,9 @@ Dans cette partie, le but est de **mieux visualiser les préférences géographi
 
 2.  Un bar chart qui indique la répartition des pays en fonction de leur score de bonheur
 
-3.  Une carte du monde colorée par pays en fonction de leur score de bonheur (avec Leaflet)
+3.  Une carte du monde colorée par pays en fonction de leur score de bonheur (avec *Leaflet*)
+
+4.  Les cartes réalisées avec **Tableau** : la contribution des différents facteurs au score de bonheur
 
 ### 1. La distribution des scores de bonheur de chaque région chaque année
 
@@ -866,21 +868,21 @@ Enfin, l'*Amérique latine* et l'*Asie* sont dans la moyenne, avec un score de b
 
 > Cela correspond aux **tendances observées précédemment**, notamment via les classements des pays et régions en fonction de leur score de bonheur.
 
-### 4. Cartes Tableau: un aperçu des facteurs de bonheur
+### 4. Les cartes réalisées avec **Tableau** : un aperçu de la contribution des facteurs au bonheur
 
-Les cartes suivantes ont toutes été réalisées sur Tableau, et intégrées au rapport via des fichiers .png situés dans le dossier data. L'intégralité de nos réalisations sur Tableau sont également disponibles dans le fichier "visualisations_tableau.twb".  
+Les cartes suivantes ont toutes été réalisées sur **Tableau**, et intégrées au rapport via des fichiers .png trouvables dans le dossier *\data*. L'intégralité de nos réalisations sur Tableau sont également disponibles dans le fichier "visualisations_tableau.twb".  
 
-La carte suivante permet de visualiser la contribution du support social au score de bonheur dans le monde, moyennée de 2015 à 2021:
+La carte suivante permet de visualiser la **contribution du support social au score de bonheur dans le monde**, moyennée de 2015 à 2021 :
 <br>
 ![](data/contribution_support_social.png)
 <br>
-On constate globalement que le support social contribue énormément au bonheur dans beaucoup de pays. Nous essaierons de voir si cette tendance se confirme à l'aide d'un graphique hiérarchisant la contribution de chaque facteur.  
+On constate globalement que le **support social contribue énormément au bonheur dans beaucoup de pays**. Nous essaierons de voir si cette tendance se confirme à l'aide d'un graphique hiérarchisant la contribution de chaque facteur au bonheur.  
 <br>
-Nous pourrions penser que la liberté des individus est un élément essentiel à leur bonheur. Voyons dans quelle mesure ce facteur y contribue:
+Nous pourrions penser que la **liberté des individus** est un élément essentiel à leur bonheur. Voyons dans quelle mesure ce facteur y contribue :
 <br>
 ![](data/contribution_liberte.png)
 <br>
-On constate cette fois des niveaux de contribution plus faible, bien qu'existants. Notamment, le contraste en Russie avec la précédente carte est saisissant, mais finalement relativement logique au vu du régime politique en place dans ce pays.
+On constate cette fois des **niveaux de contribution plus faibles**, bien qu'existants. Notamment, le contraste en Russie avec la précédente carte est saisissant, mais finalement relativement logique au vu du régime politique en place dans ce pays...
 
 # IV) **Analyse factorielle** : Quels facteurs contribuent le plus au bonheur dans le monde ?
 
