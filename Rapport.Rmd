@@ -914,6 +914,10 @@ Pour chacun des facteurs étudiés, nous nous attendons à observer une **corré
 
 ## Les visualisations réalisées
 
+1. La corrélation entre le score de bonheur des pays et chacun des facteurs étudiés
+
+2. L'analyse de facteurs supplémentaires 
+
 ### 1. La corrélation de chaque facteur et le score de bonheur des pays du monde
 
 > L'ensemble des visualisations suivantes sont réalisées avec les données de l'**année 2021**, car ce sont les données les plus récentes que nous possédons à ce jour.
@@ -1124,7 +1128,7 @@ pollution_pib_correlation_graph <- data2021_complement %>%
               col = "#C42126",
               se =FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre le niveau de pollution et le PIB", 
+  labs(title = "Corrélation entre le niveau de pollution et le PIB par habitant", 
        x = "Niveau de pollution", 
        y = "Log(PIB par habitant)")
 
@@ -1133,14 +1137,16 @@ pollution_pib_correlation_graph %>% ggplotly(tooltip = "text")
 
 Le graphique ci-dessus montre qu'il existe bien une corrélation entre le niveau de pollution et le PIB par habitant. En effet, **les pays ayant un PIB élevé sont ceux ayant un score de pollution plus faible**. 
 
-Cette découverte paraît étrange au vu de ce que l'on peut entendre dans la vie de tous les jours sur la Chine ou encore les États-Unis. Néanmoins, les pays en voie de développement ou sous-développés ont d'autres préoccupations plus importantes que leur impact environnemental, ce qui peut expliquer le phénomène observé.
+Cette découverte paraît étrange au vu de ce que l'on sait : la Chine et les États-Unis sont les pays qui polluent le plus. Cependant, ce n'est visiblement pas aux États-Unis que se fait le plus ressentir la pollution. Ainsi, les pays développés ont bien un niveau de pollution plus faible que les pays en voie de développement, ce qui ne permet pas vraiment de tirer une conslusion de notre analyse précédente. 
+
+En effet, il paraît aussi assez plausible que les pays en voie de développement ou sous-développés ont d'autres préoccupations plus importantes que leur impact environnemental, ce qui peut expliquer le phénomène observé.
 
 
-Le dataset complémentaire propose également une variable qui correspond au **prix d'une bouteille d'eau** dans les différentes villes. A nouveau si on compare ce chiffre avec le score de bonheur de la ville en question nous pouvons voir une corrélation assez surprenante.
+Le dataset complémentaire propose également une variable qui correspond au **prix d'une bouteille d'eau** dans les différentes villes. À nouveau, si on compare ce chiffre avec le score de bonheur des villes, nous pouvons voir une corrélation assez surprenante.
 
+Les lieux où le prix de l'eau est le plus faible sont les lieux avec le score de bonheur le plus faible.
 
-En effet, les lieux ou le prix de l'eau est le plus faible sont les lieux avec le score de bonheur le plus faible.
-On peut alors penser que plus le prix de l'eau est élevé plus le pays est riche et développé ce qui peut être un facteur important du score de bonheur.
+On peut alors penser que plus le prix de l'eau est élevé, plus le pays est riche et développé. Cela rejoint notre remarque précédente : **le score de bonheur est bien corrélé au niveau de développement des pays, mais pas forcément au prix de la vie ou au niveau de pollution**, qui sont des conséquences du niveau de développement.
 
 
 ```{r}
@@ -1153,15 +1159,15 @@ water_correlation_graph <- data2021_complement  %>%
               col = "#92be72",
               se =FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre le prix de l'eau et le score de bonheur", 
-       x = "Prix de l'eau (£)", 
+  labs(title = "Corrélation entre le prix d'une bouteille d'eau et le score de bonheur", 
+       x = "Prix d'une bouteille d'eau (£)", 
        y = "Score de bonheur")
 
 water_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
 
-Afin de vérifier l'observation faites suite au graphique précédent il peut être interessant d'observer la courbe du PIB par habitant en fonction du prix de l'eau.
+Afin de vérifier l'observation précédente, il peut être interessant d'observer la **corrélation entre le PIB par habitant et le prix d'une bouteille d'eau**.
 
 
 ```{r}
@@ -1174,22 +1180,36 @@ pib_water_correlation_graph <- data2021_complement  %>%
               col = "#92be72",
               se =FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre le prix de l'eau et le PIB par habitant", 
-       x = "Prix de l'eau (£)", 
+  labs(title = "Corrélation entre le prix d'une bouteille d'eau et le PIB par habitant", 
+       x = "Prix d'une bouteille d'eau (£)", 
        y = "Log(PIB par habitant)")
 
 pib_water_correlation_graph %>% ggplotly(tooltip = "text")
 ```
 
 
-Le graphique est en accord avec ce qui avait été observé. En effet, plus le PIB est élevé plus le prix de l'eau augmente ce qui entraine une forme de corrélation entre le prix de l'eau et le score de bonheur.
+Le graphique est en accord avec ce qui avait été observé. En effet, plus le PIB est élevé, plus le prix d'une bouteille d'eau augmente, ce qui montre une **corrélation entre le prix d'e l'eau'une bouteille d'eau et le niveau de développement des pays**.
+
+> Ici, nous étudions le prix d'une bouteille d'eau, mais celui-ci reflète d'une manière plus générale le **prix de la vie** dans le pays.
 
 
-# V) Quels facteurs prédominent ?
+# V) Quels sont les facteurs qui contribuent le plus au bonheur ?
 
-## Classement au niveau mondial
+Notre dernier axe d'analyse concerne le **poids des différents facteurs dans les scores de bonheur**. Nous allons répondre aux questions suivantes : 
 
-Nous avons voulu connaître l'influence de chaque facteur au niveau mondial. Le graphique ci-dessous regroupe toutes les régions et toutes les années et donne ainsi la valeur moyenne des différents facteurs.
+- Est-ce que les facteurs contribuent tous autant au bonheur ?
+
+- Est-ce que les facteurs qui contribuent le plus au bonheur sont les mêmes dans toutes les régions du monde ?
+
+## Les visualisations réalisées
+
+1. Le classement des facteurs en fonction de leur contribution au bonheur mondial
+
+2. Le classement des facteurs en fonction de leur conribution au bonheur dans les différentes régions du monde (2021)
+
+## Les facteurs qui contribuent le plus au bonheur dans le monde depuis 2015
+
+Nous avons voulu connaître l'**influence de chaque facteur au niveau mondial**. Le graphique ci-dessous regroupe toutes les régions et toutes les années, et donne ainsi la valeur moyenne de la contribution des différents facteurs au bonheur.
 
 
 ```{r classement facteurs}
@@ -1218,10 +1238,11 @@ world_factors_ranking_graph <- data %>%
 world_factors_ranking_graph %>% ggplotly(tooltip = "text")
 ```
 
-En moyenne et sur les 6 dernières années, c’est le facteur social qui influe le plus sur le bonheur suivi de l’économie. L'entourage d'une personne est donc un facteur universellement corrélé au niveau de bonheur. La confiance dans le gouvernement arrive en dernier dans ce classement. Cela confirme l'observation faite dans la partie étudiant la corrélation de chaque facteur avec le score de bonheur. En effet, la perception de la corruption était assez élevée pour tout le monde et donc pas corrélée au score de bonheur. Il est donc cohérent que la confiance du gouvernement ne soit pas un facteur d’influence important non plus.
+En moyenne et sur les 6 dernières années, c’est le **facteur social qui contribue le plus au bonheur**, suivi de l’**économie**. L'entourage d'une personne est donc un facteur universellement corrélé au bonheur des populations. 
 
+La **confiance dans le gouvernement** arrive en dernier dans ce classement. Cela confirme l'observation faite dans la partie précédente. En effet, la perception de corruption est assez élevée pour tout le monde, et ne contribue pas vraiment à rendre les gens heureux...Il est donc cohérent que la confiance dans le gouvernement ne soit pas un facteur d’influence important.
 
-## Classement au niveau régional (2021)
+## La contribution des facteurs au bonheur dans les différentes régions du monde (2021)
 
 A la suite du graphique précédent le graphique
 
@@ -1271,6 +1292,6 @@ En effet, le climat global d'un pays peut être étudié par le biais de **diff�
 
 > "J'ai trouvé ce projet très intéressant et enrichissant. J'ai pu découvrir deux logiciels, Tableau et RStudio, et un nouveau langage de programmation dont l'utilité diffère des langages que je connais déjà comme le Java ou le C. J'ai trouvé que le R est un langage qui peut être difficile à débugger, ainsi j'ai beaucoup appris à mieux formuler mes problèmes pour être plus efficace lors de mes recheches de solutions sur internet. J'aurais aimé plus développer la **création de cartes interactives avec Leaflet**, notamment l'idée que j'avais en tête d'introduire un graphique dynamique dans les info-bulles des pays tracés sur la carte." *Charlotte* 
 
->"Ce projet m’a permis de découvrir le langage R par le biais d’une étude assez libre. J'ai eu du mal par moment à aller au bout des graphiques que j'avais en tête. J’aurais aimé que l’on puisse centrer une partie de l’étude sur un pays en particulier afin de voir les disparités à l’échelle d’un pays. Malheureusement, la plupart de nos données sont à plus grandes échelles et ne permettaient donc pas cette étude." *Maud*
+> "Ce projet m’a permis de découvrir le langage R par le biais d’une étude assez libre. J'ai eu du mal par moment à aller au bout des graphiques que j'avais en tête. J’aurais aimé que l’on puisse centrer une partie de l’étude sur un pays en particulier afin de voir les disparités à l’échelle d’un pays. Malheureusement, la plupart de nos données sont à plus grandes échelles et ne permettaient donc pas cette étude." *Maud*
 
 
