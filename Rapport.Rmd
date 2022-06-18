@@ -1180,7 +1180,7 @@ pib_water_correlation_graph <- data2021_complement  %>%
               col = "#92be72",
               se =FALSE,
               size = 1) + 
-  labs(title = "Corrélation entre le prix d'une bouteille d'eau et le PIB par habitant", 
+  labs(title = "Corrélation entre le prix d'une bouteille d'eau et (bite) le PIB par habitant", 
        x = "Prix d'une bouteille d'eau (£)", 
        y = "Log(PIB par habitant)")
 
@@ -1244,7 +1244,12 @@ La **confiance dans le gouvernement** arrive en dernier dans ce classement. Cela
 
 ## La contribution des facteurs au bonheur dans les différentes régions du monde (2021)
 
-A la suite du graphique précédent le graphique
+Nous avons voulu préciser l'analyse obtenue via le précédent graphique, en nous demandant quelles étaient les tendances de contribution des facteurs **dans chaque région**. Plusieurs constats nous ont alors frappé:  
+
+-   Dans les régions développées, qui sont aussi globalement les plus heureuses, la tendance reste semblable 
+-   Dans les régions les moins heureuses, le niveau de contribution au bonheur des différents facteurs est plus bas (ce qui est logique), et le rôle de chacun des facteurs est plus équilibré  
+-   Enfin, et c'est l'e constat le plus important'observation la plus intéressante, on constate un constraste non négligeable entre le précédent graphique et celui-ci. En effet, le graphe précédent place le support social comme facteur le plus important du bonheur **en moyenne** de 2015 à 2021. Cependant, on constate ici que c'est globalement le facteur économique et non social qui prédomine en 2021. Ce phénomène peut aisément s'expliquer par la pandémie qui a frappé la plupart des régions du monde en 2020 et les confinements qui en ont résulté. Les interactions sociales entre les gens ont alors été grandement réduites, ce qui explique leur importance moindre dans le score de 2021.
+
 
 ```{r combinaison facteurs}
 factors_per_region_graph <- data %>%
@@ -1294,4 +1299,4 @@ En effet, le climat global d'un pays peut être étudié par le biais de **diff�
 
 > "Ce projet m’a permis de découvrir le langage R par le biais d’une étude assez libre. J'ai eu du mal par moment à aller au bout des graphiques que j'avais en tête. J’aurais aimé que l’on puisse centrer une partie de l’étude sur un pays en particulier afin de voir les disparités à l’échelle d’un pays. Malheureusement, la plupart de nos données sont à plus grandes échelles et ne permettaient donc pas cette étude." *Maud*
 
-
+> "Me destinant à un métier de data analyst, cette UE m'a permis de découvrir le langage R, puissant et simple d'utilisation dans une optique de faire des dashboard. J'ai notamment beaucoup apprécié la partie Rshiny dans cette optique, et aurais aimé l'approfondir un peu plus. De plus, la partie du cours s'attardant sur la bonne façon de représenter une donnée, et les différents biais inhérents à certaines méthodes de représentation apporte une réelle plus-value." *Evann*
