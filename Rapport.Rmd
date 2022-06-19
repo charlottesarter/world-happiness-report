@@ -356,7 +356,7 @@ repartition <- data2015_sorted %>% select("Region", "Country")
 
 ```
 
-2.  Qu'est ce que le bonheur ?
+2.  **Qu'est ce que le bonheur ?**
 
 Avant d'étudier le World Happiness Report, il est important de **définir ce qu'est le bonheur**, car il peut s'agir d'une notion assez subjective.
 
@@ -364,7 +364,7 @@ Le bonheur est un **état émotionnel agréable, équilibré et durable** dans l
 
 Source : [Wikipedia](https://fr.wikipedia.org/wiki/Bonheur)
 
-3.  Est-ce que les données récoltées sont vraiment objectives ?
+3.  **Est-ce que les données récoltées sont vraiment objectives ?**
 
 La principale question posée lors des enquêtes sur le bonheur est : "Imaginez une échelle avec des barreaux numérotés de zéro en bas à dix en haut. Le barreau du haut représente la meilleure vie possible pour vous, et le barreau du bas la pire vie possible pour vous. Sur quel barreau pensez-vous vous tenir à ce moment de votre vie ?". Connue sous le nom d'**échelle de Cantril**, cette évaluation du bien-être, ainsi que la formulation précise de la question, constitue un standard commun pour les recherches sur le **bien-être subjectif**. En effet, le bonheur est une notion très subjective, et peut rapidement être faussée par les petits événements du quotidien. Si on pose la question à quelqu'un qui vient d'avoir un F en IF36 et qui a loupé son train pour rentrer chez ses parents à Toulouse, il y a beaucoup de chances que sa réponse soit influencée par ses troubles actuels. Pourtant, ils ne définissent pas le bonheur sur le long terme de l'individu, seulement il est difficile pour l'homme d'avoir une vision d'ensemble sur sa vie. Ainsi, l'échelle de Cantril semble être selon les experts la mesure la plus fructueuse du bonheur des individus.
 
