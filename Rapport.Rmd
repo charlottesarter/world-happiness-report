@@ -1018,7 +1018,9 @@ Concernant le facteur de **confiance en le gouvernement**, nous avons été surp
 
 trust_government_correlation_graph <- data %>%
   filter(Year == 2021) %>%
-  ggplot(aes(x = Perceptions_of_corruption, y = Happiness_score, text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
+  ggplot(aes(x = Perceptions_of_corruption, 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "Rank: ", Happiness_rank))) +
   geom_point(aes(color = Continent)) + 
   # geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
   #             aes(x = Perceptions_of_corruption, y = Happiness_score),
@@ -1092,11 +1094,12 @@ Le graphique qui suit montre la corrélation éventuelle entre le score de bonhe
 
 pollution_correlation_graph <- data2021_complement %>%
   ggplot(aes(x = Pollution_score, 
-
-             y = Happiness_score, text = paste("Country: ", Country, "\n", "City: ", City, "\n", "Rank: ", Happiness_rank))) + 
+             y = Happiness_score, 
+             text = paste("Country: ", Country, "\n", "City: ", City, "\n", "Rank: ", Happiness_rank))) + 
   geom_point(aes(color = Regional_indicator)) + 
   geom_smooth(inherit.aes = FALSE, ## on est obligé de redéfinir l'aes ici à cause du text = paste dans l'aes ggplot
-              aes(x= Pollution_score, y = Happiness_score),
+              aes(x= Pollution_score, 
+                  y = Happiness_score),
               #method = "lm",
               col = "#C42126",
               se =FALSE,
@@ -1244,11 +1247,13 @@ La **confiance dans le gouvernement** arrive en dernier dans ce classement. Cela
 
 ## La contribution des facteurs au bonheur dans les différentes régions du monde (2021)
 
-Nous avons voulu préciser l'analyse obtenue via le précédent graphique, en nous demandant quelles étaient les tendances de contribution des facteurs **dans chaque région**. Plusieurs constats nous ont alors frappé:  
+Nous avons voulu préciser l'analyse obtenue via le précédent graphique, en nous demandant quelles étaient les tendances de contribution des facteurs **dans chaque région** en 2021. Plusieurs constats nous ont alors frappé :  
 
--   Dans les régions développées, qui sont aussi globalement les plus heureuses, la tendance reste semblable 
--   Dans les régions les moins heureuses, le niveau de contribution au bonheur des différents facteurs est plus bas (ce qui est logique), et le rôle de chacun des facteurs est plus équilibré  
--   Enfin, et c'est l'e constat le plus important'observation la plus intéressante, on constate un constraste non négligeable entre le précédent graphique et celui-ci. En effet, le graphe précédent place le support social comme facteur le plus important du bonheur **en moyenne** de 2015 à 2021. Cependant, on constate ici que c'est globalement le facteur économique et non social qui prédomine en 2021. Ce phénomène peut aisément s'expliquer par la pandémie qui a frappé la plupart des régions du monde en 2020 et les confinements qui en ont résulté. Les interactions sociales entre les gens ont alors été grandement réduites, ce qui explique leur importance moindre dans le score de 2021.
+-   Dans les régions développées, qui sont aussi globalement les plus heureuses, la tendance de répartition de la contribution des facteurs reste semblable.
+
+-   Dans les régions les moins heureuses, le niveau de contribution au bonheur des différents facteurs est plus bas (ce qui est logique), et le rôle de chacun des facteurs est plus équilibré.
+
+-   Enfin, et c'est le constat le plus important et l'observation la plus intéressante, on remarque un constraste non négligeable entre le précédent graphique et celui-ci. En effet, le graphe précédent place le **support social** comme facteur contribuant le plus au bonheur **en moyenne** de 2015 à 2021. Cependant, on constate ici que c'est globalement le **facteur économique** et non social qui prédomine en 2021. Ce phénomène peut aisément s'expliquer par la **pandémie** qui a frappé la plupart des régions du monde en 2020, et les confinements qui en ont résulté. Les interactions sociales entre les gens ont alors été grandement réduites, ce qui explique leur importance moindre dans le score de bonheur de 2021.
 
 
 ```{r combinaison facteurs}
@@ -1267,7 +1272,8 @@ factors_per_region_graph <- data %>%
   
   ggplot(aes(x = reorder(Factor_name, desc(Factor_value)), 
              y = Factor_value, 
-             fill = reorder(Factor_name, desc(Factor_value)))) +
+             fill = reorder(Factor_name, desc(Factor_value)),
+             text = paste("Factor value: ", round(Factor_value,3)))) +
     geom_bar(stat = "identity") +
     facet_wrap(Region ~ ., ncol = 2) +
     theme(axis.title.x = element_blank(), 
@@ -1277,7 +1283,7 @@ factors_per_region_graph <- data %>%
          fill = "Facteurs", 
          y = "Valeur")
 
-ggplotly(factors_per_region_graph)
+factors_per_region_graph %>% ggplotly(tooltip = "text")
 
 ```
 
